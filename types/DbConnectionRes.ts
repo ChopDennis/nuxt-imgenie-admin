@@ -10,4 +10,12 @@ interface DbConnectionRes {
   updateTime: string;
 }
 
-export type { DbConnectionRes };
+interface DbCategoriesRes {
+  icon: string;
+  title: string;
+  itemId: string;
+  refUrl: string | null;
+  description: string | null;
+}
+
+export type { DbConnectionRes, DbCategoriesRes };

@@ -23,9 +23,8 @@ export const useDbConnectionApi = async (
     result = error.value.data.data as ApiResponse;
   } else {
     console.log(`useFetch ${Api.dbConnection}/${url} - ${formatCurrentTime()}`); // eslint-disable-line no-console
-    const table = data.value as any;
-    console.table(table.data); // eslint-disable-line no-console
     result = data.value as ApiResponse;
+    console.log(JSON.stringify(result.data)); // eslint-disable-line no-console
   }
   return result;
 };
