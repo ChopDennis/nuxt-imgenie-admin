@@ -6,15 +6,15 @@ export default defineEventHandler(async (event) => {
   const url = getRouterParam(event, "url");
   const body = await readBody(event);
 
-  const response = await $fetch(`${baseUrl}/datamart/datamart/${url}`, {
+  const response = await $fetch(`${baseUrl}/datamart/dbconnection/${url}`, {
     method: "post",
     headers: {
       TXNSEQ: uuid.v1(),
     },
-    body: {
+    body: JSON.stringify({
       userId,
       ...body,
-    },
+    }),
   });
 
   return response;
