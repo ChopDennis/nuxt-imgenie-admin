@@ -40,7 +40,7 @@ export default defineNuxtConfig({
     },
     components: {
       prefix: "Prime",
-      include: ["InputText", "Button"],
+      include: ["InputText", "Button", "DataTable", "Column", "Dialog"],
     },
     cssLayerOrder: "tailwind-base, primevue, tailwind-utilities",
   },
