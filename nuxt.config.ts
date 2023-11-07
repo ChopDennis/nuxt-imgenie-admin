@@ -17,6 +17,15 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxtjs/tailwindcss",
     "nuxt-lodash",
+    "@element-plus/nuxt",
+    [
+      "@nuxtjs/google-fonts",
+      {
+        families: {
+          "Noto Sans TC": true,
+        },
+      },
+    ],
   ],
   pinia: {
     storesDirs: ["./stores/**"],
