@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: "page", mode: "out-in" },
   },
-  css: ["@/assets/css/main.css", "@/assets/css/element-plus.css"],
+  css: ["@/assets/css/main.css"],
   devtools: {
     enabled: false,
   },
@@ -27,6 +27,9 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  elementPlus: {
+    importStyle: "scss",
+  },
   pinia: {
     storesDirs: ["./stores/**"],
   },
@@ -34,6 +37,15 @@ export default defineNuxtConfig({
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
+    },
+  },
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@use "@/assets/scss/element/index.scss" as element;`,
+        },
+      },
     },
   },
   runtimeConfig: {
