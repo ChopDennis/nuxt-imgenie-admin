@@ -3,11 +3,7 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: "page", mode: "out-in" },
   },
-  css: [
-    "primevue/resources/themes/lara-light-teal/theme.css",
-    "@/assets/css/main.css",
-    "primeicons/primeicons.css",
-  ],
+  css: ["@/assets/css/main.css", "@/assets/css/element-plus.css"],
   devtools: {
     enabled: false,
   },
@@ -21,7 +17,6 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxtjs/tailwindcss",
     "nuxt-lodash",
-    "nuxt-primevue",
   ],
   pinia: {
     storesDirs: ["./stores/**"],
@@ -31,18 +26,6 @@ export default defineNuxtConfig({
       tailwindcss: {},
       autoprefixer: {},
     },
-  },
-  primevue: {
-    usePrimeVue: true,
-    options: {
-      unstyled: false,
-      ripple: true,
-    },
-    components: {
-      prefix: "Prime",
-      include: ["InputText", "Button", "DataTable", "Column", "Dialog"],
-    },
-    cssLayerOrder: "tailwind-base, primevue, tailwind-utilities",
   },
   runtimeConfig: {
     public: {
