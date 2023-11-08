@@ -8,6 +8,7 @@ export const useDbConnectionApi = async (
   url: string,
   params?: any,
 ): Promise<ApiResponse> => {
+  const nuxtApp = useNuxtApp();
   let result: ApiResponse = {};
 
   const { data, error } = await useFetch(`${Api.dbConnection}/${url}`, {
@@ -17,6 +18,7 @@ export const useDbConnectionApi = async (
     },
     lazy: true,
     deep: false,
+    getCachedData: (key) => nuxtApp.payload.data[key],
   });
   if (error.value) {
     console.error("useFetch 錯誤訊息: ", error.value.data); // eslint-disable-line no-console
@@ -24,7 +26,7 @@ export const useDbConnectionApi = async (
   } else {
     console.log(`useFetch ${Api.dbConnection}/${url} - ${formatCurrentTime()}`); // eslint-disable-line no-console
     result = data.value as ApiResponse;
-    console.log(JSON.stringify(result.data)); // eslint-disable-line no-console
+    // console.log(JSON.stringify(result.data)); // eslint-disable-line no-console
   }
   return result;
 };

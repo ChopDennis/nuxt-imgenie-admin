@@ -1,19 +1,21 @@
 <template>
   <div>
-    <img v-for="(image, index) in images" :key="index" :src="image" />
+    <ElButton
+      style=""
+      :icon="ElIconPlus"
+      type="primary"
+      @click="goToDbConnection()"
+      >資料庫連線</ElButton
+    >
   </div>
 </template>
 <script setup lang="ts">
-import { filename } from "pathe/utils";
+const router = useRouter();
 
-const glob = import.meta.glob("@/assets/icons/homepage-products/*.png", {
-  eager: true,
-});
-const images = Object.fromEntries(
-  Object.entries(glob).map(([key, value]: [string, any]) => [
-    filename(key),
-    value.default,
-  ]),
-);
+const goToDbConnection = () => {
+  router.push({
+    path: "/",
+  });
+};
 </script>
 <style scoped></style>

@@ -10,6 +10,16 @@ interface DbConnectionRes {
   updateTime: string;
 }
 
+interface MappingDbConnectionList {
+  connId: string;
+  connTypeName: string;
+  updateTime: string;
+  connInfoHostPort: string;
+  connInfoDatabase: string;
+  connStatus: boolean;
+  rowNumber: number;
+}
+
 interface DbCategoriesRes {
   icon: string;
   title: string;
@@ -18,4 +28,4 @@ interface DbCategoriesRes {
   description: string | null;
 }
 
-export type { DbConnectionRes, DbCategoriesRes };
+export type { DbConnectionRes, DbCategoriesRes, MappingDbConnectionList };

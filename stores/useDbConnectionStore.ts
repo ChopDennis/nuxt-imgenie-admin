@@ -1,10 +1,11 @@
+import _ from "lodash";
 import { useDbConnectionApi } from "~/composables/useApi";
 import type { DbCategoriesRes, DbConnectionRes } from "~/types/DbConnectionRes";
 
 export const useDbConnectionStore = defineStore("dbConnection", {
   state: () => {
     return {
-      dbConnectionList: [] as DbConnectionRes[],
+      dbConnectionList: [] as MappingDbConnectionList[],
       dbCategories: [] as DbCategoriesRes[],
       testConnectionStatus: false,
     };
@@ -13,7 +14,22 @@ export const useDbConnectionStore = defineStore("dbConnection", {
   actions: {
     async getDbConnectionList() {
       const data = await useDbConnectionApi("list");
-      this.dbConnectionList = data.data as DbConnectionRes[];
+      const mappingData = _.map(
+        data.data as DbConnectionRes[],
+        (list, index) => {
+          const { connInfo, dbType, connName, ...rest } = list;
+          return {
+            ...rest,
+            connTypeName: `${_.upperFirst(dbType)}-${connName}`,
+            connInfoHostPort: `${connInfo.host}:${connInfo.port}`,
+            connInfoDatabase: connInfo.database,
+            connStatus: true,
+            rowNumber: index + 1,
+          };
+        },
+      );
+
+      this.dbConnectionList = mappingData as MappingDbConnectionList[];
     },
 
     async getDbCategories() {
