@@ -1,25 +1,25 @@
 $-colors: (
-  'primary': (
-    'base': #456DEC,
+  "primary": (
+    "base": #456dec,
   ),
-  'success': (
-    'base': #67c23a,
+  "success": (
+    "base": #67c23a,
   ),
-  'warning': (
-    'base': #e6a23c,
+  "warning": (
+    "base": #e6a23c,
   ),
-  'danger': (
-    'base': #f56c6c,
+  "danger": (
+    "base": #f56c6c,
   ),
-  'error': (
-    'base': #f56c6c,
+  "error": (
+    "base": #f56c6c,
   ),
-  'info': (
-    'base': #909399,
+  "info": (
+    "base": #909399,
   ),
 );
 
-@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+@forward "element-plus/theme-chalk/src/common/var.scss" with (
   $colors: $-colors
 );
 
@@ -29,7 +29,7 @@ $-colors: (
   --el-overlay-color-lighter: rgba(0, 0, 0, 0.5);
 }
 
-.el-dialog__header{
+.el-dialog__header {
   font-weight: 700;
   font-size: 20px;
   letter-spacing: 1px;

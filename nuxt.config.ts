@@ -11,7 +11,7 @@ export default defineNuxtConfig({
     dirs: ["./stores/**", "./types/**"],
   },
   lodash: {
-    prefix: "_",
+    prefix: "_use",
   },
   modules: [
     "@pinia/nuxt",
