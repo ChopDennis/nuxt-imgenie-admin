@@ -35,4 +35,16 @@ $-colors: (
   letter-spacing: 1px;
 }
 
+.el-menu-vertical:not(.el-menu--collapse) {
+  width: 256px;
+  height: 100vh;
+}
+
+.el-menu-vertical.el-menu--collapse {
+  height: 100vh;
+}
+
+.el-sub-menu {
+  padding-left: 3px !important;
+}
 // @use './dark.scss';

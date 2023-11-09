@@ -1,15 +1,13 @@
 <template>
-  <div class="p-5">
-    <div class="flex flex-col gap-4">
+  <div>
+    <div class="px-5 flex">
+      <p class="text-gray-300">首頁／系統管理／</p>
+      <p>資料庫連線</p>
+    </div>
+    <!-- 資料庫連線 -->
+    <div class="flex flex-col gap-4 p-5">
       <div class="flex justify-between">
         <h1 class="text-xl font-bold tracking-wide">資料庫連線</h1>
-        <ElButton
-          style=""
-          :icon="ElIconPlus"
-          type="primary"
-          @click="goToLogin()"
-          >登入</ElButton
-        >
         <ElButton
           style=""
           :icon="ElIconPlus"
@@ -18,23 +16,10 @@
           >新增連線</ElButton
         >
       </div>
-      <div class="bg-white rounded-lg p-5 shadow-custom-lg">
-        <ClientOnly>
-          <ElTable :data="store.dbConnectionList" class="w-4/5">
-            <ElTableColumn prop="rowNumber" label="編號" />
-            <ElTableColumn prop="connTypeName" label="連線名稱" />
-            <ElTableColumn prop="connInfoDatabase" label="資料庫名稱" />
-            <ElTableColumn prop="connInfoHostPort" label="主機名稱及IP" />
-            <ElTableColumn label="狀態">
-              <template #default="scope">
-                <ElSwitch v-model="scope.row.connStatus" />
-              </template>
-            </ElTableColumn>
-          </ElTable>
-        </ClientOnly>
-      </div>
+      <DbConnectionList :list="dbConnStore.dbConnectionList" />
     </div>
 
+    <!-- 選擇連線類型 -->
     <ElDialog
       v-model="dbCategoriesDialogVisible"
       title="選擇連線類型"
@@ -43,19 +28,25 @@
     >
       <div class="grid grid-cols-2 gap-4">
         <div
-          v-for="(category, index) in store.dbCategories"
+          v-for="(category, index) in dbConnStore.dbCategories"
           :key="index"
-          class="rounded-lg p-4 h-auto flex justify-start gap-2"
-          :class="{ 'db-category-active': true, 'shadow-custom-md': true }"
+          class="rounded-lg p-4 h-auto flex justify-start gap-2 transition-all"
+          :class="{
+            'db-category-active': false,
+            'shadow-custom-md': true,
+          }"
           @click="editNewConnection()"
         >
           <div><img :src="icons[`ic_${category.itemId}`]" class="w-6" /></div>
 
-          <div class="font-medium text-lg">{{ category.title }}</div>
+          <div class="font-medium text-lg">
+            {{ _useUpperFirst(category.title) }}
+          </div>
         </div>
       </div>
     </ElDialog>
 
+    <!-- 連線設定 -->
     <ElDialog
       v-model="dbConnectionSettingDialogVisible"
       title="連線設定"
@@ -68,35 +59,26 @@
         }
       "
     >
-      <DbConnectionSetting :list="store.dbConnectionList" />
+      <DbConnectionSetting :list="dbConnStore.dbConnectionList" />
     </ElDialog>
   </div>
 </template>
 <script setup lang="ts">
-const router = useRouter();
-const store = useDbConnectionStore();
-await store.getDbConnectionList();
-const icons = dynamicImportIcons();
+const dbConnStore = useDbConnectionStore();
+await dbConnStore.getDbConnectionList();
+const icons = dynamicImportDbConnectionIcons();
 const dataColumn = ref<string[]>([]);
 const dbCategoriesDialogVisible = ref(false);
 const dbConnectionSettingDialogVisible = ref(false);
 
-// console.table(store.dbConnectionList);
-dataColumn.value = Object.keys(store.dbConnectionList[0]);
+dataColumn.value = Object.keys(dbConnStore.dbConnectionList[0]);
 
 const addConnection = async () => {
-  await store.getDbCategories();
+  await dbConnStore.getDbCategories();
   dbCategoriesDialogVisible.value = true;
 };
 
-const editNewConnection = () => {
-  dbCategoriesDialogVisible.value = false;
-  dbConnectionSettingDialogVisible.value = true;
-};
-
-const goToLogin = () => {
-  router.push({ path: "/login" });
-};
+const editNewConnection = () => {};
 </script>
 <style scoped>
 .db-category-active {
