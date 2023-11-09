@@ -12,11 +12,14 @@
           style=""
           :icon="ElIconPlus"
           type="primary"
-          @click="addConnection()"
+          @click="addConnection"
           >新增連線</ElButton
         >
       </div>
-      <DbConnectionList :list="dbConnStore.dbConnectionList" />
+      <DbConnectionList
+        :list="store.dbConnectionList"
+        @edit-setting="editActiveConnection"
+      />
     </div>
 
     <!-- 選擇連線類型 -->
@@ -28,7 +31,7 @@
     >
       <div class="grid grid-cols-2 gap-4">
         <div
-          v-for="(category, index) in dbConnStore.dbCategories"
+          v-for="(category, index) in store.dbCategories"
           :key="index"
           class="rounded-lg p-4 h-auto flex justify-start gap-2 transition-all"
           :class="{
@@ -49,42 +52,61 @@
     <!-- 連線設定 -->
     <ElDialog
       v-model="dialog.connSetting"
-      :title="`${dbCategorySelected}連線設定`"
+      :destroy-on-close="true"
+      :title="`${dbType} 連線設定`"
       modal-class="backdrop-blur-sm"
       align-center
       :before-close="
         (done) => {
-          dialog.categories = true;
+          dialog.categories = isEmpty(store.dbConnSetting);
+          store.dbConnSetting = {};
           done();
         }
       "
     >
-      <DbConnectionSetting :list="dbConnStore.dbConnectionList" />
+      <DbConnectionSetting :form="store.dbConnSetting" />
     </ElDialog>
   </div>
 </template>
 <script setup lang="ts">
-const dbConnStore = useDbConnectionStore();
-await dbConnStore.getDbConnectionList();
+const store = useDbConnectionStore();
+await store.getDbConnectionList();
 const icons = dynamicImportDbConnectionIcons();
 const dataColumn = ref<string[]>([]);
-const dialog = ref({
+const dialog = reactive({
   categories: false,
   connSetting: false,
 });
-const dbCategorySelected = ref("");
+const dbType = ref("");
 
-dataColumn.value = Object.keys(dbConnStore.dbConnectionList[0]);
+dataColumn.value = Object.keys(store.dbConnectionList[0]);
 
 const addConnection = async () => {
-  await dbConnStore.getDbCategories();
-  dialog.value.categories = true;
+  await store.getDbCategories();
+  dialog.categories = true;
 };
 
 const editNewConnection = (title: string) => {
-  dbCategorySelected.value = title;
-  dialog.value.categories = false;
-  dialog.value.connSetting = true;
+  dbType.value = title;
+  store.dbConnSetting = {
+    連線名稱: "",
+    主機名稱或IP: "",
+    通訊埠: "",
+    使用者名稱: "",
+    密碼: "",
+    資料庫名稱: "",
+  };
+  // console.table(store.dbConnSetting);
+
+  dialog.categories = false;
+  dialog.connSetting = true;
+};
+
+const editActiveConnection = async (id: string) => {
+  await store.getDbConnSetting(id);
+  // console.table(store.dbConnSetting);
+  dbType.value = store.dbConnSetting.dbType;
+  dialog.connSetting = true;
 };
 </script>
 <style scoped>

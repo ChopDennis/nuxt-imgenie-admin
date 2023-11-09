@@ -26,8 +26,11 @@
           </template>
         </ElTableColumn>
         <ElTableColumn label="操作">
-          <template #default>
-            <img src="~/assets/icons/dbConnection/ic_db_edit.svg" />
+          <template #default="scope">
+            <img
+              src="~/assets/icons/dbConnection/ic_db_edit.svg"
+              @click="emits('editSetting', scope.row.connId)"
+            />
           </template>
         </ElTableColumn>
       </ElTable>
@@ -51,6 +54,10 @@ const currentPage = ref(1);
 const pageSize = ref(12);
 const props = defineProps<{
   list: MappingDbConnectionList[];
+}>();
+
+const emits = defineEmits<{
+  editSetting: [id: string];
 }>();
 
 const currentPageData = computed(() => {

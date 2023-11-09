@@ -3,6 +3,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
     return {
       dbConnectionList: [] as MappingDbConnectionList[],
       dbCategories: [] as DbCategoriesRes[],
+      dbConnSetting: [] as DbQueryRes,
       testConnectionStatus: false,
     };
   },
@@ -30,6 +31,30 @@ export const useDbConnectionStore = defineStore("dbConnection", {
     async getDbCategories() {
       const data = await useDbConnectionApi("dbs");
       this.dbCategories = data.data as DbCategoriesRes[];
+    },
+
+    async getDbConnSetting(connId: string) {
+      const data = await useDbConnectionApi("query", {
+        connId,
+      });
+      console.log("useDbConnectionApi", data.data);
+
+      const { connName, connInfo, dbType } = data.data as DbQueryRes;
+      // const { ssl } = connInfo.ssl;
+      this.dbConnSetting = {
+        連線名稱: connName as string,
+        主機名稱或IP: connInfo.host as string,
+        通訊埠: connInfo.port as string,
+        使用者名稱: connInfo.username as string,
+        密碼: connInfo.password as string,
+        資料庫名稱: connInfo.database as string,
+        dbType,
+        // 啟用SSL: ssl.isSSL ?? false,
+        // 啟用用戶端驗證: ssl.isClientCertificate ?? false,
+        // "Server Certificate": ssl.ca ?? null,
+        // "Client Certificate": ssl.clientCertificate ?? null,
+        // "Client Key": ssl.clientKey ?? null,
+      };
     },
 
     async testConnection() {

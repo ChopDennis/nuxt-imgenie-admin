@@ -28,4 +28,27 @@ interface DbCategoriesRes {
   description: string | null;
 }
 
-export type { DbConnectionRes, DbCategoriesRes, MappingDbConnectionList };
+interface DbQueryRes {
+  connId: string;
+  dbType: string;
+  connInfo: {
+    ssl?: {
+      isSSL?: boolean;
+      isClientCertificate?: boolean;
+      ca?: any;
+      clientCertificate?: any;
+      clientKey?: any;
+    };
+    host: string;
+    port: string;
+    database: string;
+  };
+  connName: string;
+}
+
+export type {
+  DbConnectionRes,
+  DbCategoriesRes,
+  MappingDbConnectionList,
+  DbQueryRes,
+};
