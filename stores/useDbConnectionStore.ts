@@ -19,9 +19,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
             connTypeName: `${_useUpperFirst(dbType)}-${connName}`,
             connInfoHostPort: `${connInfo.host}:${connInfo.port}`,
             connInfoDatabase: connInfo.database,
-            connStatus: true,
             rowNumber: index + 1,
-            editable: true,
           };
         },
       );

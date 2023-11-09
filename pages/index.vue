@@ -21,7 +21,7 @@
 
     <!-- 選擇連線類型 -->
     <ElDialog
-      v-model="dbCategoriesDialogVisible"
+      v-model="dialog.categories"
       title="選擇連線類型"
       modal-class="backdrop-blur-sm"
       align-center
@@ -35,7 +35,7 @@
             'db-category-active': false,
             'shadow-custom-md': true,
           }"
-          @click="editNewConnection()"
+          @click="editNewConnection(category.title)"
         >
           <div><img :src="icons[`ic_${category.itemId}`]" class="w-6" /></div>
 
@@ -48,13 +48,13 @@
 
     <!-- 連線設定 -->
     <ElDialog
-      v-model="dbConnectionSettingDialogVisible"
-      title="連線設定"
+      v-model="dialog.connSetting"
+      :title="`${dbCategorySelected}連線設定`"
       modal-class="backdrop-blur-sm"
       align-center
       :before-close="
         (done) => {
-          dbCategoriesDialogVisible = true;
+          dialog.categories = true;
           done();
         }
       "
@@ -68,17 +68,24 @@ const dbConnStore = useDbConnectionStore();
 await dbConnStore.getDbConnectionList();
 const icons = dynamicImportDbConnectionIcons();
 const dataColumn = ref<string[]>([]);
-const dbCategoriesDialogVisible = ref(false);
-const dbConnectionSettingDialogVisible = ref(false);
+const dialog = ref({
+  categories: false,
+  connSetting: false,
+});
+const dbCategorySelected = ref("");
 
 dataColumn.value = Object.keys(dbConnStore.dbConnectionList[0]);
 
 const addConnection = async () => {
   await dbConnStore.getDbCategories();
-  dbCategoriesDialogVisible.value = true;
+  dialog.value.categories = true;
 };
 
-const editNewConnection = () => {};
+const editNewConnection = (title: string) => {
+  dbCategorySelected.value = title;
+  dialog.value.categories = false;
+  dialog.value.connSetting = true;
+};
 </script>
 <style scoped>
 .db-category-active {
