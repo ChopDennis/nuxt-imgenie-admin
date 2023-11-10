@@ -1,24 +1,34 @@
 // TODO: type Methods = "GET" | "POST" | "DELETE" | "PUT"
-
 enum Api {
   dbConnection = "/api/dbConnection",
 }
 
+export const useLoading = () => {
+  return useState<boolean>("isLoading", () => false);
+};
+
 export const useDbConnectionApi = async (
   url: string,
   params?: any,
+  cached: boolean = false,
+  loading: boolean = false,
 ): Promise<ApiResponse> => {
-  // const nuxtApp = useNuxtApp();
+  const nuxtApp = useNuxtApp();
   let result: ApiResponse = {};
+  const isLoading = useLoading();
 
   const { data, error } = await useFetch(`${Api.dbConnection}/${url}`, {
     method: "post",
     body: {
       ...params,
     },
-    lazy: true,
-    deep: false,
-    // getCachedData: (key) => nuxtApp.payload.data[key],
+    getCachedData: (key) => (cached ? nuxtApp.payload.data[key] : null),
+    onRequest() {
+      isLoading.value = loading;
+    },
+    onResponse() {
+      isLoading.value = false;
+    },
   });
   if (error.value) {
     console.error("useFetch 錯誤訊息: ", error.value.data); // eslint-disable-line no-console

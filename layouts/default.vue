@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col w-full">
+  <div v-loading="isLoading" class="flex flex-col w-full">
     <div class="z-50 absolute">
       <GlobalSideMenu />
     </div>
@@ -23,8 +23,8 @@
   </div>
 </template>
 <script setup lang="ts">
-
 const store = useGlobalStore();
+const isLoading = useLoading();
 const goToLogin = () => {
   navigateTo({ path: "/" });
 };

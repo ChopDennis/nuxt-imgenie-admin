@@ -47,4 +47,8 @@ $-colors: (
 .el-sub-menu {
   padding-left: 3px !important;
 }
+
+.el-loading-mask{
+  height: 100vh;
+}
 // @use './dark.scss';
