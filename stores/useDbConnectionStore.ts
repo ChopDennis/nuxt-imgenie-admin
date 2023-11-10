@@ -40,7 +40,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       console.log("useDbConnectionApi", data.data);
 
       const { connName, connInfo, dbType } = data.data as DbQueryRes;
-      // const { ssl } = connInfo.ssl;
+      const { ssl } = connInfo;
       this.dbConnSetting = {
         連線名稱: connName as string,
         主機名稱或IP: connInfo.host as string,
@@ -49,8 +49,8 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         密碼: connInfo.password as string,
         資料庫名稱: connInfo.database as string,
         dbType,
-        // 啟用SSL: ssl.isSSL ?? false,
-        // 啟用用戶端驗證: ssl.isClientCertificate ?? false,
+        啟用SSL: ssl.isSSL ?? false,
+        啟用用戶端驗證: ssl.isClientCertificate ?? false,
         // "Server Certificate": ssl.ca ?? null,
         // "Client Certificate": ssl.clientCertificate ?? null,
         // "Client Key": ssl.clientKey ?? null,
