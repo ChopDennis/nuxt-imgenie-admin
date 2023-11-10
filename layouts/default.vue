@@ -23,11 +23,10 @@
   </div>
 </template>
 <script setup lang="ts">
-const router = useRouter();
 
 const store = useGlobalStore();
 const goToLogin = () => {
-  router.push({ path: "/login" });
+  navigateTo({ path: "/" });
 };
 </script>
 

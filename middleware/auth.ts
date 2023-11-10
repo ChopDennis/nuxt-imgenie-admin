@@ -16,6 +16,6 @@ export default defineNuxtRouteMiddleware((_to, _from) => {
   const isLoggedIn = false; // 判斷是否登入
 
   if (!isLoggedIn) {
-    return navigateTo("/login");
+    return navigateTo("/");
   }
 });
