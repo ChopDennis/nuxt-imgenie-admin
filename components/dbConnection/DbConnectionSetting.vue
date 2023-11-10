@@ -21,14 +21,33 @@
         </el-upload> -->
       </ElFormItem>
     </ElForm>
+    <div class="flex justify-between pt-4">
+      <ElButton @click="clickConnSetting">連線設定</ElButton>
+      <div class="flex">
+        <ElButton>取消</ElButton>
+        <ElButton type="primary">確認</ElButton>
+      </div>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
 const props = defineProps<{
-  form: {};
+  form: dbConnSetForm;
 }>();
-const form = reactive(props.form);
-// const yourUploadUrl = () => {
-//   return "";
-// };
+const form = reactive<dbConnSetForm>(props.form);
+const connInfo = {
+  host: form.主機名稱或IP,
+  port: form.通訊埠,
+  database: form.資料庫名稱,
+  username: form.使用者名稱,
+  password: form.密碼,
+  ssl: {
+    CAFile: "1234",
+  },
+};
+const store = useDbConnectionStore();
+const clickConnSetting = () => {
+  console.log(JSON.stringify(connInfo));
+  store.testConnection("postgresql", connInfo);
+};
 </script>

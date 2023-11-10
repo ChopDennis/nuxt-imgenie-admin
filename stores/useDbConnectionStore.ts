@@ -3,14 +3,15 @@ export const useDbConnectionStore = defineStore("dbConnection", {
     return {
       dbConnectionList: [] as MappingDbConnectionList[],
       dbCategories: [] as DbCategoriesRes[],
-      dbConnSetting: [] as DbQueryRes,
+      dbConnSetting: {} as DbQueryRes,
+      dbConnSetForm: {} as DbConnSetForm,
       testConnectionStatus: false,
     };
   },
 
   actions: {
-    async getDbConnectionList() {
-      const data = await useDbConnectionApi("list");
+    async getDbConnectionList(cached: boolean) {
+      const data = await useDbConnectionApi("list", null, cached, true);
       const mappingData = _useMap(
         data.data as DbConnectionRes[],
         (list, index) => {
@@ -29,7 +30,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
     },
 
     async getDbCategories() {
-      const data = await useDbConnectionApi("dbs");
+      const data = await useDbConnectionApi("dbs", null, true);
       this.dbCategories = data.data as DbCategoriesRes[];
     },
 
@@ -37,17 +38,18 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       const data = await useDbConnectionApi("query", {
         connId,
       });
-      console.log("useDbConnectionApi", data.data);
+
+      this.dbConnSetting = data.data as DbQueryRes;
 
       const { connName, connInfo, dbType } = data.data as DbQueryRes;
       const { ssl } = connInfo;
-      this.dbConnSetting = {
-        連線名稱: connName as string,
-        主機名稱或IP: connInfo.host as string,
-        通訊埠: connInfo.port as string,
-        使用者名稱: connInfo.username as string,
-        密碼: connInfo.password as string,
-        資料庫名稱: connInfo.database as string,
+      this.dbConnSetForm = {
+        連線名稱: connName,
+        主機名稱或IP: connInfo.host,
+        通訊埠: connInfo.port,
+        使用者名稱: connInfo.username,
+        密碼: connInfo.password,
+        資料庫名稱: connInfo.database,
         dbType,
         啟用SSL: ssl.isSSL ?? false,
         啟用用戶端驗證: ssl.isClientCertificate ?? false,
@@ -57,11 +59,10 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       };
     },
 
-    async testConnection() {
+    async testConnection(dbType: string, connInfo: {}) {
       const data = await useDbConnectionApi("test-connection", {
-        dbType: "postgresql",
-        connInfo:
-          '{"host":"10.0.1.13","port":"5432","username":"imgenie_datamart","password":"imgenie_datamart","database":"iMGenie_mart","ssl":{"CAFile":"1234"}}',
+        dbType,
+        connInfo: JSON.stringify(connInfo),
       });
       this.testConnectionStatus = data.data as any;
     },
