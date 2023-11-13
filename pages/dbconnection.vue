@@ -47,7 +47,7 @@
             'db-category-active': false,
             'shadow-custom-md': true,
           }"
-          @click="editNewConnection(category.title)"
+          @click="editNewConnection(category.title, category.itemId)"
         >
           <div><img :src="icons[`ic_${category.itemId}`]" class="w-6" /></div>
 
@@ -62,7 +62,7 @@
     <ElDialog
       v-model="dialog.connSetting"
       :destroy-on-close="true"
-      :title="`${dbType} 連線設定`"
+      :title="`${dbTitle} 連線設定`"
       modal-class="backdrop-blur-sm"
       align-center
       width="576"
@@ -74,7 +74,10 @@
         }
       "
     >
-      <DbConnectionSetting :form="store.dbConnSetForm" />
+      <DbConnectionSetting
+        :form="store.dbConnSetForm"
+        :is-new-conn="isNewConn"
+      />
     </ElDialog>
   </div>
 </template>
@@ -87,7 +90,8 @@ const dialog = reactive({
   categories: false,
   connSetting: false,
 });
-const dbType = ref("");
+const dbTitle = ref("");
+const isNewConn = ref(false);
 dataColumn.value = Object.keys(store.dbConnectionList[0]);
 
 const addConnection = async () => {
@@ -95,26 +99,26 @@ const addConnection = async () => {
   dialog.categories = true;
 };
 
-const editNewConnection = (title: string) => {
-  dbType.value = title;
-  store.dbConnSetting = {
-    連線名稱: "",
-    主機名稱或IP: "",
-    通訊埠: "",
-    使用者名稱: "",
-    密碼: "",
-    資料庫名稱: "",
+const editNewConnection = (title: string, dbType: string) => {
+  dbTitle.value = title;
+  store.dbConnSetType = dbType;
+  store.dbConnSetForm = {
+    connName: "",
+    database: "",
+    host: "",
+    port: "",
+    username: "",
+    password: "",
   };
-  // console.table(store.dbConnSetting);
-
+  isNewConn.value = true;
   dialog.categories = false;
   dialog.connSetting = true;
 };
 
 const editActiveConnection = async (id: string) => {
   await store.getDbConnSetting(id);
-  // console.table(store.dbConnSetting);
-  dbType.value = store.dbConnSetting.dbType;
+  dbTitle.value = store.dbConnSetting.dbType;
+  isNewConn.value = false;
   dialog.connSetting = true;
 };
 </script>

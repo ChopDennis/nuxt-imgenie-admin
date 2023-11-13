@@ -5,7 +5,9 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       dbCategories: [] as DbCategoriesRes[],
       dbConnSetting: {} as DbQueryRes,
       dbConnSetForm: {} as DbConnSetForm,
-      testConnectionStatus: false,
+      testConnectionStatus: null,
+      dbConnSetId: "",
+      dbConnSetType: "",
     };
   },
 
@@ -34,29 +36,42 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       this.dbCategories = data.data as DbCategoriesRes[];
     },
 
-    async getDbConnSetting(connId: string) {
+    async getDbConnSetting(id: string) {
       const data = await useDbConnectionApi("query", {
-        connId,
+        connId: id,
       });
 
       this.dbConnSetting = data.data as DbQueryRes;
 
-      const { connName, connInfo, dbType } = data.data as DbQueryRes;
-      const { ssl } = connInfo;
+      const { connName, connInfo, dbType, connId } = data.data as DbQueryRes;
+      const { ssl, ...rest } = connInfo;
       this.dbConnSetForm = {
-        連線名稱: connName,
-        主機名稱或IP: connInfo.host,
-        通訊埠: connInfo.port,
-        使用者名稱: connInfo.username,
-        密碼: connInfo.password,
-        資料庫名稱: connInfo.database,
-        dbType,
-        啟用SSL: ssl.isSSL ?? false,
-        啟用用戶端驗證: ssl.isClientCertificate ?? false,
+        connName,
+        ...rest,
+        isSSL: ssl.isSSL ?? false,
+        isClientCertificate: ssl.isClientCertificate ?? false,
         // "Server Certificate": ssl.ca ?? null,
         // "Client Certificate": ssl.clientCertificate ?? null,
         // "Client Key": ssl.clientKey ?? null,
       };
+      this.dbConnSetId = connId;
+      this.dbConnSetType = dbType;
+    },
+
+    async setDbConnSetting(
+      connName: string,
+      connInfo: {},
+      isActive: boolean = false,
+    ) {
+      if (isActive) this.dbConnSetId = "";
+      const data = await useDbConnectionApi("save", {
+        connId: this.dbConnSetId,
+        connName,
+        dbType: this.dbConnSetType,
+        connInfo: JSON.stringify(connInfo),
+        isActive,
+      });
+      this.testConnectionStatus = data.data as any;
     },
 
     async testConnection(dbType: string, connInfo: {}) {

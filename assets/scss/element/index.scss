@@ -48,7 +48,10 @@ $-colors: (
   padding-left: 3px !important;
 }
 
-.el-loading-mask{
+.el-loading-mask {
   height: 100vh;
 }
-// @use './dark.scss';
+
+.el-alert--success.is-light {
+  border: 1px solid;
+}
