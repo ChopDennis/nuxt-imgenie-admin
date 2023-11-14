@@ -13,7 +13,7 @@
             style=""
             :icon="ElIconRefresh"
             type="primary"
-            @click="store.getDbConnectionList(false)"
+            @click="store.getDbConnList(false)"
             >重新整理</ElButton
           >
           <ElButton
@@ -26,7 +26,7 @@
         </div>
       </div>
       <DbConnectionList
-        :list="store.dbConnectionList"
+        :list="store.dbConnList"
         @edit-setting="editActiveConnection"
       />
     </div>
@@ -68,8 +68,8 @@
       width="576"
       :before-close="
         (done) => {
-          dialog.categories = isEmpty(store.dbConnSetting);
-          store.dbConnSetting = {};
+          dialog.categories = isEmpty(store.dbConnSetForm);
+          store.dbConnSetForm = dbConnNewForm;
           done();
         }
       "
@@ -77,6 +77,11 @@
       <DbConnectionSetting
         :form="store.dbConnSetForm"
         :is-new-conn="isNewConn"
+        @disable-dialog="
+          (val) => {
+            dialog.connSetting = val;
+          }
+        "
       />
     </ElDialog>
   </div>
@@ -84,7 +89,7 @@
 <script setup lang="ts">
 const store = useDbConnectionStore();
 const icons = dynamicImportDbConnectionIcons();
-await store.getDbConnectionList(true);
+await store.getDbConnList(true);
 const dataColumn = ref<string[]>([]);
 const dialog = reactive({
   categories: false,
@@ -92,7 +97,15 @@ const dialog = reactive({
 });
 const dbTitle = ref("");
 const isNewConn = ref(false);
-dataColumn.value = Object.keys(store.dbConnectionList[0]);
+const dbConnNewForm = reactive({
+  connName: "",
+  database: "",
+  host: "",
+  port: "",
+  username: "",
+  password: "",
+});
+dataColumn.value = Object.keys(store.dbConnList[0]);
 
 const addConnection = async () => {
   await store.getDbCategories();
@@ -102,22 +115,15 @@ const addConnection = async () => {
 const editNewConnection = (title: string, dbType: string) => {
   dbTitle.value = title;
   store.dbConnSetType = dbType;
-  store.dbConnSetForm = {
-    connName: "",
-    database: "",
-    host: "",
-    port: "",
-    username: "",
-    password: "",
-  };
+  store.dbConnSetForm = dbConnNewForm;
   isNewConn.value = true;
   dialog.categories = false;
   dialog.connSetting = true;
 };
 
 const editActiveConnection = async (id: string) => {
-  await store.getDbConnSetting(id);
-  dbTitle.value = store.dbConnSetting.dbType;
+  await store.getDbConnQuery(id);
+  dbTitle.value = store.dbConnQueryRes.dbType;
   isNewConn.value = false;
   dialog.connSetting = true;
 };

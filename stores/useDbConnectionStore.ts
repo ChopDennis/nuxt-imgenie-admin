@@ -1,21 +1,22 @@
 export const useDbConnectionStore = defineStore("dbConnection", {
   state: () => {
     return {
-      dbConnectionList: [] as MappingDbConnectionList[],
+      dbConnList: [] as DbConnListMap[],
       dbCategories: [] as DbCategoriesRes[],
-      dbConnSetting: {} as DbQueryRes,
+      dbConnQueryRes: {} as DbConnQueryRes,
       dbConnSetForm: {} as DbConnSetForm,
-      testConnectionStatus: null,
       dbConnSetId: "",
       dbConnSetType: "",
+      dbConnSaveRes: {} as DbConnSaveRes,
+      dbConnTestRes: null as boolean | null,
     };
   },
 
   actions: {
-    async getDbConnectionList(cached: boolean) {
+    async getDbConnList(cached: boolean) {
       const data = await useDbConnectionApi("list", null, cached, true);
       const mappingData = _useMap(
-        data.data as DbConnectionRes[],
+        data.data as DbConnListRes[],
         (list, index) => {
           const { connInfo, dbType, connName, ...rest } = list;
           return {
@@ -28,7 +29,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         },
       );
 
-      this.dbConnectionList = mappingData as MappingDbConnectionList[];
+      this.dbConnList = mappingData as DbConnListMap[];
     },
 
     async getDbCategories() {
@@ -36,42 +37,34 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       this.dbCategories = data.data as DbCategoriesRes[];
     },
 
-    async getDbConnSetting(id: string) {
+    async getDbConnQuery(id: string) {
       const data = await useDbConnectionApi("query", {
         connId: id,
       });
 
-      this.dbConnSetting = data.data as DbQueryRes;
+      this.dbConnQueryRes = data.data as DbConnQueryRes;
 
-      const { connName, connInfo, dbType, connId } = data.data as DbQueryRes;
-      const { ssl, ...rest } = connInfo;
+      const { connName, connInfo, dbType, connId } =
+        data.data as DbConnQueryRes;
       this.dbConnSetForm = {
         connName,
-        ...rest,
-        isSSL: ssl.isSSL ?? false,
-        isClientCertificate: ssl.isClientCertificate ?? false,
-        // "Server Certificate": ssl.ca ?? null,
-        // "Client Certificate": ssl.clientCertificate ?? null,
-        // "Client Key": ssl.clientKey ?? null,
+        ...connInfo,
       };
       this.dbConnSetId = connId;
       this.dbConnSetType = dbType;
     },
 
-    async setDbConnSetting(
-      connName: string,
-      connInfo: {},
-      isActive: boolean = false,
-    ) {
-      if (isActive) this.dbConnSetId = "";
-      const data = await useDbConnectionApi("save", {
+    async setDbConnSave(form: DbConnSetForm, isNewConn: boolean = false) {
+      if (isNewConn) this.dbConnSetId = "";
+      const { connName, ...connInfo } = form;
+      const params = {
         connId: this.dbConnSetId,
         connName,
         dbType: this.dbConnSetType,
         connInfo: JSON.stringify(connInfo),
-        isActive,
-      });
-      this.testConnectionStatus = data.data as any;
+        isActivate: true, // TODO: 不應該寫死
+      };
+      await useDbConnectionApi("save", params); // // TODO: 要寫入回傳
     },
 
     async testConnection(dbType: string, connInfo: {}) {
@@ -79,7 +72,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         dbType,
         connInfo: JSON.stringify(connInfo),
       });
-      this.testConnectionStatus = data.data as any;
+      this.dbConnTestRes = data.data as boolean;
     },
   },
 });

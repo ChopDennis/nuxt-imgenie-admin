@@ -53,7 +53,7 @@
 const currentPage = ref(1);
 const pageSize = ref(12);
 const props = defineProps<{
-  list: MappingDbConnectionList[];
+  list: DbConnListMap[];
 }>();
 
 const emits = defineEmits<{
