@@ -67,7 +67,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       await useDbConnectionApi("save", params); // // TODO: 要寫入回傳
     },
 
-    async testConnection(dbType: string, connInfo: {}) {
+    async testConnection(dbType: string, connInfo: ConnInfo) {
       const data = await useDbConnectionApi("test-connection", {
         dbType,
         connInfo: JSON.stringify(connInfo),

@@ -29,7 +29,7 @@
         />
       </ElFormItem>
       <div class="flex justify-between">
-        <ElButton @click="clickConnSetting">連線測試</ElButton>
+        <ElButton @click="clickConnTest">連線測試</ElButton>
         <div class="flex">
           <ElButton @click="clickCancel">取消</ElButton>
           <ElButton type="primary" @click="clickConfirm()">確認</ElButton>
@@ -67,19 +67,9 @@ const emits = defineEmits<{
 const form = reactive<DbConnSetForm>(props.form);
 
 const store = useDbConnectionStore();
-const clickConnSetting = () => {
-  const { host, port, database, username, password } = form;
-  const connInfo = {
-    host,
-    port,
-    database,
-    username,
-    password,
-    // TODO: 不應該寫死
-    ssl: {
-      CAFile: "1234",
-    },
-  };
+const clickConnTest = () => {
+  const { _connName, ...connInfo } = form;
+
   store.testConnection("postgresql", connInfo);
 };
 

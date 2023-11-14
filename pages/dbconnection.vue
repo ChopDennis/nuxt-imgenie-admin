@@ -74,7 +74,7 @@
         }
       "
     >
-      <DbConnectionSetting
+      <DbConnectionSet
         :form="store.dbConnSetForm"
         :is-new-conn="isNewConn"
         @disable-dialog="
@@ -104,6 +104,7 @@ const dbConnNewForm = reactive({
   port: "",
   username: "",
   password: "",
+  ssl: {},
 });
 dataColumn.value = Object.keys(store.dbConnList[0]);
 
