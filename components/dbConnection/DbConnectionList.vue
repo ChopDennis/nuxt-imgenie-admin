@@ -11,9 +11,9 @@
           sortable
           :sort-method="
             (a, b) => {
-              if (a.isActive && !b.isActive) {
+              if (a.isActivate && !b.isActivate) {
                 return -1;
-              } else if (!a.isActive && b.isActive) {
+              } else if (!a.isActivate && b.isActivate) {
                 return 1;
               } else {
                 return 0;
@@ -22,14 +22,14 @@
           "
         >
           <template #default="scope">
-            <ElSwitch v-model="scope.row.isActive" />
+            <ElSwitch v-model="scope.row.isActivate" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="操作">
           <template #default="scope">
             <img
               src="~/assets/icons/dbConnection/ic_db_edit.svg"
-              @click="emits('editSetting', scope.row.connId)"
+              @click="clickEditActiveConn(scope.row.connId)"
             />
           </template>
         </ElTableColumn>
@@ -40,7 +40,7 @@
         :current-page="currentPage"
         :page-sizes="[12, 24, 48]"
         :page-size="pageSize"
-        :total="list.length"
+        :total="store.dbConnListMap.length"
         background
         layout="total, sizes, prev, pager, next"
         @size-change="handleSizeChange"
@@ -50,18 +50,14 @@
   </div>
 </template>
 <script setup lang="ts">
+const store = useDbConnectionStore();
 const currentPage = ref(1);
 const pageSize = ref(12);
-const props = defineProps<{
-  list: DbConnListMap[];
-}>();
-
-const emits = defineEmits<{
-  editSetting: [id: string];
-}>();
 
 const currentPageData = computed(() => {
-  return _useChunk(props.list, pageSize.value)[currentPage.value - 1] || [];
+  return (
+    _useChunk(store.dbConnListMap, pageSize.value)[currentPage.value - 1] || []
+  );
 });
 
 const handleSizeChange = (val: number) => {
@@ -71,5 +67,12 @@ const handleSizeChange = (val: number) => {
 
 const handleCurrentChange = (val: number) => {
   currentPage.value = val;
+};
+
+const clickEditActiveConn = async (id: string) => {
+  await store.getDbConnQuery(id);
+  store.dbConnSetTitle = store.dbConnQueryRes.dbType;
+  store.dbConnSetIsNew = false;
+  store.dbConnDialog.connSetting = true;
 };
 </script>

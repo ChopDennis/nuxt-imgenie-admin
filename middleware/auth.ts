@@ -1,4 +1,4 @@
-export default defineNuxtRouteMiddleware((_to, _from) => {
+export default defineNuxtRouteMiddleware(() => {
   // if (to.params.id === "1") {
   //   return abortNavigation();
   // }

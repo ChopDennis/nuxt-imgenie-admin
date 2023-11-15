@@ -20,113 +20,44 @@
             style=""
             :icon="ElIconPlus"
             type="primary"
-            @click="addConnection"
+            @click="clickAddNewConn"
             >新增連線</ElButton
           >
         </div>
       </div>
-      <DbConnectionList
-        :list="store.dbConnList"
-        @edit-setting="editActiveConnection"
-      />
+      <DbConnectionList />
     </div>
 
     <!-- 選擇連線類型 -->
     <ElDialog
-      v-model="dialog.categories"
+      v-model="store.dbConnDialog.categories"
       title="選擇連線類型"
       modal-class="backdrop-blur-sm"
       align-center
     >
-      <div class="grid grid-cols-2 gap-4">
-        <div
-          v-for="(category, index) in store.dbCategories"
-          :key="index"
-          class="rounded-lg p-4 h-auto flex justify-start gap-2 transition-all"
-          :class="{
-            'db-category-active': false,
-            'shadow-custom-md': true,
-          }"
-          @click="editNewConnection(category.title, category.itemId)"
-        >
-          <div><img :src="icons[`ic_${category.itemId}`]" class="w-6" /></div>
-
-          <div class="font-medium text-lg">
-            {{ _useUpperFirst(category.title) }}
-          </div>
-        </div>
-      </div>
+      <DbConnectionTypes />
     </ElDialog>
 
     <!-- 連線設定 -->
     <ElDialog
-      v-model="dialog.connSetting"
+      v-model="store.dbConnDialog.connSetting"
       :destroy-on-close="true"
-      :title="`${dbTitle} 連線設定`"
+      :title="`${store.dbConnSetTitle} 連線設定`"
       modal-class="backdrop-blur-sm"
       align-center
       width="576"
-      :before-close="
-        (done) => {
-          dialog.categories = isEmpty(store.dbConnSetForm);
-          store.dbConnSetForm = dbConnNewForm;
-          done();
-        }
-      "
     >
-      <DbConnectionSet
-        :form="store.dbConnSetForm"
-        :is-new-conn="isNewConn"
-        @disable-dialog="
-          (val) => {
-            dialog.connSetting = val;
-          }
-        "
-      />
+      <DbConnectionSet />
     </ElDialog>
   </div>
 </template>
 <script setup lang="ts">
 const store = useDbConnectionStore();
-const icons = dynamicImportDbConnectionIcons();
 await store.getDbConnList(true);
-const dataColumn = ref<string[]>([]);
-const dialog = reactive({
-  categories: false,
-  connSetting: false,
-});
-const dbTitle = ref("");
-const isNewConn = ref(false);
-const dbConnNewForm = reactive({
-  connName: "",
-  database: "",
-  host: "",
-  port: "",
-  username: "",
-  password: "",
-  ssl: {},
-});
-dataColumn.value = Object.keys(store.dbConnList[0]);
 
-const addConnection = async () => {
-  await store.getDbCategories();
-  dialog.categories = true;
-};
-
-const editNewConnection = (title: string, dbType: string) => {
-  dbTitle.value = title;
-  store.dbConnSetType = dbType;
-  store.dbConnSetForm = dbConnNewForm;
-  isNewConn.value = true;
-  dialog.categories = false;
-  dialog.connSetting = true;
-};
-
-const editActiveConnection = async (id: string) => {
-  await store.getDbConnQuery(id);
-  dbTitle.value = store.dbConnQueryRes.dbType;
-  isNewConn.value = false;
-  dialog.connSetting = true;
+const clickAddNewConn = async () => {
+  await store.getDbConnTypes();
+  store.dbConnDialog.categories = true;
 };
 </script>
 <style scoped>

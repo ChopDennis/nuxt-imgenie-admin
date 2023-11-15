@@ -21,11 +21,11 @@ declare global {
     updateTime: string;
     connInfoHostPort: string;
     connInfoDatabase: string;
-    isActive: boolean;
+    isActivate: boolean;
     rowNumber: number;
   }
 
-  interface DbCategoriesRes {
+  interface DbConnTypesRes {
     icon: string;
     title: string;
     itemId: string;
@@ -38,6 +38,7 @@ declare global {
     dbType: string;
     connName: string;
     connInfo: ConnInfo;
+    isActivate: boolean;
   }
   interface DbConnSetForm {
     connName: string;
@@ -56,7 +57,7 @@ declare global {
     connName: string;
     connInfo: string;
     updateTime: string;
-    // TODO: isActive: boolean
+    isActivate: boolean;
   }
 }
 

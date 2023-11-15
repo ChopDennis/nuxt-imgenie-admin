@@ -1,14 +1,24 @@
 export const useDbConnectionStore = defineStore("dbConnection", {
   state: () => {
     return {
-      dbConnList: [] as DbConnListMap[],
-      dbCategories: [] as DbCategoriesRes[],
+      dbConnListMap: [] as DbConnListMap[],
+      dbConnTypesRes: [] as DbConnTypesRes[],
       dbConnQueryRes: {} as DbConnQueryRes,
       dbConnSetForm: {} as DbConnSetForm,
       dbConnSetId: "",
       dbConnSetType: "",
+      dbConnSetTitle: "",
       dbConnSaveRes: {} as DbConnSaveRes,
+      dbConnSetIsNew: false as boolean,
+      dbConnSetActivate: false as boolean,
       dbConnTestRes: null as boolean | null,
+      dbConnDialog: {
+        categories: false,
+        connSetting: false,
+      } as {
+        categories: boolean;
+        connSetting: boolean;
+      },
     };
   },
 
@@ -16,7 +26,12 @@ export const useDbConnectionStore = defineStore("dbConnection", {
     async getDbConnList(cached: boolean) {
       const data = await useDbConnectionApi("list", null, cached, true);
       const mappingData = _useMap(
-        data.data as DbConnListRes[],
+        _useReverse(
+          _useSortBy(data.data as DbConnListRes[], [
+            "updateTime",
+            "isActivate",
+          ]),
+        ),
         (list, index) => {
           const { connInfo, dbType, connName, ...rest } = list;
           return {
@@ -29,12 +44,12 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         },
       );
 
-      this.dbConnList = mappingData as DbConnListMap[];
+      this.dbConnListMap = mappingData as DbConnListMap[];
     },
 
-    async getDbCategories() {
+    async getDbConnTypes() {
       const data = await useDbConnectionApi("dbs", null, true);
-      this.dbCategories = data.data as DbCategoriesRes[];
+      this.dbConnTypesRes = data.data as DbConnTypesRes[];
     },
 
     async getDbConnQuery(id: string) {
@@ -44,7 +59,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
 
       this.dbConnQueryRes = data.data as DbConnQueryRes;
 
-      const { connName, connInfo, dbType, connId } =
+      const { connName, connInfo, dbType, connId, isActivate } =
         data.data as DbConnQueryRes;
       this.dbConnSetForm = {
         connName,
@@ -52,27 +67,49 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       };
       this.dbConnSetId = connId;
       this.dbConnSetType = dbType;
+      this.dbConnSetActivate = isActivate;
     },
 
-    async setDbConnSave(form: DbConnSetForm, isNewConn: boolean = false) {
-      if (isNewConn) this.dbConnSetId = "";
-      const { connName, ...connInfo } = form;
+    async getDbConnSave() {
+      const { connName, ...connInfo } = this.dbConnSetForm;
       const params = {
-        connId: this.dbConnSetId,
+        connId: this.dbConnSetIsNew ? "" : this.dbConnSetId,
         connName,
         dbType: this.dbConnSetType,
         connInfo: JSON.stringify(connInfo),
-        isActivate: true, // TODO: 不應該寫死
+        isActivate: this.dbConnSetActivate,
       };
-      await useDbConnectionApi("save", params); // // TODO: 要寫入回傳
+
+      await useDbConnectionApi("save", params); // TODO: 要寫入回傳
+      await this.getDbConnList(false);
+      this.dbConnDialog.connSetting = false;
     },
 
-    async testConnection(dbType: string, connInfo: ConnInfo) {
+    async getDbConnTest() {
+      const { _, ...connInfo } = this.dbConnSetForm;
       const data = await useDbConnectionApi("test-connection", {
-        dbType,
+        dbType: this.dbConnSetType,
         connInfo: JSON.stringify(connInfo),
       });
       this.dbConnTestRes = data.data as boolean;
+    },
+
+    resetDbConnSetForm() {
+      this.dbConnSetForm = {
+        connName: "",
+        database: "",
+        host: "",
+        port: "",
+        username: "",
+        password: "",
+        ssl: {},
+      };
+    },
+
+    onCloseDbConnSetForm() {
+      this.dbConnDialog.categories = this.dbConnSetIsNew;
+      this.resetDbConnSetForm();
+      this.dbConnTestRes = null;
     },
   },
 });
