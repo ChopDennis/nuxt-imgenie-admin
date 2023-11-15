@@ -22,7 +22,12 @@
           "
         >
           <template #default="scope">
-            <ElSwitch v-model="scope.row.isActivate" />
+            <ElSwitch
+              v-model="scope.row.isActivate"
+              @change="
+                changeDbAcActivate(scope.row.connId, scope.row.isActivate)
+              "
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn label="操作">
@@ -74,5 +79,12 @@ const clickEditActiveConn = async (id: string) => {
   store.dbConnSetTitle = store.dbConnQueryRes.dbType;
   store.dbConnSetIsNew = false;
   store.dbConnDialog.connSetting = true;
+};
+
+const changeDbAcActivate = async (
+  connId: string,
+  isActivate: boolean,
+): Promise<boolean> => {
+  return await store.getDbConnUpdate(connId, isActivate);
 };
 </script>

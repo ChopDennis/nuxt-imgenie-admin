@@ -94,6 +94,17 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       this.dbConnTestRes = data.data as boolean;
     },
 
+    async getDbConnUpdate(
+      connId: string,
+      isActivate: boolean,
+    ): Promise<boolean> {
+      const data = await useDbConnectionApi("update", {
+        connId,
+        isActivate,
+      });
+      return data.code === ApiResponseCode.Success;
+    },
+
     resetDbConnSetForm() {
       this.dbConnSetForm = {
         connName: "",

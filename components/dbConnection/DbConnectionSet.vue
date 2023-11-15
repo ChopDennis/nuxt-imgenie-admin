@@ -13,11 +13,17 @@
       description="請聯絡系統管理員"
       show-icon
     />
-    <ElForm :model="store.dbConnSetForm" label-width="150px">
+    <ElForm
+      ref="dbConnSetFormRef"
+      :model="store.dbConnSetForm"
+      :rules="formRules"
+      label-width="150px"
+    >
       <ElFormItem
         v-for="(value, key) in store.dbConnSetForm"
         :key="key"
         :label="formLabel[_useToString(key)]"
+        :prop="_useToString(key)"
       >
         <ElInput
           v-if="typeof value === 'string'"
@@ -37,7 +43,7 @@
           <ElButton @click="store.dbConnDialog.connSetting = false"
             >取消</ElButton
           >
-          <ElButton type="primary" @click="store.getDbConnSave()"
+          <ElButton type="primary" @click="submitForm(dbConnSetFormRef)"
             >確認</ElButton
           >
         </div>
@@ -47,6 +53,8 @@
 </template>
 s
 <script setup lang="ts">
+import type { FormInstance, FormRules } from "element-plus";
+const dbConnSetFormRef = ref<FormInstance>();
 const store = useDbConnectionStore();
 
 const formLabel: DbConnSetForm = {
@@ -56,6 +64,30 @@ const formLabel: DbConnSetForm = {
   username: "使用者名稱",
   password: "密碼",
   database: "資料庫名稱",
+};
+
+const formRules = reactive<FormRules<DbConnSetForm>>({
+  connName: [{ required: true, message: "請輸入連線名稱", trigger: "change" }],
+  host: [{ required: true, message: "請輸入主機名稱或IP", trigger: "change" }],
+  port: [{ required: true, message: "請輸入通訊埠", trigger: "change" }],
+  username: [
+    { required: true, message: "請輸入使用者名稱", trigger: "change" },
+  ],
+  password: [{ required: true, message: "請輸入密碼", trigger: "change" }],
+  database: [
+    { required: true, message: "請輸入資料庫名稱", trigger: "change" },
+  ],
+});
+
+const submitForm = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  await formEl.validate((valid, fields) => {
+    if (valid) {
+      store.getDbConnSave();
+    } else {
+      console.log("error submit!", fields); // eslint-disable-line no-console
+    }
+  });
 };
 
 onBeforeUnmount(() => {
