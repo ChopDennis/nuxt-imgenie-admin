@@ -37,11 +37,11 @@ $-colors: (
 
 .el-menu-vertical:not(.el-menu--collapse) {
   width: 256px;
-  height: 100vh;
+  height: 100% !important;
 }
 
 .el-menu-vertical.el-menu--collapse {
-  height: 100vh;
+  height: 100% !important;
 }
 
 .el-sub-menu {
@@ -49,7 +49,7 @@ $-colors: (
 }
 
 .el-loading-mask {
-  height: 100vh;
+  height: 100% !important;
 }
 
 .el-alert--success.is-light {

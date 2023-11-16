@@ -1,28 +1,27 @@
 <template>
   <div>
-    <div class="px-5 flex">
-      <p class="text-gray-300">首頁／系統管理／</p>
-      <p>資料庫連線</p>
-    </div>
     <!-- 資料庫連線 -->
-    <div class="flex flex-col gap-4 p-5">
-      <div class="flex justify-between">
-        <h1 class="text-xl font-bold tracking-wide">資料庫連線</h1>
-        <div>
-          <ElButton
-            style=""
-            :icon="ElIconRefresh"
-            type="primary"
-            @click="store.getDbConnList(false)"
-            >重新整理</ElButton
-          >
-          <ElButton
-            style=""
-            :icon="ElIconPlus"
-            type="primary"
-            @click="clickAddNewConn"
-            >新增連線</ElButton
-          >
+    <div class="flex flex-col">
+      <div
+        class="flex flex-col gap-4 px-5 pb-4 sticky top-0 bg-white -mt-1 z-50"
+      >
+        <div class="flex">
+          <p class="text-gray-300">首頁／系統管理／</p>
+          <p>資料庫連線</p>
+        </div>
+        <div class="flex justify-between">
+          <h1 class="text-xl font-bold tracking-wide">資料庫連線</h1>
+          <div>
+            <ElButton
+              :icon="ElIconRefresh"
+              type="primary"
+              @click="store.getDbConnList(false)"
+              >重新整理</ElButton
+            >
+            <ElButton :icon="ElIconPlus" type="primary" @click="clickAddNewConn"
+              >新增連線</ElButton
+            >
+          </div>
         </div>
       </div>
       <DbConnectionList />
