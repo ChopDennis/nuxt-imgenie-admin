@@ -33,7 +33,7 @@
         />
 
         <ElCheckbox
-          v-else-if="typeof value === 'boolean'"
+          v-if="typeof value === 'boolean'"
           v-model="store.dbConnSetForm[_useToString(key)]"
         />
       </ElFormItem>
@@ -64,6 +64,9 @@ const formLabel: DbConnSetForm = {
   username: "使用者名稱",
   password: "密碼",
   database: "資料庫名稱",
+  isSSL: "啟用SSL",
+  isClientCertificate: "啟用用戶端驗證",
+  CAFile: "SSL",
 };
 
 const formRules = reactive<FormRules<DbConnSetForm>>({

@@ -24,14 +24,9 @@ export const useDbConnectionStore = defineStore("dbConnection", {
 
   actions: {
     async getDbConnList(cached: boolean) {
-      const data = await useDbConnectionApi("list", null, cached, true);
+      const data = await useDbConnectionApi("all", null, cached, true);
       const mappingData = _useMap(
-        _useReverse(
-          _useSortBy(data.data as DbConnListRes[], [
-            "updateTime",
-            "isActivate",
-          ]),
-        ),
+        data.data as DbConnListRes[],
         (list, index) => {
           const { connInfo, dbType, connName, ...rest } = list;
           return {
@@ -61,9 +56,15 @@ export const useDbConnectionStore = defineStore("dbConnection", {
 
       const { connName, connInfo, dbType, connId, isActivate } =
         data.data as DbConnQueryRes;
+      const { ssl, host, port, username, password, database } = connInfo;
       this.dbConnSetForm = {
         connName,
-        ...connInfo,
+        host,
+        port,
+        username,
+        password,
+        database,
+        ...ssl,
       };
       this.dbConnSetId = connId;
       this.dbConnSetType = dbType;
@@ -108,11 +109,11 @@ export const useDbConnectionStore = defineStore("dbConnection", {
     resetDbConnSetForm() {
       this.dbConnSetForm = {
         connName: "",
-        database: "",
         host: "",
         port: "",
         username: "",
         password: "",
+        database: "",
         ssl: {},
       };
     },
