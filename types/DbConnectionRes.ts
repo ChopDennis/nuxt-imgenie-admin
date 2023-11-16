@@ -13,6 +13,7 @@ declare global {
     connInfo: ConnInfo;
     connName: string;
     updateTime: string;
+    isActivate: boolean;
   }
 
   interface DbConnListMap {

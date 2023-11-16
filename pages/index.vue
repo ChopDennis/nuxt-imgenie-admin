@@ -6,8 +6,6 @@
   </div>
 </template>
 <script setup lang="ts">
-// const router = useRouter();
-
 const goToDbConnection = () => {
   navigateTo({
     path: "/dbconnection",

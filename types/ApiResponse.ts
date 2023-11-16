@@ -3,7 +3,7 @@
 declare global {
   enum ApiResponseCode {
     Success = "A0001",
-    parameterError = "P0001",
+    ParameterError = "P0001",
 
     IllegalArgument = "E0001",
     EntityNotFound = "E0002",

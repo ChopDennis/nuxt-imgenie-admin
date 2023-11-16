@@ -2,7 +2,7 @@
   <div class="px-5 mt-4">
     <div class="bg-white rounded-lg p-5 shadow-custom-lg">
       <ClientOnly>
-        <ElTable :data="currentPageData" height="800">
+        <ElTable :data="currentPageData" max-height="600">
           <ElTableColumn prop="rowNumber" label="編號" width="60" />
           <ElTableColumn prop="connTypeName" label="連線名稱" />
           <ElTableColumn prop="connInfoDatabase" label="資料庫名稱" />
@@ -26,7 +26,7 @@
               <ElSwitch
                 v-model="scope.row.isActivate"
                 @change="
-                  changeDbAcActivate(scope.row.connId, scope.row.isActivate)
+                  changeDbActivate(scope.row.connId, scope.row.isActivate)
                 "
               />
             </template>
@@ -59,7 +59,7 @@
 <script setup lang="ts">
 const store = useDbConnectionStore();
 const currentPage = ref(1);
-const pageSize = ref(20);
+const pageSize = ref(10);
 
 const currentPageData = computed(() => {
   return (
@@ -78,12 +78,11 @@ const handleCurrentChange = (val: number) => {
 
 const clickEditActiveConn = async (id: string) => {
   await store.getDbConnQuery(id);
-  store.dbConnSetTitle = store.dbConnQueryRes.dbType;
   store.dbConnSetIsNew = false;
   store.dbConnDialog.connSetting = true;
 };
 
-const changeDbAcActivate = async (
+const changeDbActivate = async (
   connId: string,
   isActivate: boolean,
 ): Promise<boolean> => {
