@@ -7,6 +7,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       dbConnSetId: "",
       dbConnSetType: "",
       dbConnSetTitle: "",
+      dbConnSetName: "",
       dbConnSetIsNew: false as boolean,
       dbConnSetActivate: false as boolean,
       dbConnTestRes: null as boolean | null,
@@ -23,28 +24,32 @@ export const useDbConnectionStore = defineStore("dbConnection", {
   // TODO: try catch
   actions: {
     async getDbConnList(cached: boolean) {
-      const { data } = await useDbConnectionApi("all", null, cached, true);
-      const mappingData = _useMap(data as DbConnListRes[], (list, index) => {
-        const { connInfo, dbType, connName, ...rest } = list;
-        return {
-          ...rest,
-          connTypeName: `${_useUpperFirst(dbType)}-${connName}`,
-          connInfoHostPort: `${connInfo.host}:${connInfo.port}`,
-          connInfoDatabase: connInfo.database,
-          rowNumber: index + 1,
-        };
-      });
+      try {
+        const { data } = await useApi(ApiDbConnection.List, null, cached, true);
+        const mappingData = _useMap(data as DbConnListRes[], (list, index) => {
+          const { connInfo, dbType, connName, ...rest } = list;
+          return {
+            ...rest,
+            connTypeName: `${_useUpperFirst(dbType)}-${connName}`,
+            connInfoHostPort: `${connInfo.host}:${connInfo.port}`,
+            connInfoDatabase: connInfo.database,
+            rowNumber: index + 1,
+          };
+        });
 
-      this.dbConnListMap = mappingData;
+        this.dbConnListMap = mappingData;
+      } catch (error) {
+        console.log(error); // eslint-disable-line no-console
+      }
     },
 
     async getDbConnTypes() {
-      const { data } = await useDbConnectionApi("dbs", null, true);
+      const { data } = await useApi(ApiDbConnection.Types, null, true);
       this.dbConnTypesRes = data;
     },
 
     async getDbConnQuery(id: string) {
-      const { data } = await useDbConnectionApi("query", {
+      const { data } = await useApi(ApiDbConnection.Query, {
         connId: id,
       });
       const { connName, connInfo, dbType, connId, isActivate } =
@@ -75,17 +80,18 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         isActivate: this.dbConnSetActivate,
       };
 
-      await useDbConnectionApi("save", params);
+      await useApi(ApiDbConnection.Save, params);
       await this.getDbConnList(false);
       this.dbConnDialog.connSetting = false;
     },
 
     async getDbConnTest() {
-      const { ...connInfo } = this.dbConnSetForm;
-      const data = await useDbConnectionApi("test-connection", {
+      const { connName, ...connInfo } = this.dbConnSetForm;
+      const data = await useApi(ApiDbConnection.Test, {
         dbType: this.dbConnSetType,
         connInfo: JSON.stringify(connInfo),
       });
+      this.dbConnSetName = connName;
       this.dbConnTestRes = data.data as boolean;
     },
 
@@ -93,7 +99,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       connId: string,
       isActivate: boolean,
     ): Promise<boolean> {
-      const data = await useDbConnectionApi("update", {
+      const data = await useApi(ApiDbConnection.Update, {
         connId,
         isActivate,
       });
