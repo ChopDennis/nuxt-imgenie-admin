@@ -9,6 +9,6 @@
 </template>
 <script setup lang="ts">
 const store = useDataMartStore();
-await store.getDataMartList(false);
+await store.getDataMartList(true);
 </script>
 <style scoped></style>

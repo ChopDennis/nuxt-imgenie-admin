@@ -24,6 +24,7 @@
     "@types/node": "^18.17.3",
     "@typescript-eslint/parser": "^6.7.5",
     "autoprefixer": "^10.4.16",
+    "crypto-js": "^4.2.0",
     "element-plus": "^2.4.2",
     "eslint": "^8.52.0",
     "eslint-config-prettier": "^9.0.0",
@@ -31,14 +32,15 @@
     "lodash": "^4.17.21",
     "nuxt": "^3.8.0",
     "nuxt-lodash": "^2.5.3",
+    "nuxt-security": "^1.0.0-rc.4",
     "postcss": "^8.4.31",
     "prettier": "^3.0.3",
     "sass": "^1.69.5",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "uuid": "^9.0.1"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
-    "pinia": "^2.1.7",
-    "vue-uuid": "^3.0.0"
+    "pinia": "^2.1.7"
   }
 }

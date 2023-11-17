@@ -29,16 +29,16 @@ enum ApiResponseCode {
 }
 
 enum ApiDbConnection {
-  List = "/api/dbConnection/all",
-  Types = "/api/dbConnection/dbs",
-  Save = "/api/dbConnection/save",
-  Test = "/api/dbConnection/test-connection",
-  Query = "/api/dbConnection/query",
-  Update = "/api/dbConnection/update",
+  List = "/api/datamart/dbconnection/all",
+  Types = "/api/datamart/dbconnection/dbs",
+  Save = "/api/datamart/dbconnection/save",
+  Test = "/api/datamart/dbconnection/test-connection",
+  Query = "/api/datamart/dbconnection/query",
+  Update = "/api/datamart/dbconnection/update",
 }
 
 enum ApiDataMart {
-  List = "/api/dataMart/all",
+  List = "/api/datamart/datamart/all",
 }
 
 export { ApiDbConnection, ApiResponseCode, ApiDataMart };

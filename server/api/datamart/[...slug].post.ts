@@ -1,15 +1,14 @@
-import { uuid } from "vue-uuid";
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
   const baseUrl = config.public.apiBase;
   const userId = config.public.auth;
-  const url = getRouterParam(event, "url");
+  const url = event.context.params?.slug;
   const body = await readBody(event);
 
-  const response = await $fetch(`${baseUrl}/datamart/dbconnection/${url}`, {
+  const response = await $fetch(`${baseUrl}/datamart/${url}`, {
     method: "post",
     headers: {
-      TXNSEQ: uuid.v1(),
+      TXNSEQ: "",
     },
     body: JSON.stringify({
       userId,
