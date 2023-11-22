@@ -28,11 +28,12 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         const { data } = await useApi(ApiDbConnection.List, null, cached, true);
         const mappingData = _useMap(data as DbConnListRes[], (list, index) => {
           const { connInfo, dbType, connName, ...rest } = list;
+          const { host, port, database } = connInfo;
           return {
             ...rest,
             connTypeName: `${_useUpperFirst(dbType)}-${connName}`,
-            connInfoHostPort: `${connInfo.host}:${connInfo.port}`,
-            connInfoDatabase: connInfo.database,
+            connInfoHostPort: `${host}:${port}`,
+            connInfoDatabase: database,
             rowNumber: index + 1,
           };
         });
@@ -54,7 +55,9 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       });
       const { connName, connInfo, dbType, connId, isActivate } =
         data as DbConnQueryRes;
-      const { ssl, host, port, username, password, database } = connInfo;
+      const { ssl, host, port, username, password, database } = JSON.parse(
+        connInfo,
+      ) as ConnInfo;
       this.dbConnSetForm = {
         connName,
         host,
@@ -80,7 +83,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         isActivate: this.dbConnSetActivate,
       };
 
-      await useApi(ApiDbConnection.Save, params);
+      await useApi(ApiDbConnection.Save, params, false, false, "connInfo");
       await this.getDbConnList(false);
       this.dbConnDialog.connSetting = false;
     },

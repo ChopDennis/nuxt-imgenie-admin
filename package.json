@@ -21,6 +21,7 @@
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@nuxtjs/google-fonts": "^3.0.2",
     "@nuxtjs/tailwindcss": "^6.8.0",
+    "@types/crypto-js": "^4.2.1",
     "@types/node": "^18.17.3",
     "@typescript-eslint/parser": "^6.7.5",
     "autoprefixer": "^10.4.16",
@@ -36,8 +37,8 @@
     "postcss": "^8.4.31",
     "prettier": "^3.0.3",
     "sass": "^1.69.5",
-    "typescript": "^5.2.2",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
