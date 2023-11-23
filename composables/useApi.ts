@@ -1,5 +1,6 @@
 // TODO: type Methods = "GET" | "POST" | "DELETE" | "PUT"
-import { encryptData, decryptData } from "./crypto";
+import { v4 as uuidv4 } from "uuid";
+import { encryptData } from "./crypto";
 
 export const useLoading = () => {
   return useState<boolean>("isLoading", () => false);
@@ -7,37 +8,52 @@ export const useLoading = () => {
 
 export const useApi = async (
   url: string,
-  params?: any,
-  cached: boolean = false,
-  loading: boolean = false,
-  encryptDataField: string | null = null,
+  options?: ApiOptions,
 ): Promise<ApiResponse> => {
   const nuxtApp = useNuxtApp();
   let result: ApiResponse = {};
-  const isLoading = useLoading();
+  let requestBody: any;
+  let isEncrypt = false;
 
-  // Encrypt the specified data field if provided
-  if (encryptDataField && params && params[encryptDataField]) {
-    params[encryptDataField] = encryptData(params[encryptDataField]);
+  const isLoading = useLoading();
+  const uuid = uuidv4();
+  const config = useRuntimeConfig();
+  const userId = config.public.auth;
+
+  if (options && options.params) {
+    requestBody = {
+      userId,
+      ...options.params,
+    };
+  } else {
+    requestBody = {
+      userId,
+    };
+  }
+
+  if (options && options.encrypt) {
+    requestBody = {
+      data: encryptData(requestBody, uuid),
+    };
+    isEncrypt = true;
   }
 
   const { data, error } = await useFetch(url, {
     method: "post",
-    body: {
-      ...params,
+    headers: {
+      TXNSEQ: uuid,
+      IS_ENCRYPT: `${isEncrypt}`,
     },
-    getCachedData: (key) => (cached ? nuxtApp.payload.data[key] : null),
-    onRequest({ request }) {
-      console.log("request", request);
-      isLoading.value = loading;
+    body: {
+      ...requestBody,
+    },
+    getCachedData: (key) =>
+      options?.cached ? nuxtApp.payload.data[key] : null,
+    onRequest() {
+      isLoading.value = options?.loading ?? false;
     },
     onResponse() {
       isLoading.value = false;
-    },
-    onResponseError() {
-      // console.error(
-      //   `useFetch 錯誤訊息: ${response._data.data.code}-${response._data.data.message}`,
-      // );
     },
   });
   if (error.value) {
@@ -45,12 +61,7 @@ export const useApi = async (
     result = error.value.data.data as ApiResponse;
   } else {
     console.log(`useFetch ${url} - ${formatCurrentTime()}`); // eslint-disable-line no-console
-    // Decrypt the response if needed
-    if (data && encryptDataField && data[encryptDataField]) {
-      data[encryptDataField] = decryptData(data[encryptDataField], key);
-    }
     result = data.value as ApiResponse;
-    // console.log(JSON.stringify(result.data)); // eslint-disable-line no-console
   }
   return result;
 };

@@ -6,6 +6,13 @@ declare global {
     message?: string;
     data?: any;
   }
+
+  interface ApiOptions {
+    params?: any | null;
+    cached?: boolean;
+    loading?: boolean;
+    encrypt?: boolean;
+  }
 }
 
 enum ApiResponseCode {

@@ -25,7 +25,10 @@ export const useDbConnectionStore = defineStore("dbConnection", {
   actions: {
     async getDbConnList(cached: boolean) {
       try {
-        const { data } = await useApi(ApiDbConnection.List, null, cached, true);
+        const { data } = await useApi(ApiDbConnection.List, {
+          cached,
+          loading: true,
+        });
         const mappingData = _useMap(data as DbConnListRes[], (list, index) => {
           const { connInfo, dbType, connName, ...rest } = list;
           const { host, port, database } = connInfo;
@@ -45,13 +48,15 @@ export const useDbConnectionStore = defineStore("dbConnection", {
     },
 
     async getDbConnTypes() {
-      const { data } = await useApi(ApiDbConnection.Types, null, true);
+      const { data } = await useApi(ApiDbConnection.Types, { cached: true });
       this.dbConnTypesRes = data;
     },
 
     async getDbConnQuery(id: string) {
       const { data } = await useApi(ApiDbConnection.Query, {
-        connId: id,
+        params: {
+          connId: id,
+        },
       });
       const { connName, connInfo, dbType, connId, isActivate } =
         data as DbConnQueryRes;
@@ -83,7 +88,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         isActivate: this.dbConnSetActivate,
       };
 
-      await useApi(ApiDbConnection.Save, params, false, false, "connInfo");
+      await useApi(ApiDbConnection.Save, { params, encrypt: true });
       await this.getDbConnList(false);
       this.dbConnDialog.connSetting = false;
     },
@@ -91,8 +96,10 @@ export const useDbConnectionStore = defineStore("dbConnection", {
     async getDbConnTest() {
       const { connName, ...connInfo } = this.dbConnSetForm;
       const data = await useApi(ApiDbConnection.Test, {
-        dbType: this.dbConnSetType,
-        connInfo: JSON.stringify(connInfo),
+        params: {
+          dbType: this.dbConnSetType,
+          connInfo: JSON.stringify(connInfo),
+        },
       });
       this.dbConnSetName = connName;
       this.dbConnTestRes = data.data as boolean;
@@ -103,8 +110,10 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       isActivate: boolean,
     ): Promise<boolean> {
       const data = await useApi(ApiDbConnection.Update, {
-        connId,
-        isActivate,
+        params: {
+          connId,
+          isActivate,
+        },
       });
       return data.code === ApiResponseCode.Success;
     },
