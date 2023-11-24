@@ -37,17 +37,6 @@
           v-model="store.dbConnSetForm[_useToString(key)]"
         />
       </ElFormItem>
-      <div class="flex justify-between">
-        <ElButton @click="store.getDbConnTest()">連線測試</ElButton>
-        <div class="flex">
-          <ElButton @click="store.dbConnDialog.connSetting = false"
-            >取消</ElButton
-          >
-          <ElButton type="primary" @click="submitForm(dbConnSetFormRef)"
-            >確認</ElButton
-          >
-        </div>
-      </div>
     </ElForm>
   </div>
 </template>
@@ -92,6 +81,11 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     }
   });
 };
+
+defineExpose({
+  submitForm,
+  dbConnSetFormRef,
+});
 
 onBeforeUnmount(() => {
   store.onCloseDbConnSetForm();

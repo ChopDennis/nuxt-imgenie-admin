@@ -9,21 +9,29 @@
             width="70"
             align="center"
           />
-          <ElTableColumn prop="connTypeName" label="連線名稱" min-width="150" />
           <ElTableColumn
-            prop="connInfoDatabase"
-            label="資料庫名稱"
+            prop="dataMartName"
+            label="Data Mart 名稱"
             min-width="150"
           />
           <ElTableColumn
-            prop="connInfoHostPort"
-            label="主機名稱及IP"
-            min-width="150"
-          />
+            prop="dbType"
+            label="資料庫類型"
+            width="120"
+            align="center"
+            ><template #default="">
+              <img
+                class="m-auto"
+                src="~/assets/icons/dbConnection/ic_postgresql.svg"
+              />
+            </template>
+          </ElTableColumn>
+          <ElTableColumn prop="connName" label="資料庫來源" min-width="150" />
+          <ElTableColumn prop="updateTime" label="建立時間" min-width="150" />
           <ElTableColumn
             label="狀態"
-            width="90"
             align="center"
+            width="90"
             sortable
             :sort-method="
               (a, b) => {
@@ -41,17 +49,20 @@
               <ElSwitch
                 v-model="scope.row.isActivate"
                 @change="
-                  changeDbActivate(scope.row.connId, scope.row.isActivate)
+                  changeDataMartActivate(
+                    scope.row.datamartId,
+                    scope.row.isActivate,
+                  )
                 "
               />
             </template>
           </ElTableColumn>
           <ElTableColumn label="操作" width="90" align="center">
-            <template #default="scope">
+            <template #default="">
               <img
                 class="m-auto"
                 src="~/assets/icons/dbConnection/ic_db_edit.svg"
-                @click="clickEditActiveConn(scope.row.connId)"
+                @click="clickEditActiveConn()"
               />
             </template>
           </ElTableColumn>
@@ -62,7 +73,7 @@
           :current-page="currentPage"
           :page-sizes="[10, 20, 40]"
           :page-size="pageSize"
-          :total="store.dbConnListMap.length"
+          :total="store.dataMartListMap.length"
           background
           layout="total, sizes, prev, pager, next"
           @size-change="handleSizeChange"
@@ -73,13 +84,14 @@
   </div>
 </template>
 <script setup lang="ts">
-const store = useDbConnectionStore();
+const store = useDataMartStore();
 const currentPage = ref(1);
 const pageSize = ref(10);
 
 const currentPageData = computed(() => {
   return (
-    _useChunk(store.dbConnListMap, pageSize.value)[currentPage.value - 1] || []
+    _useChunk(store.dataMartListMap, pageSize.value)[currentPage.value - 1] ||
+    []
   );
 });
 
@@ -92,16 +104,18 @@ const handleCurrentChange = (val: number) => {
   currentPage.value = val;
 };
 
-const clickEditActiveConn = async (id: string) => {
-  await store.getDbConnQuery(id);
-  store.dbConnSetIsNew = false;
-  store.dbConnDialog.connSetting = true;
+const clickEditActiveConn = () => {
+  // await store.getDbConnQuery(id);
+  // store.dbConnSetIsNew = false;
+  // store.dbConnDialog.connSetting = true;
+  console.log("clickEditActiveConn");
 };
 
-const changeDbActivate = async (
+const changeDataMartActivate = async (
   connId: string,
   isActivate: boolean,
 ): Promise<boolean> => {
-  return await store.getDbConnUpdate(connId, isActivate);
+  console.log("changeDataMart: ", connId + "-" + isActivate);
+  return await store.getDataMartUpdate(connId, isActivate);
 };
 </script>

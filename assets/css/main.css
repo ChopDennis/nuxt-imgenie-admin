@@ -21,3 +21,21 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+th {
+  background-color: rgba(242, 244, 245, 1) !important;
+  color: rgba(32, 34, 47, 1) !important;
+  font-weight: 400 !important;
+}
+
+th:not(:last-child) .cell {
+  border-right: 1px solid lightgray !important;
+}
+
+#dbTypeSelectButton:hover {
+  background-color: rgba(239, 244, 254, 1);
+}
+
+#dbTypeSelectButton:focus {
+  border: 1px solid rgba(69, 109, 236, 1);
+}

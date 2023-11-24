@@ -2,6 +2,7 @@
   <div class="grid grid-cols-2 gap-4">
     <div
       v-for="(type, index) in store.dbConnTypesRes"
+      id="dbTypeSelectButton"
       :key="index"
       class="rounded-lg p-4 h-auto flex justify-start gap-2 transition-all"
       :class="{

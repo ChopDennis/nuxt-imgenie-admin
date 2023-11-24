@@ -55,3 +55,12 @@ $-colors: (
 .el-alert--success.is-light {
   border: 1px solid;
 }
+
+.el-dialog__body {
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+}
+
+.el-alert--error.is-light {
+  border: 1px solid !important;
+}

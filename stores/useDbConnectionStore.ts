@@ -74,7 +74,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       };
       this.dbConnSetId = connId;
       this.dbConnSetType = dbType;
-      this.dbConnSetTitle = dbType;
+      this.dbConnSetTitle = _useUpperFirst(dbType);
       this.dbConnSetActivate = isActivate;
     },
 

@@ -5,7 +5,7 @@
       <div
         class="flex flex-col gap-4 px-5 pb-4 sticky top-0 bg-white -mt-1 z-50"
       >
-        <div class="flex">
+        <div class="flex text-sm">
           <p class="text-gray-300">首頁／系統管理／</p>
           <p>資料庫連線</p>
         </div>
@@ -41,23 +41,51 @@
     <ElDialog
       v-model="store.dbConnDialog.connSetting"
       :destroy-on-close="true"
-      :title="`${store.dbConnSetTitle} 連線設定`"
       modal-class="backdrop-blur-sm"
       align-center
       width="576"
     >
-      <DbConnectionSet />
+      <template #header
+        ><img
+          class="inline-block pb-2 pr-2"
+          src="~/assets/icons/dbConnection/ic_postgresql.svg"
+        />
+        <span>{{ store.dbConnSetTitle }} 連線設定</span>
+      </template>
+      <DbConnectionSet ref="dbConnectionSetRef" />
+      <template #footer>
+        <div class="flex justify-between">
+          <ElButton @click="store.getDbConnTest()">連線測試</ElButton>
+          <span>
+            <ElButton @click="store.dbConnDialog.connSetting = false"
+              >取消</ElButton
+            >
+            <ElButton type="primary" @click="clickConfirm">確認</ElButton>
+          </span>
+        </div>
+      </template>
     </ElDialog>
   </div>
 </template>
 <script setup lang="ts">
+import DbConnectionSet from "~/components/dbConnection/DbConnectionSet.vue";
+
 const store = useDbConnectionStore();
+const dbConnectionSetRef = ref<InstanceType<typeof DbConnectionSet> | null>(
+  null,
+);
 await store.getDbConnList(true);
 
 const clickAddNewConn = async () => {
   await store.getDbConnTypes();
   store.dbConnDialog.categories = true;
 };
+
+function clickConfirm() {
+  dbConnectionSetRef.value?.submitForm(
+    dbConnectionSetRef.value?.dbConnSetFormRef,
+  );
+}
 </script>
 <style scoped>
 .db-category-active {

@@ -2,6 +2,7 @@ export const useDataMartStore = defineStore("dataMart", {
   state: () => {
     return {
       dataMartList: [] as DataMartListRes[],
+      dataMartListMap: [] as DataMartListMap[],
     };
   },
 
@@ -13,10 +14,33 @@ export const useDataMartStore = defineStore("dataMart", {
           cached,
           loading: true,
         });
+
         this.dataMartList = data;
+        this.mapDataMartList();
       } catch (error) {
         console.log(error); // eslint-disable-line no-console
       }
+    },
+    mapDataMartList() {
+      const mappingData = _useMap(this.dataMartList, (list, index) => {
+        return {
+          ...list,
+          rowNumber: index + 1,
+        };
+      });
+      this.dataMartListMap = mappingData;
+    },
+    async getDataMartUpdate(
+      datamartId: string,
+      isActivate: boolean,
+    ): Promise<boolean> {
+      const data = await useApi(ApiDataMart.Update, {
+        params: {
+          datamartId,
+          isActivate,
+        },
+      });
+      return data.code === ApiResponseCode.Success;
     },
   },
 });

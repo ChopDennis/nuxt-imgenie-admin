@@ -1,60 +1,62 @@
 <template>
-  <ClientOnly>
-    <ElMenu
-      class="el-menu-vertical"
-      :collapse="store.isSideMenuCollapse"
-      background-color="#20222F"
-      text-color="white"
-      default-active="2-1"
-      active-text-color="#456DEC"
-    >
-      <ElMenuItem style="background-color: #313549">
-        <img
-          :src="icons['ic_menu_collapse']"
-          width="24"
-          :class="[
-            store.isSideMenuCollapse
-              ? 'icon-menu-collapse'
-              : 'icon-menu-expend',
-          ]"
-          @click="store.isSideMenuCollapse = !store.isSideMenuCollapse"
-        />
-        <template #title>
-          <div
-            v-if="!store.isSideMenuCollapse"
-            class="text-white font-bold text-base"
-          >
-            iMGenie 後台管理
-          </div>
-        </template>
-      </ElMenuItem>
-
-      <ElSubMenu
-        v-for="(menu, menuIndex) in sideMenuList"
-        :key="menuIndex"
-        :index="_useToString(menuIndex + 1)"
+  <div class="absolute h-full" style="z-index: 999">
+    <ClientOnly>
+      <ElMenu
+        class="el-menu-vertical"
+        :collapse="store.isSideMenuCollapse"
+        background-color="#20222F"
+        text-color="white"
+        default-active="2-1"
+        active-text-color="#456DEC"
       >
-        <template #title>
-          <img :src="icons[`${menu.icon}`]" width="16" />
-          <div
-            v-if="!store.isSideMenuCollapse"
-            class="font-normal text-sm px-2"
-          >
-            {{ menu.title }}
-          </div></template
+        <ElMenuItem style="background-color: #313549">
+          <img
+            :src="icons['ic_menu_collapse']"
+            width="24"
+            :class="[
+              store.isSideMenuCollapse
+                ? 'icon-menu-collapse'
+                : 'icon-menu-expend',
+            ]"
+            @click="store.isSideMenuCollapse = !store.isSideMenuCollapse"
+          />
+          <template #title>
+            <div
+              v-if="!store.isSideMenuCollapse"
+              class="text-white font-bold text-base"
+            >
+              iMGenie 後台管理
+            </div>
+          </template>
+        </ElMenuItem>
+
+        <ElSubMenu
+          v-for="(menu, menuIndex) in sideMenuList"
+          :key="menuIndex"
+          :index="_useToString(menuIndex + 1)"
         >
-        <ElMenuItemGroup>
-          <el-menu-item
-            v-for="(subMenu, subMenuIndex) in menu.subMenu"
-            :key="subMenuIndex"
-            :index="_useToString(`${menuIndex + 1}-${subMenuIndex + 1}`)"
-            @click="navigateTo(`${subMenu.path}`)"
-            >{{ subMenu.title }}</el-menu-item
+          <template #title>
+            <img :src="icons[`${menu.icon}`]" width="16" />
+            <div
+              v-if="!store.isSideMenuCollapse"
+              class="font-normal text-sm px-2"
+            >
+              {{ menu.title }}
+            </div></template
           >
-        </ElMenuItemGroup>
-      </ElSubMenu>
-    </ElMenu>
-  </ClientOnly>
+          <ElMenuItemGroup>
+            <el-menu-item
+              v-for="(subMenu, subMenuIndex) in menu.subMenu"
+              :key="subMenuIndex"
+              :index="_useToString(`${menuIndex + 1}-${subMenuIndex + 1}`)"
+              @click="navigateTo(`${subMenu.path}`)"
+              >{{ subMenu.title }}</el-menu-item
+            >
+          </ElMenuItemGroup>
+        </ElSubMenu>
+      </ElMenu>
+    </ClientOnly>
+  </div>
 </template>
 <script setup lang="ts">
 const sideMenuList = ref();
