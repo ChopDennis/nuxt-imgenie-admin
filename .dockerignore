@@ -1,4 +1,10 @@
 npm-debug.log
 node_modules
 .nuxt
-.output
+.vscode
+.eslintignore
+.eslintrc
+.gitignore
+tsconfig.json
+yarn-error.log
+yarn.lock
