@@ -1,6 +1,4 @@
-// TODO: type Methods = "GET" | "POST" | "DELETE" | "PUT"
 import { v4 as uuidv4 } from "uuid";
-import { encryptData } from "./crypto";
 
 export const useLoading = () => {
   return useState<boolean>("isLoading", () => false);
@@ -62,6 +60,9 @@ export const useApi = async (
   } else {
     console.log(`useFetch ${url} - ${formatCurrentTime()}`); // eslint-disable-line no-console
     result = data.value as ApiResponse;
+    if (options?.decrypt) {
+      result.data = decryptData(result.data, uuid);
+    }
   }
   return result;
 };

@@ -38,7 +38,7 @@ declare global {
     connId: string;
     dbType: string;
     connName: string;
-    connInfo: string;
+    connInfo: ConnInfo;
     isActivate: boolean;
   }
   interface DbConnSetForm {
@@ -56,7 +56,7 @@ declare global {
     connId: string;
     dbType: string;
     connName: string;
-    connInfo: string;
+    connInfo: ConnInfo;
     updateTime: string;
     isActivate: boolean;
   }

@@ -28,6 +28,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         const { data } = await useApi(ApiDbConnection.List, {
           cached,
           loading: true,
+          decrypt: true,
         });
         const mappingData = _useMap(data as DbConnListRes[], (list, index) => {
           const { connInfo, dbType, connName, ...rest } = list;
@@ -57,12 +58,12 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         params: {
           connId: id,
         },
+        decrypt: true,
       });
       const { connName, connInfo, dbType, connId, isActivate } =
         data as DbConnQueryRes;
-      const { ssl, host, port, username, password, database } = JSON.parse(
-        connInfo,
-      ) as ConnInfo;
+      const { ssl, host, port, username, password, database } =
+        connInfo as ConnInfo;
       this.dbConnSetForm = {
         connName,
         host,
@@ -88,7 +89,11 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         isActivate: this.dbConnSetActivate,
       };
 
-      await useApi(ApiDbConnection.Save, { params, encrypt: true });
+      await useApi(ApiDbConnection.Save, {
+        params,
+        encrypt: true,
+        decrypt: true,
+      });
       await this.getDbConnList(false);
       this.dbConnDialog.connSetting = false;
     },
@@ -100,6 +105,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
           dbType: this.dbConnSetType,
           connInfo: JSON.stringify(connInfo),
         },
+        encrypt: true,
       });
       this.dbConnSetName = connName;
       this.dbConnTestRes = data.data as boolean;

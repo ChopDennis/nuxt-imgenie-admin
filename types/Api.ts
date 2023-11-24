@@ -12,6 +12,7 @@ declare global {
     cached?: boolean;
     loading?: boolean;
     encrypt?: boolean;
+    decrypt?: boolean;
   }
 }
 
