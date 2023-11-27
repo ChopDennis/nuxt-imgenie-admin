@@ -5,12 +5,13 @@
       title="連線成功"
       type="success"
       show-icon
+      class="font-black"
     />
     <ElAlert
       v-if="store.dbConnTestRes === false"
-      title="連線失敗"
+      title="無法連結到localhost: "
+      description="錯誤訊息"
       type="error"
-      description="請聯絡系統管理員"
       show-icon
     />
     <ElForm
@@ -19,24 +20,44 @@
       :rules="formRules"
       label-width="150px"
     >
-      <ElFormItem
-        v-for="(value, key) in store.dbConnSetForm"
-        :key="key"
-        :label="formLabel[_useToString(key)]"
-        :prop="_useToString(key)"
-      >
-        <ElInput
+      <div v-for="(value, key) in store.dbConnSetForm" :key="key">
+        <ElFormItem
           v-if="typeof value === 'string'"
-          v-model="store.dbConnSetForm[_useToString(key)]"
-          :placeholder="`請輸入${formLabel[_useToString(key)]}`"
-          :type="`${_useToString(key)}`"
-        />
+          :label="formLabel[_useToString(key)]"
+          :prop="_useToString(key)"
+        >
+          <ElInput
+            v-model="store.dbConnSetForm[_useToString(key)]"
+            :placeholder="`請輸入${formLabel[_useToString(key)]}`"
+            :type="`${_useToString(key)}`"
+          />
+        </ElFormItem>
+      </div>
+      <div class="flex">
+        <div v-for="(value, key) in store.dbConnSetForm.ssl" :key="key">
+          <ElFormItem
+            v-if="typeof value === 'boolean'"
+            :label="formLabel[_useToString(key)]"
+            :prop="_useToString(key)"
+          >
+            <ElCheckbox v-model="store.dbConnSetForm[_useToString(key)]" />
+          </ElFormItem>
+        </div>
+      </div>
 
-        <ElCheckbox
-          v-if="typeof value === 'boolean'"
-          v-model="store.dbConnSetForm[_useToString(key)]"
-        />
-      </ElFormItem>
+      <div v-for="(value, key) in store.dbConnSetForm.ssl" :key="key">
+        <ElFormItem
+          v-if="typeof value === 'string'"
+          :label="formLabel[_useToString(key)]"
+          :prop="_useToString(key)"
+        >
+          <ElInput
+            v-model="store.dbConnSetForm[_useToString(key)]"
+            placeholder="將資料拖曳此處，或點擊上傳"
+            :type="`${_useToString(key)}`"
+          />
+        </ElFormItem>
+      </div>
     </ElForm>
   </div>
 </template>
@@ -56,6 +77,9 @@ const formLabel: DbConnSetForm = {
   isSSL: "啟用SSL",
   isClientCertificate: "啟用用戶端驗證",
   CAFile: "SSL",
+  ca: "Server Certificate",
+  clientKey: "Client Key",
+  clientCertificate: "Client Certificate",
 };
 
 const formRules = reactive<FormRules<DbConnSetForm>>({

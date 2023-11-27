@@ -132,7 +132,13 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         username: "",
         password: "",
         database: "",
-        ssl: {},
+        ssl: {
+          isSSL: false,
+          isClientCertificate: false,
+          ca: "",
+          clientCertificate: "",
+          clientKey: "",
+        },
       };
     },
 

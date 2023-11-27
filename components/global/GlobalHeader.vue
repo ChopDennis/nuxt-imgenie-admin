@@ -1,6 +1,8 @@
 <template>
   <div class="w-full h-16 flex justify-end items-stretch px-5">
-    <div class="self-center px-8"><ElIconBell width="24" /></div>
+    <div class="self-center px-8">
+      <ElBadge :value="12" class="item"> <ElIconBell width="24" /> </ElBadge>
+    </div>
     <img
       src="~/assets/icons/header/ic_avatar.svg"
       width="40"

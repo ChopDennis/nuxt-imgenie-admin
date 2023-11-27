@@ -4,14 +4,16 @@
       v-for="(type, index) in store.dbConnTypesRes"
       id="dbTypeSelectButton"
       :key="index"
-      class="rounded-lg p-4 h-auto flex justify-start gap-2 transition-all"
+      class="rounded-lg p-4 h-auto flex justify-start gap-2 transition-all items-center"
       :class="{
         'db-category-active': false,
         'shadow-custom-md': true,
       }"
       @click="clickEditNewConn(type.title, type.itemId)"
     >
-      <div><img :src="icons[`ic_${type.itemId}`]" class="w-6" /></div>
+      <div>
+        <img :src="globalStore.dbConnIcons[`ic_${type.itemId}`]" class="w-6" />
+      </div>
 
       <div class="font-medium text-lg">
         {{ _useUpperFirst(type.title) }}
@@ -21,7 +23,8 @@
 </template>
 <script setup lang="ts">
 const store = useDbConnectionStore();
-const icons = dynamicImportDbConnectionIcons();
+const globalStore = useGlobalStore();
+
 const clickEditNewConn = (title: string, dbType: string) => {
   store.dbConnSetTitle = title;
   store.dbConnSetType = dbType;

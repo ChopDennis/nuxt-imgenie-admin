@@ -46,11 +46,12 @@
       width="576"
     >
       <template #header
-        ><img
-          class="inline-block pb-2 pr-2"
-          src="~/assets/icons/dbConnection/ic_postgresql.svg"
-        />
-        <span>{{ store.dbConnSetTitle }} 連線設定</span>
+        ><div class="h-auto flex items-center gap-2">
+          <div>
+            <img :src="globalStore.dbConnIcons[`ic_${store.dbConnSetType}`]" />
+          </div>
+          <div>{{ store.dbConnSetTitle }} 連線設定</div>
+        </div>
       </template>
       <DbConnectionSet ref="dbConnectionSetRef" />
       <template #footer>
@@ -71,6 +72,9 @@
 import DbConnectionSet from "~/components/dbConnection/DbConnectionSet.vue";
 
 const store = useDbConnectionStore();
+const globalStore = useGlobalStore();
+globalStore.dynamicImportDbConnectionIcons();
+
 const dbConnectionSetRef = ref<InstanceType<typeof DbConnectionSet> | null>(
   null,
 );

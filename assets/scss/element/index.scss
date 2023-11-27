@@ -53,7 +53,7 @@ $-colors: (
 }
 
 .el-alert--success.is-light {
-  border: 1px solid;
+  border: 1px solid !important;
 }
 
 .el-dialog__body {
@@ -63,4 +63,35 @@ $-colors: (
 
 .el-alert--error.is-light {
   border: 1px solid !important;
+}
+
+.el-sub-menu .el-menu-item,
+.el-sub-menu__title {
+  height: 45px !important;
+}
+
+.el-menu-item-group {
+  margin-top: -14px !important;
+  padding-left: 4px !important;
+}
+
+.el-alert__content {
+  color: black !important;
+  font-weight: 400 !important;
+}
+
+.el-alert__title.is-bold {
+  font-weight: 400 !important;
+}
+
+.el-alert__description {
+  color: black !important;
+}
+
+.el-alert {
+  --el-alert-icon-large-size: 24px !important;
+}
+
+.el-alert .el-alert__icon.is-big {
+  margin-top: -24px !important;
 }
