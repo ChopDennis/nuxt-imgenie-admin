@@ -23,11 +23,11 @@ export const useDbConnectionStore = defineStore("dbConnection", {
 
   // TODO: try catch
   actions: {
-    async getDbConnList(cached: boolean) {
+    async getDbConnList(cached: boolean, loading: boolean) {
       try {
         const { data } = await useApi(ApiDbConnection.List, {
           cached,
-          loading: true,
+          loading,
           decrypt: true,
         });
         const mappingData = _useMap(data as DbConnListRes[], (list, index) => {
@@ -94,7 +94,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         encrypt: true,
         decrypt: true,
       });
-      await this.getDbConnList(false);
+      await this.getDbConnList(false, false);
       this.dbConnDialog.connSetting = false;
     },
 

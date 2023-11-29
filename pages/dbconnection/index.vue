@@ -15,7 +15,7 @@
             <ElButton
               :icon="ElIconRefresh"
               type="primary"
-              @click="store.getDbConnList(false)"
+              @click="store.getDbConnList(false, true)"
               >重新整理</ElButton
             >
             <ElButton :icon="ElIconPlus" type="primary" @click="clickAddNewConn"
@@ -78,7 +78,7 @@ globalStore.dynamicImportDbConnectionIcons();
 const dbConnectionSetRef = ref<InstanceType<typeof DbConnectionSet> | null>(
   null,
 );
-await store.getDbConnList(true);
+await store.getDbConnList(true, false);
 
 const clickAddNewConn = async () => {
   await store.getDbConnTypes();

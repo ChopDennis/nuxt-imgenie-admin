@@ -8,11 +8,11 @@ export const useDataMartStore = defineStore("dataMart", {
 
   // TODO: try catch
   actions: {
-    async getDataMartList(cached: boolean) {
+    async getDataMartList(cached: boolean, loading: boolean) {
       try {
         const { data } = await useApi(ApiDataMart.List, {
           cached,
-          loading: true,
+          loading,
         });
 
         this.dataMartList = data;
