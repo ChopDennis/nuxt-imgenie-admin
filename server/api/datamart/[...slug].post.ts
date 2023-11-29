@@ -4,11 +4,12 @@ export default defineEventHandler(async (event) => {
   const url = event.context.params?.slug;
   const body = await readBody(event);
   const txnseq = getHeader(event, "txnseq");
-
+  const isEncrypt = getHeader(event, "is_encrypt");
   const response = await $fetch(`${baseUrl}/datamart/${url}`, {
     method: "post",
     headers: {
-      txnseq: txnseq as string,
+      TXNSEQ: txnseq as string,
+      IS_ENCRYPT: isEncrypt as string,
     },
     body: JSON.stringify({
       ...body,
