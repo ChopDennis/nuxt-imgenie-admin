@@ -11,14 +11,18 @@ declare global {
     updateTime: string;
   }
 
-  interface DataMartListMap {
-    connName: string;
-    dataMartName: string;
-    dbType: string;
-    icon: string;
-    isActivate: boolean;
-    rowNumber: number;
-    updateTime: string;
+  interface DataMartQueryRes {
+    datamartId: string;
+    datamartName: string;
+    description: string;
+    dbName: string;
+    dbConnection: {
+      connId: string;
+      dbType: string;
+      connName: string;
+      connInfo: ConnInfo;
+    };
+    [key: string]: any;
   }
 }
 

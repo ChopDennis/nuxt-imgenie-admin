@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     enabled: false,
   },
   imports: {
-    dirs: ["./stores/**", "./types/**"],
+    dirs: ["./stores/**", "./types/**", "composables/**"],
   },
   lodash: {
     prefix: "_use",

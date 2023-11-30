@@ -29,8 +29,6 @@
 const store = useDataMartStore();
 await store.getDataMartList(true, false);
 const clickAddNewDataMart = () => {
-  console.log("新增");
-
   store.resetDataMartForm();
   navigateTo({ path: "/datamart/edit" });
 };

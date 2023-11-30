@@ -3,8 +3,8 @@ declare global {
     host: string;
     port: string;
     database: string;
-    username?: string;
-    password?: string;
+    username: string;
+    password: string;
     ssl?: any;
   }
   interface DbConnListRes {

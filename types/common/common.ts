@@ -48,6 +48,7 @@ enum ApiDbConnection {
 enum ApiDataMart {
   List = "/api/datamart/datamart/all",
   Update = "/api/datamart/datamart/update",
+  Query = "/api/datamart/datamart/query",
 }
 
 export { ApiDbConnection, ApiResponseCode, ApiDataMart };

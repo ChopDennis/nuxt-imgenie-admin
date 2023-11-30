@@ -27,7 +27,6 @@
 <script setup lang="ts">
 const store = useDataMartStore();
 const route = useRoute();
-console.log(route.query.datamartId);
 
 await store.getDataMartQuery(route.query.datamartId as string);
 </script>
