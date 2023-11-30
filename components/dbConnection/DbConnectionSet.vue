@@ -68,18 +68,18 @@ const dbConnSetFormRef = ref<FormInstance>();
 const store = useDbConnectionStore();
 
 const formLabel: DbConnSetForm = {
-  connName: "連線名稱",
-  host: "主機名稱或IP",
-  port: "通訊埠",
-  username: "使用者名稱",
-  password: "密碼",
-  database: "資料庫名稱",
+  connName: "連線名稱:",
+  host: "主機名稱或IP:",
+  port: "通訊埠:",
+  username: "使用者名稱:",
+  password: "密碼:",
+  database: "資料庫名稱:",
   isSSL: "啟用SSL",
   isClientCertificate: "啟用用戶端驗證",
   CAFile: "SSL",
-  ca: "Server Certificate",
-  clientKey: "Client Key",
-  clientCertificate: "Client Certificate",
+  ca: "Server Certificate:",
+  clientKey: "Client Key:",
+  clientCertificate: "Client Certificate:",
 };
 
 const formRules = reactive<FormRules<DbConnSetForm>>({

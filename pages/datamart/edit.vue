@@ -20,12 +20,15 @@
           </div>
         </div>
       </div>
-      <DataMartEdit />
+      <DataMartInfo />
     </div>
   </div>
 </template>
 <script setup lang="ts">
 const store = useDataMartStore();
-await store.getDataMartList(true);
+const route = useRoute();
+console.log(route.query.datamartId);
+
+await store.getDataMartQuery(route.query.datamartId as string);
 </script>
 <style scoped></style>

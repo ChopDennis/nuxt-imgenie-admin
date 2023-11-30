@@ -28,7 +28,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         const { data } = await useApi(ApiDbConnection.List, {
           cached,
           loading,
-          decrypt: true,
+          // decrypt: true,
         });
         const mappingData = _useMap(data as DbConnListRes[], (list, index) => {
           const { connInfo, dbType, connName, ...rest } = list;

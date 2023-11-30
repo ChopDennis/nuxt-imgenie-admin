@@ -12,7 +12,10 @@
           <h1 class="text-xl font-bold tracking-wide">Data Mart 設定</h1>
           <div>
             <ElButton :icon="ElIconRefresh" type="primary">重新整理</ElButton>
-            <ElButton :icon="ElIconPlus" type="primary"
+            <ElButton
+              :icon="ElIconPlus"
+              type="primary"
+              @click="clickAddNewDataMart()"
               >新增 Data Mart</ElButton
             >
           </div>
@@ -24,6 +27,12 @@
 </template>
 <script setup lang="ts">
 const store = useDataMartStore();
-await store.getDataMartList(true);
+await store.getDataMartList(true, false);
+const clickAddNewDataMart = () => {
+  console.log("新增");
+
+  store.resetDataMartForm();
+  navigateTo({ path: "/datamart/edit" });
+};
 </script>
 <style scoped></style>

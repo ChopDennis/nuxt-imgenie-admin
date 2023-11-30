@@ -58,11 +58,11 @@
             </template>
           </ElTableColumn>
           <ElTableColumn label="操作" width="90" align="center">
-            <template #default="">
+            <template #default="scope">
               <img
                 class="m-auto"
                 src="~/assets/icons/dbConnection/ic_db_edit.svg"
-                @click="clickEditActiveConn()"
+                @click="toEditDataMart(scope.row.datamartId)"
               />
             </template>
           </ElTableColumn>
@@ -73,7 +73,7 @@
           :current-page="currentPage"
           :page-sizes="[10, 20, 40]"
           :page-size="pageSize"
-          :total="store.dataMartListMap.length"
+          :total="store.dataMartList.length"
           background
           layout="total, sizes, prev, pager, next"
           @size-change="handleSizeChange"
@@ -90,8 +90,7 @@ const pageSize = ref(10);
 
 const currentPageData = computed(() => {
   return (
-    _useChunk(store.dataMartListMap, pageSize.value)[currentPage.value - 1] ||
-    []
+    _useChunk(store.dataMartList, pageSize.value)[currentPage.value - 1] || []
   );
 });
 
@@ -104,18 +103,20 @@ const handleCurrentChange = (val: number) => {
   currentPage.value = val;
 };
 
-const clickEditActiveConn = () => {
-  // await store.getDbConnQuery(id);
-  // store.dbConnSetIsNew = false;
-  // store.dbConnDialog.connSetting = true;
-  console.log("clickEditActiveConn");
+const toEditDataMart = async (datamartId: string) => {
+  console.log(datamartId);
+  await navigateTo({
+    path: "/datamart/edit",
+    query: {
+      datamartId,
+    },
+  });
 };
 
 const changeDataMartActivate = async (
   connId: string,
   isActivate: boolean,
 ): Promise<boolean> => {
-  console.log("changeDataMart: ", connId + "-" + isActivate);
   return await store.getDataMartUpdate(connId, isActivate);
 };
 </script>

@@ -1,8 +1,10 @@
 export const useDataMartStore = defineStore("dataMart", {
   state: () => {
     return {
-      dataMartList: [] as DataMartListRes[],
-      dataMartListMap: [] as DataMartListMap[],
+      dataMartListRes: [] as DataMartListRes[],
+      dataMartList: [] as DataMartListMap[],
+      dataMartQueryRes: {} as DataMartQueryRes,
+      dataMartInfo: {} as DataMartInfo,
     };
   },
 
@@ -15,21 +17,23 @@ export const useDataMartStore = defineStore("dataMart", {
           loading,
         });
 
-        this.dataMartList = data;
+        this.dataMartListRes = data;
         this.mapDataMartList();
       } catch (error) {
         console.log(error); // eslint-disable-line no-console
       }
     },
+
     mapDataMartList() {
-      const mappingData = _useMap(this.dataMartList, (list, index) => {
+      const mappingData = _useMap(this.dataMartListRes, (list, index) => {
         return {
           ...list,
           rowNumber: index + 1,
         };
       });
-      this.dataMartListMap = mappingData;
+      this.dataMartList = mappingData;
     },
+
     async getDataMartUpdate(
       datamartId: string,
       isActivate: boolean,
@@ -41,6 +45,46 @@ export const useDataMartStore = defineStore("dataMart", {
         },
       });
       return data.code === ApiResponseCode.Success;
+    },
+
+    async getDataMartQuery(datamartId: string) {
+      const { data } = await useApi(ApiDataMart.Update, {
+        params: {
+          datamartId,
+        },
+      });
+      this.dataMartQueryRes = data;
+      this.mapDataMartInfo();
+    },
+
+    mapDataMartInfo() {
+      // const { datamartId, datamartName, dbName, description, dbConnection } =
+      //   this.dataMartQueryRes;
+      // const { connId } = dbConnection;
+      // this.dataMartInfo = {
+      //   datamartName,
+      //   description,
+      // }
+    },
+
+    resetDataMartForm() {
+      this.dataMartInfo = {
+        datamartName: "",
+        description: "",
+        dbConnection: {
+          connId: "",
+          dbType: "",
+          connName: "",
+          connInfo: {
+            username: "",
+            password: "",
+            host: "",
+            port: "",
+            database: "",
+          },
+        },
+        DBML: "",
+      };
     },
   },
 });
