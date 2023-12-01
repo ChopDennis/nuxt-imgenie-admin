@@ -49,7 +49,7 @@
               <ElSwitch
                 v-model="scope.row.isActivate"
                 @change="
-                  changeDataMartActivate(
+                  dataMartController.changeActivate(
                     scope.row.datamartId,
                     scope.row.isActivate,
                   )
@@ -67,31 +67,34 @@
             </template>
           </ElTableColumn>
         </ElTable>
+        <div class="flex justify-end mt-4">
+          <ElPagination
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 40]"
+            :page-size="pageSize"
+            :total="props.list.length"
+            background
+            layout="total, sizes, prev, pager, next"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
+        </div>
       </ClientOnly>
-      <div class="flex justify-end mt-4">
-        <ElPagination
-          :current-page="currentPage"
-          :page-sizes="[10, 20, 40]"
-          :page-size="pageSize"
-          :total="store.dataMartList.length"
-          background
-          layout="total, sizes, prev, pager, next"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
-      </div>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-const store = useDataMartStore();
+const props = defineProps<{
+  list: DataMartTable[];
+}>();
+
+const dataMartController = new DataMartController();
+
 const currentPage = ref(1);
 const pageSize = ref(10);
 
 const currentPageData = computed(() => {
-  return (
-    _useChunk(store.dataMartList, pageSize.value)[currentPage.value - 1] || []
-  );
+  return _useChunk(props.list, pageSize.value)[currentPage.value - 1] || [];
 });
 
 const handleSizeChange = (val: number) => {
@@ -110,12 +113,5 @@ const toEditDataMart = async (datamartId: string) => {
       datamartId,
     },
   });
-};
-
-const changeDataMartActivate = async (
-  connId: string,
-  isActivate: boolean,
-): Promise<boolean> => {
-  return await store.getDataMartUpdate(connId, isActivate);
 };
 </script>

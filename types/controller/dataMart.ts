@@ -1,5 +1,5 @@
 declare global {
-  interface DataMartListMap {
+  interface DataMartTable {
     connName: string;
     dataMartName: string;
     dbType: string;

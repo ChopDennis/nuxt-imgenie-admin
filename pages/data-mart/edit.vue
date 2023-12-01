@@ -25,9 +25,7 @@
   </div>
 </template>
 <script setup lang="ts">
-const store = useDataMartStore();
-const route = useRoute();
-
-await store.getDataMartQuery(route.query.datamartId as string);
+const dataMartController = new DataMartController();
+dataMartController.queryMart();
 </script>
 <style scoped></style>

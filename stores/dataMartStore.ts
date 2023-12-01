@@ -1,43 +1,41 @@
 export const useDataMartStore = defineStore("dataMart", {
   state: () => {
     return {
-      dataMartListRes: [] as DataMartListRes[],
-      dataMartList: [] as DataMartListMap[],
-      dataMartQueryRes: {} as DataMartQueryRes,
+      dataMartTable: [
+        {
+          connName: "",
+          dataMartName: "",
+          dbType: "",
+          icon: "",
+          isActivate: false,
+          rowNumber: 0,
+          updateTime: "",
+        },
+      ] as DataMartTable[],
       dataMartInfo: {} as DataMartInfo,
     };
   },
 
-  // TODO: try catch
   actions: {
-    async getDataMartList(cached: boolean, loading: boolean) {
+    async getList(
+      cached: boolean,
+      loading: boolean,
+    ): Promise<DataMartListRes[]> {
+      let response;
       try {
         const { data } = await useApi(ApiDataMart.List, {
           cached,
           loading,
         });
 
-        this.dataMartListRes = data;
-        this.mapDataMartList();
+        response = data;
       } catch (error) {
         console.log(error); // eslint-disable-line no-console
       }
+      return response;
     },
 
-    mapDataMartList() {
-      const mappingData = _useMap(this.dataMartListRes, (list, index) => {
-        return {
-          ...list,
-          rowNumber: index + 1,
-        };
-      });
-      this.dataMartList = mappingData;
-    },
-
-    async getDataMartUpdate(
-      datamartId: string,
-      isActivate: boolean,
-    ): Promise<boolean> {
+    async getUpdate(datamartId: string, isActivate: boolean): Promise<boolean> {
       const data = await useApi(ApiDataMart.Update, {
         params: {
           datamartId,
@@ -47,24 +45,19 @@ export const useDataMartStore = defineStore("dataMart", {
       return data.code === ApiResponseCode.Success;
     },
 
-    async getDataMartQuery(datamartId: string) {
-      const { data } = await useApi(ApiDataMart.Update, {
-        params: {
-          datamartId,
-        },
-      });
-      this.dataMartQueryRes = data;
-      this.mapDataMartInfo();
-    },
-
-    mapDataMartInfo() {
-      // const { datamartId, datamartName, dbName, description, dbConnection } =
-      //   this.dataMartQueryRes;
-      // const { connId } = dbConnection;
-      // this.dataMartInfo = {
-      //   datamartName,
-      //   description,
-      // }
+    async getQuery(datamartId: string): Promise<DataMartQueryRes> {
+      let response;
+      try {
+        const { data } = await useApi(ApiDataMart.Update, {
+          params: {
+            datamartId,
+          },
+        });
+        response = data;
+      } catch (error) {
+        console.log(error); // eslint-disable-line no-console
+      }
+      return response;
     },
 
     resetDataMartForm() {

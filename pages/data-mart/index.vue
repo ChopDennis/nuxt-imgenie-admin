@@ -11,26 +11,28 @@
         <div class="flex justify-between">
           <h1 class="text-xl font-bold tracking-wide">Data Mart 設定</h1>
           <div>
-            <ElButton :icon="ElIconRefresh" type="primary">重新整理</ElButton>
+            <ElButton
+              :icon="ElIconRefresh"
+              type="primary"
+              @click="dataMartController.getTable()"
+              >重新整理</ElButton
+            >
             <ElButton
               :icon="ElIconPlus"
               type="primary"
-              @click="clickAddNewDataMart()"
+              @click="dataMartController.addMart()"
               >新增 Data Mart</ElButton
             >
           </div>
         </div>
       </div>
-      <DataMartList />
+      <DataMartList :list="store.dataMartTable" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
 const store = useDataMartStore();
-await store.getDataMartList(true, false);
-const clickAddNewDataMart = () => {
-  store.resetDataMartForm();
-  navigateTo({ path: "/datamart/edit" });
-};
+const dataMartController = new DataMartController();
+dataMartController.getTable();
 </script>
 <style scoped></style>
