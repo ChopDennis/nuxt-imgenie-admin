@@ -88,11 +88,11 @@ sideMenuList.value = [
     subMenu: [
       {
         title: "資料庫連線",
-        path: "/dbconnection",
+        path: "/db-connection",
       },
       {
         title: "Data Mart 設定",
-        path: "/datamart",
+        path: "/data-mart",
       },
     ],
   },

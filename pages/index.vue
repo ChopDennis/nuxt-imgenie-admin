@@ -8,7 +8,7 @@
 <script setup lang="ts">
 const goToDbConnection = () => {
   navigateTo({
-    path: "/dbconnection",
+    path: "/db-connection",
   });
 };
 </script>

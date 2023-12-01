@@ -105,7 +105,7 @@ const handleCurrentChange = (val: number) => {
 
 const toEditDataMart = async (datamartId: string) => {
   await navigateTo({
-    path: "/datamart/edit",
+    path: "/data-mart/edit",
     query: {
       datamartId,
     },
