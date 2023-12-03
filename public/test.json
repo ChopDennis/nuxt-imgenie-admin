@@ -1,9 +1,0 @@
-{
-  "datamartId": "3718423b-afee-4b6b-a652-7509c493d850",
-  "description": "專注於醫療領域的數據平台，旨在收集、儲存和分享醫療相關的數據和信息，以支援醫療研究和臨床決策",
-  "dbName": "db",
-  "connId": "9e134e40-2e04-4b60-b757-62832dde07c7",
-  "datamartName": "iMgenie CDM",
-  "isActivate": true,
-  "userId": "3ba0811a-8eb3-e61f-fa5e-8aef80ab2cfc"
-}

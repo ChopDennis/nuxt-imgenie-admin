@@ -10,22 +10,15 @@ export const useApi = async (
 ): Promise<ApiResponse> => {
   const nuxtApp = useNuxtApp();
   let result: ApiResponse = {};
-  let requestBody: any;
-  let isEncrypt = false;
+  let requestBody: any = {};
+  let isEncrypt: boolean = false;
 
   const isLoading = useLoading();
   const uuid = uuidv4();
-  const config = useRuntimeConfig();
-  const userId = config.public.auth;
 
   if (options && options.params) {
     requestBody = {
-      userId,
       ...options.params,
-    };
-  } else {
-    requestBody = {
-      userId,
     };
   }
 
