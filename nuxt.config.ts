@@ -25,7 +25,12 @@ export default defineNuxtConfig({
     baseURL: "http://localhost:3000",
     // globalAppMiddleware: {
     //   isEnabled: true,
+    //   addDefaultCallbackUrl: "/data-mart",
     // },
+    session: {
+      enableRefreshPeriodically: false,
+      enableRefreshOnWindowFocus: false,
+    },
   },
   css: ["@/assets/css/main.css"],
   devtools: {

@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div>
-      <pre>Status: {{ status }}</pre>
+  <div class="backdrop-blur-sm w-full self-center">
+    <div class="login-model bg-white p-12 rounded-3xl m-auto">
+      <!-- <pre>Status: {{ status }}</pre>
       <pre>
 Data: {{ data || "no session data present, are you logged in?" }}</pre
       >
@@ -15,15 +15,31 @@ JWT token: {{ token || "no token present, are you logged in?" }}</pre
 JWT refreshToken: {{
           refreshToken || "no refreshToken present, are you logged in?"
         }}</pre
-      >
-      <ElForm @submit.prevent="">
+      > -->
+      <h1 class="text-center font-bold text-2xl mb-12">IMGenie 管理平台</h1>
+      <ElForm class="flex flex-col gap-2">
         <ElFormItem>
-          <ElInput v-model="account" type="text" placeholder="Username" />
+          <ElInput
+            v-model="account"
+            type="text"
+            placeholder="輸入Email"
+            :disabled="true"
+          />
         </ElFormItem>
         <ElFormItem>
-          <ElInput v-model="password" type="password" placeholder="Password" />
+          <ElInput
+            v-model="password"
+            type="password"
+            placeholder="輸入密碼"
+            :disabled="true"
+          />
         </ElFormItem>
-        <ElButton type="primary" @click="clickLoginButton()">sign in</ElButton>
+        <ElFormItem>
+          <ElCheckbox v-model="rememberEmail" label="記住信箱" />
+        </ElFormItem>
+        <ElButton class="w-full" type="primary" @click="clickLoginButton()"
+          >登入</ElButton
+        >
       </ElForm>
     </div>
   </div>
@@ -34,11 +50,12 @@ definePageMeta({
     unauthenticatedOnly: true,
     navigateAuthenticatedTo: "/",
   },
+  layout: "login",
 });
 
 const account = ref("userbyapi3");
 const password = ref("test");
-
+const rememberEmail = ref(true);
 const { signIn, token, refreshToken, data, status, lastRefreshedAt } =
   useAuth();
 
@@ -46,11 +63,15 @@ const clickLoginButton = async () => {
   try {
     await signIn(
       { account: "userbyapi3", password: "test" },
-      { callbackUrl: "/" },
+      { callbackUrl: "/data-mart" },
     );
   } catch (error) {
     console.error(error);
   }
 };
 </script>
-<style scoped></style>
+<style scoped>
+.login-model {
+  width: 500px;
+}
+</style>
