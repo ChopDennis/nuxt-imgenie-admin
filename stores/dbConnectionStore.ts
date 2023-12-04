@@ -23,6 +23,30 @@ export const useDbConnectionStore = defineStore("dbConnection", {
 
   // TODO: try catch
   actions: {
+    async getDbConnAll(cached: boolean, loading: boolean) {
+      try {
+        const { data } = await useApi(ApiDbConnection.All, {
+          cached,
+          loading,
+          // decrypt: true,
+        });
+        const mappingData = _useMap(data as DbConnListRes[], (list, index) => {
+          const { connInfo, dbType, connName, ...rest } = list;
+          const { host, port, database } = connInfo;
+          return {
+            ...rest,
+            connTypeName: `${_useUpperFirst(dbType)}-${connName}`,
+            connInfoHostPort: `${host}:${port}`,
+            connInfoDatabase: database,
+            rowNumber: index + 1,
+          };
+        });
+
+        this.dbConnListMap = mappingData;
+      } catch (error) {
+        console.log(error); // eslint-disable-line no-console
+      }
+    },
     async getDbConnList(cached: boolean, loading: boolean) {
       try {
         const { data } = await useApi(ApiDbConnection.List, {
@@ -94,7 +118,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         encrypt: true,
         decrypt: true,
       });
-      await this.getDbConnList(false, false);
+      await this.getDbConnAll(false, false);
       this.dbConnDialog.connSetting = false;
     },
 

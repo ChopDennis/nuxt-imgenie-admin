@@ -79,6 +79,13 @@ export default defineNuxtConfig({
       },
     },
   },
+  routeRules: {
+    "/api/datamart/datamart/save": {
+      security: {
+        xssValidator: false,
+      },
+    },
+  },
   runtimeConfig: {
     public: {
       apiBase: "https://imgenie-app-gl-pcpt4o333q-de.a.run.app/v1",

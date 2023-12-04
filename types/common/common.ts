@@ -37,7 +37,8 @@ enum ApiResponseCode {
 }
 
 enum ApiDbConnection {
-  List = "/api/datamart/dbconnection/all",
+  All = "/api/datamart/dbconnection/all",
+  List = "/api/datamart/dbconnection/list",
   Types = "/api/datamart/dbconnection/dbs",
   Save = "/api/datamart/dbconnection/save",
   Test = "/api/datamart/dbconnection/test-connection",
@@ -49,6 +50,8 @@ enum ApiDataMart {
   List = "/api/datamart/datamart/all",
   Update = "/api/datamart/datamart/update",
   Query = "/api/datamart/datamart/query",
+  Save = "/api/datamart/datamart/save",
+  Export = "/api/datamart/datamart/export-file",
 }
 
 export { ApiDbConnection, ApiResponseCode, ApiDataMart };

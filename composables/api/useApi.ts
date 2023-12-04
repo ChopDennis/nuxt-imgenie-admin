@@ -10,34 +10,35 @@ export const useApi = async (
 ): Promise<ApiResponse> => {
   const nuxtApp = useNuxtApp();
   let result: ApiResponse = {};
-  let requestBody: any = {};
+  let body: any = {};
   let isEncrypt: boolean = false;
+
+  const { token, refreshToken } = useAuth();
 
   const isLoading = useLoading();
   const uuid = uuidv4();
 
   if (options && options.params) {
-    requestBody = {
-      ...options.params,
-    };
+    body = options.params;
   }
 
   if (options && options.encrypt) {
-    requestBody = {
-      data: encryptData(requestBody, uuid),
+    body = {
+      data: encryptData(body, uuid),
     };
     isEncrypt = true;
   }
 
+  const headers = new Headers();
+  headers.append("TXNSEQ", uuid);
+  headers.append("IS_ENCRYPT", `${isEncrypt}`);
+  headers.append("REFRESH_TOKEN", refreshToken.value as string);
+  headers.append("Authorization", token.value as string);
+
   const { data, error } = await useFetch(url, {
     method: "post",
-    headers: {
-      TXNSEQ: uuid,
-      IS_ENCRYPT: `${isEncrypt}`,
-    },
-    body: {
-      ...requestBody,
-    },
+    headers,
+    body,
     getCachedData: (key) =>
       options?.cached ? nuxtApp.payload.data[key] : null,
     onRequest() {
