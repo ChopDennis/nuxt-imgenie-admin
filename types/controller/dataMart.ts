@@ -10,10 +10,11 @@ declare global {
   }
 
   interface DataMartInfo {
-    datamartId?: string;
+    datamartId: string;
     datamartName: string;
     description: string;
-    dbConnection?: {
+    dbName: string;
+    dbConnection: {
       connId: string;
       dbType: string;
       connName: string;

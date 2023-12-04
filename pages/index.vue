@@ -56,8 +56,7 @@ definePageMeta({
 const account = ref("userbyapi3");
 const password = ref("test");
 const rememberEmail = ref(true);
-const { signIn, token, refreshToken, data, status, lastRefreshedAt } =
-  useAuth();
+const { signIn } = useAuth();
 
 const clickLoginButton = async () => {
   try {

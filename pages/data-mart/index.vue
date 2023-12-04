@@ -14,25 +14,23 @@
             <ElButton
               :icon="ElIconRefresh"
               type="primary"
-              @click="dataMartController.getTable()"
+              @click="store.getDataMartList(false, false)"
               >重新整理</ElButton
             >
-            <ElButton
+            <!-- <ElButton
               :icon="ElIconPlus"
               type="primary"
               @click="dataMartController.addMart()"
               >新增 Data Mart</ElButton
-            >
+            > -->
           </div>
         </div>
       </div>
-      <DataMartList :list="store.dataMartTable" />
+      <DataMartTable :table="store.dataMartTable" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
 const store = useDataMartStore();
-const dataMartController = new DataMartController();
-dataMartController.getTable();
+await store.getDataMartList(true, false);
 </script>
-<style scoped></style>

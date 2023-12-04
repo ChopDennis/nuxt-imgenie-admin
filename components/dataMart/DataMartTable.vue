@@ -49,7 +49,7 @@
               <ElSwitch
                 v-model="scope.row.isActivate"
                 @change="
-                  dataMartController.changeActivate(
+                  store.getDataMartUpdate(
                     scope.row.datamartId,
                     scope.row.isActivate,
                   )
@@ -72,7 +72,7 @@
             :current-page="currentPage"
             :page-sizes="[10, 20, 40]"
             :page-size="pageSize"
-            :total="props.list.length"
+            :total="props.table.length"
             background
             layout="total, sizes, prev, pager, next"
             @size-change="handleSizeChange"
@@ -84,17 +84,16 @@
   </div>
 </template>
 <script setup lang="ts">
+const store = useDataMartStore();
 const props = defineProps<{
-  list: DataMartTable[];
+  table: DataMartTable[];
 }>();
-
-const dataMartController = new DataMartController();
 
 const currentPage = ref(1);
 const pageSize = ref(10);
 
 const currentPageData = computed(() => {
-  return _useChunk(props.list, pageSize.value)[currentPage.value - 1] || [];
+  return _useChunk(props.table, pageSize.value)[currentPage.value - 1] || [];
 });
 
 const handleSizeChange = (val: number) => {

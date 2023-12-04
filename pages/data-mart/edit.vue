@@ -20,12 +20,12 @@
           </div>
         </div>
       </div>
-      <DataMartInfo />
+      <DataMartInfo :data-mart-info="store.dataMartInfo" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
-const dataMartController = new DataMartController();
-dataMartController.queryMart();
+const store = useDataMartStore();
+await store.getDataMartQuery();
 </script>
 <style scoped></style>
