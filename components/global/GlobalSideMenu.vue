@@ -3,28 +3,21 @@
     <ClientOnly>
       <ElMenu
         class="el-menu-vertical"
-        :collapse="store.isSideMenuCollapse"
+        :collapse="isCollapse"
         background-color="#20222F"
         text-color="white"
-        default-active="2-1"
+        :default-active="sideMenuActive"
         active-text-color="#456DEC"
       >
         <ElMenuItem style="background-color: #313549">
           <img
             :src="icons['ic_menu_collapse']"
             width="24"
-            :class="[
-              store.isSideMenuCollapse
-                ? 'icon-menu-collapse'
-                : 'icon-menu-expend',
-            ]"
-            @click="store.isSideMenuCollapse = !store.isSideMenuCollapse"
+            :class="[isCollapse ? 'icon-menu-collapse' : 'icon-menu-expend']"
+            @click="isCollapse = !isCollapse"
           />
           <template #title>
-            <div
-              v-if="!store.isSideMenuCollapse"
-              class="text-white font-bold text-base"
-            >
+            <div v-if="!isCollapse" class="text-white font-bold text-base">
               iMGenie 後台管理
             </div>
           </template>
@@ -37,10 +30,7 @@
         >
           <template #title>
             <img :src="icons[`${menu.icon}`]" width="16" />
-            <div
-              v-if="!store.isSideMenuCollapse"
-              class="font-normal text-sm px-2"
-            >
+            <div v-if="!isCollapse" class="font-normal text-sm px-2">
               {{ menu.title }}
             </div></template
           >
@@ -59,44 +49,10 @@
   </div>
 </template>
 <script setup lang="ts">
-const sideMenuList = ref();
-const store = useGlobalStore();
+const sideMenuActive = useSideMenuActive();
+const isCollapse = useSideMenuCollapse();
+const sideMenuList = useSideMenuList();
 const icons = dynamicImportSideMenuIcons();
-
-sideMenuList.value = [
-  {
-    icon: "ic_authority",
-    title: "權限管理",
-    subMenu: [
-      {
-        title: "帳號設定",
-        path: "/",
-      },
-      {
-        title: "角色管理",
-        path: "/",
-      },
-      {
-        title: "群組管理",
-        path: "/",
-      },
-    ],
-  },
-  {
-    icon: "ic_system",
-    title: "系統管理",
-    subMenu: [
-      {
-        title: "資料庫連線",
-        path: "/db-connection",
-      },
-      {
-        title: "Data Mart 設定",
-        path: "/data-mart",
-      },
-    ],
-  },
-];
 </script>
 <style>
 .icon-menu-collapse {

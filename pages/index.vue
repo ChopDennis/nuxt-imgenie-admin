@@ -40,6 +40,12 @@ JWT refreshToken: {{
         <ElButton class="w-full" type="primary" @click="clickLoginButton()"
           >登入</ElButton
         >
+        <ElButton class="w-full" type="primary" @click="clickLogoutButton()"
+          >登出</ElButton
+        >
+        <ElButton class="w-full" type="primary" @click="clickRefreshButton()"
+          >重整</ElButton
+        >
       </ElForm>
     </div>
   </div>
@@ -56,7 +62,7 @@ definePageMeta({
 const account = ref("userbyapi3");
 const password = ref("test");
 const rememberEmail = ref(true);
-const { signIn } = useAuth();
+const { signIn, signOut, refresh } = useAuth();
 
 const clickLoginButton = async () => {
   try {
@@ -64,6 +70,20 @@ const clickLoginButton = async () => {
       { account: "userbyapi3", password: "test" },
       { callbackUrl: "/data-mart" },
     );
+  } catch (error) {
+    console.error(error);
+  }
+};
+const clickLogoutButton = async () => {
+  try {
+    await signOut({ callbackUrl: "/" });
+  } catch (error) {
+    console.error(error);
+  }
+};
+const clickRefreshButton = async () => {
+  try {
+    await refresh();
   } catch (error) {
     console.error(error);
   }

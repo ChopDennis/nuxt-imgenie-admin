@@ -48,7 +48,7 @@
       <template #header
         ><div class="h-auto flex items-center gap-2">
           <div>
-            <img :src="globalStore.dbConnIcons[`ic_${store.dbConnSetType}`]" />
+            <img :src="icons[`ic_${store.dbConnSetType}`]" />
           </div>
           <div>{{ store.dbConnSetTitle }} 連線設定</div>
         </div>
@@ -72,8 +72,9 @@
 import DbConnectionSet from "~/components/dbConnection/DbConnectionSet.vue";
 
 const store = useDbConnectionStore();
-const globalStore = useGlobalStore();
-globalStore.dynamicImportDbConnectionIcons();
+const icons = dynamicImportDbConnectionIcons();
+const sideMenuActive = useSideMenuActive();
+sideMenuActive.value = "2-2";
 
 const dbConnectionSetRef = ref<InstanceType<typeof DbConnectionSet> | null>(
   null,

@@ -12,7 +12,7 @@
       @click="clickEditNewConn(type.title, type.itemId)"
     >
       <div>
-        <img :src="globalStore.dbConnIcons[`ic_${type.itemId}`]" class="w-6" />
+        <img :src="icons[`ic_${type.itemId}`]" class="w-6" />
       </div>
 
       <div class="font-medium text-lg">
@@ -23,7 +23,7 @@
 </template>
 <script setup lang="ts">
 const store = useDbConnectionStore();
-const globalStore = useGlobalStore();
+const icons = dynamicImportDbConnectionIcons();
 
 const clickEditNewConn = (title: string, dbType: string) => {
   store.dbConnSetTitle = title;

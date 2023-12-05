@@ -14,9 +14,6 @@
           <h1 class="text-xl font-bold tracking-wide">DataMart 編輯</h1>
           <div>
             <ElButton :icon="ElIconRefresh" type="primary">重新整理</ElButton>
-            <ElButton :icon="ElIconPlus" type="primary"
-              >新增 Data Mart</ElButton
-            >
           </div>
         </div>
       </div>

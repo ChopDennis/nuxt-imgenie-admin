@@ -17,12 +17,12 @@
               @click="store.getDataMartList(false, false)"
               >重新整理</ElButton
             >
-            <!-- <ElButton
+            <ElButton
               :icon="ElIconPlus"
               type="primary"
-              @click="dataMartController.addMart()"
+              @click="navigateTo({ path: '/data-mart/add' })"
               >新增 Data Mart</ElButton
-            > -->
+            >
           </div>
         </div>
       </div>
@@ -32,5 +32,7 @@
 </template>
 <script setup lang="ts">
 const store = useDataMartStore();
-await store.getDataMartList(true, false);
+await store.getDataMartList(true, true);
+const sideMenuActive = useSideMenuActive();
+sideMenuActive.value = "2-2";
 </script>

@@ -10,47 +10,75 @@
         <ElFormItem label="Data Mart 說明: ">
           <ElInput v-model="info.description"></ElInput>
         </ElFormItem>
-        <ElButton @click="dialog = !dialog">設定</ElButton>
+
         <ElDialog
           v-model="dialog"
           title="資料庫連線設定"
           modal-class="backdrop-blur-sm"
           align-center
         >
-          <!-- {{ store.dbConnListMap }} -->
+          <DataMartSetDialog />
         </ElDialog>
         <ClientOnly>
-          <ElTable :data="connTable" max-height="650" size="large">
-            <ElTableColumn label="資料庫來源" width="150" align="center"
-              ><template #default="scope">
-                <img
-                  class="m-auto"
-                  src="~/assets/icons/dbConnection/ic_postgresql.svg"
-                />{{ scope.row.connName }}
-              </template>
-            </ElTableColumn>
-            <ElTableColumn prop="database" label="資料庫名稱" min-width="150" />
-            <ElTableColumn prop="host" label="主機名稱及IP" min-width="150" />
+          <div class="flex flex-col w-full gap-2 mb-4">
+            <div class="flex justify-end">
+              <ElButton @click="dialog = !dialog">資料庫設定</ElButton>
+            </div>
+            <div class="flex justify-end">
+              <div style="width: 850px">
+                <ElTable :data="connTable" max-height="650" size="large">
+                  <ElTableColumn label="資料庫來源" width="200"
+                    ><template #default="scope">
+                      <div class="flex gap-2">
+                        <img
+                          class=""
+                          src="~/assets/icons/dbConnection/ic_postgresql.svg"
+                        />{{ scope.row.connName }}
+                      </div>
+                    </template>
+                  </ElTableColumn>
+                  <ElTableColumn
+                    prop="database"
+                    label="資料庫名稱"
+                    min-width="150"
+                  />
+                  <ElTableColumn
+                    prop="host"
+                    label="主機名稱及IP"
+                    min-width="150"
+                  />
 
-            <ElTableColumn prop="dbName" label="資料庫/資料集" min-width="150">
-              <template #default="scope">
-                {{ scope.row.database }}/{{ scope.row.dbName }}
-              </template>
-            </ElTableColumn>
-          </ElTable>
+                  <ElTableColumn
+                    prop="dbName"
+                    label="資料庫/資料集"
+                    min-width="150"
+                  >
+                    <template #default="scope">
+                      {{ scope.row.database }}/{{ scope.row.dbName }}
+                    </template>
+                  </ElTableColumn>
+                </ElTable>
+              </div>
+            </div>
+          </div>
         </ClientOnly>
         <ElFormItem label="請輸入資料庫Schema(DBML格式): ">
-          <ElUpload
-            v-model:file-list="fileList"
-            :multiple="false"
-            :on-change="handleChange"
-            :auto-upload="false"
-          >
-            <el-button type="primary">Click to upload</el-button>
-          </ElUpload>
+          <div class="w-full">
+            <ElUpload
+              v-model:file-list="fileList"
+              :multiple="false"
+              :on-change="handleChange"
+              :auto-upload="false"
+            >
+              <el-button>上傳 DBML</el-button>
+            </ElUpload>
+          </div>
         </ElFormItem>
-        <ElButton @click="clickUpload()">上傳</ElButton>
       </ElForm>
+      <div class="flex w-full justify-end gap-2">
+        <ElButton @click="navigateTo({ path: '/data-mart' })">取消</ElButton>
+        <ElButton type="primary" @click="clickUpload()">儲存</ElButton>
+      </div>
     </div>
   </div>
 </template>
