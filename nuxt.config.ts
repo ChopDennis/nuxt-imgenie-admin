@@ -17,9 +17,11 @@ export default defineNuxtConfig({
       },
       token: {
         signInResponseTokenPointer: "/accessToken",
+        maxAgeInSeconds: 60 * 15,
       },
       refreshToken: {
         signInResponseRefreshTokenPointer: "/refreshToken",
+        maxAgeInSeconds: 60 * 60 * 24,
       },
     },
     baseURL: "http://localhost:3000",

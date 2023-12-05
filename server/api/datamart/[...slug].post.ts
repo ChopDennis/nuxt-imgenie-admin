@@ -1,3 +1,4 @@
+// const { randomUUID } = await import("node:crypto");
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
   const baseUrl = config.public.apiBase;
@@ -9,6 +10,8 @@ export default defineEventHandler(async (event) => {
   } else {
     body = await readBody(event);
   }
+  // const uuid = randomUUID();
+  // console.log(uuid);
 
   const headers = new Headers();
   headers.append("TXNSEQ", getHeader(event, "TXNSEQ") as string);
@@ -21,6 +24,17 @@ export default defineEventHandler(async (event) => {
     headers,
     body,
   });
+  const ResponseHeaders = getResponseHeaders(event);
+  const newToken = getResponseHeader(event, "new_token");
+  const newRefreshToken = getResponseHeader(event, "new_refresh_token");
+  console.log(ResponseHeaders);
+
+  if (newToken && newRefreshToken) {
+    await useStorage().setItem("new_token", newToken);
+    await useStorage().setItem("new_refresh_token", newRefreshToken);
+    const keys = useStorage().getKeys();
+    console.log(keys);
+  }
 
   return response;
 });
