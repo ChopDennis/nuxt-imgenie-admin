@@ -14,7 +14,12 @@
   </div>
 </template>
 <script setup lang="ts">
-const goToLogin = () => {
-  navigateTo({ path: "/" });
+const { signOut } = useAuth();
+const goToLogin = async () => {
+  try {
+    await signOut({ callbackUrl: "/" });
+  } catch (error) {
+    console.error(error); // eslint-disable-line no-console
+  }
 };
 </script>

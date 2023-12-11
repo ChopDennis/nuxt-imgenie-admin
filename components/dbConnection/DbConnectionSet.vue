@@ -33,31 +33,32 @@
           />
         </ElFormItem>
       </div>
-      <div class="flex">
-        <div v-for="(value, key) in store.dbConnSetForm.ssl" :key="key">
-          <ElFormItem
-            v-if="typeof value === 'boolean'"
-            :label="formLabel[_useToString(key)]"
-            :prop="_useToString(key)"
-          >
-            <ElCheckbox v-model="store.dbConnSetForm[_useToString(key)]" />
-          </ElFormItem>
-        </div>
-      </div>
-
-      <div v-for="(value, key) in store.dbConnSetForm.ssl" :key="key">
-        <ElFormItem
-          v-if="typeof value === 'string'"
-          :label="formLabel[_useToString(key)]"
-          :prop="_useToString(key)"
-        >
+      <!-- <div>
+        <ElFormItem :label="formLabel['ca']" prop="ca">
           <ElInput
-            v-model="store.dbConnSetForm[_useToString(key)]"
+            v-model="store.dbConnSetForm['ca']"
             placeholder="將資料拖曳此處，或點擊上傳"
-            :type="`${_useToString(key)}`"
+            type="input"
           />
         </ElFormItem>
-      </div>
+      </div> -->
+      <!-- <ElFormItem :label="formLabel['clientKey']" prop="clientKey">
+        <ElInput
+          v-model="store.dbConnSetForm['clientKey']"
+          placeholder="將資料拖曳此處，或點擊上傳"
+          type="input"
+        />
+      </ElFormItem>
+      <ElFormItem
+        :label="formLabel['clientCertificate']"
+        prop="clientCertificate"
+      >
+        <ElInput
+          v-model="store.dbConnSetForm['clientCertificate']"
+          placeholder="將資料拖曳此處，或點擊上傳"
+          type="input"
+        />
+      </ElFormItem> -->
     </ElForm>
   </div>
 </template>

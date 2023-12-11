@@ -6,7 +6,7 @@
       >
         <div class="flex text-sm">
           <p class="text-gray-300">首頁／系統管理／</p>
-          <p>DataMart</p>
+          <p>Data Mart 設定</p>
         </div>
         <div class="flex justify-between">
           <h1 class="text-xl font-bold tracking-wide">Data Mart 設定</h1>
@@ -14,7 +14,7 @@
             <ElButton
               :icon="ElIconRefresh"
               type="primary"
-              @click="store.getDataMartList(false, false)"
+              @click="store.getDataMartTable()"
               >重新整理</ElButton
             >
             <ElButton
@@ -32,7 +32,7 @@
 </template>
 <script setup lang="ts">
 const store = useDataMartStore();
-await store.getDataMartList(true, true);
+await store.getDataMartTable({ cached: true });
 const sideMenuActive = useSideMenuActive();
 sideMenuActive.value = "2-2";
 </script>

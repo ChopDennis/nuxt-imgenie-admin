@@ -9,7 +9,11 @@
             width="70"
             align="center"
           />
-          <ElTableColumn prop="connTypeName" label="連線名稱" min-width="150" />
+          <ElTableColumn prop="connTypeName" label="連線名稱" min-width="150">
+            <template #default="scope">
+              {{ scope.row.connType }}-{{ scope.row.connName }}
+            </template>
+          </ElTableColumn>
           <ElTableColumn
             prop="connInfoDatabase"
             label="資料庫名稱"
@@ -79,7 +83,7 @@ const pageSize = ref(10);
 
 const currentPageData = computed(() => {
   return (
-    _useChunk(store.dbConnListMap, pageSize.value)[currentPage.value - 1] || []
+    _useChunk(store.dbConnTable, pageSize.value)[currentPage.value - 1] || []
   );
 });
 

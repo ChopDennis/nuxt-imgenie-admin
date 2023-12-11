@@ -12,16 +12,12 @@ export default eventHandler(async (event) => {
 
   const headers = new Headers();
   headers.append("TXNSEQ", "1645a8fa-efe1-4fa6-8d36-768f7266bf23");
-  headers.append("REFRESH_TOKEN", body.refreshToken);
+  // headers.append("REFRESH_TOKEN", body.refreshToken);
 
-  const response: any = await $fetch(`${baseUrl}/keycloak/login`, {
+  const response: any = await $fetch(`${baseUrl}/keycloak/refreshToken`, {
     method: "post",
     headers,
-    body: {
-      account: "userbyapi3",
-      password: "test",
-      ...body,
-    },
+    body,
   });
 
   return response.data;

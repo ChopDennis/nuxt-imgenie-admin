@@ -15,7 +15,7 @@
             <ElButton
               :icon="ElIconRefresh"
               type="primary"
-              @click="store.getDbConnAll(false, true)"
+              @click="store.getDbConnTable()"
               >重新整理</ElButton
             >
             <ElButton :icon="ElIconPlus" type="primary" @click="clickAddNewConn"
@@ -74,12 +74,12 @@ import DbConnectionSet from "~/components/dbConnection/DbConnectionSet.vue";
 const store = useDbConnectionStore();
 const icons = dynamicImportDbConnectionIcons();
 const sideMenuActive = useSideMenuActive();
-sideMenuActive.value = "2-2";
+sideMenuActive.value = "2-1";
 
 const dbConnectionSetRef = ref<InstanceType<typeof DbConnectionSet> | null>(
   null,
 );
-await store.getDbConnAll(true, false);
+await store.getDbConnTable({ cached: true });
 
 const clickAddNewConn = async () => {
   await store.getDbConnTypes();

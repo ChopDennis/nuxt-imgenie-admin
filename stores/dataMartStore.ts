@@ -4,39 +4,56 @@ export const useDataMartStore = defineStore("dataMart", {
       dataMartListRes: [] as DataMartListRes[],
       dataMartQueryRes: {} as DataMartQueryRes,
       dataMartTable: [] as DataMartTable[],
-      dataMartInfo: {} as DataMartInfo,
+      dataMartSetForm: {
+        connId: "",
+        connName: "",
+        datamartId: "",
+        dbType: "",
+        database: "",
+        datamartName: "",
+        description: "",
+        dbName: "",
+        host: "",
+        isActivate: false,
+      } as DataMartSetForm,
     };
   },
 
   actions: {
-    async getDataMartList(cached: boolean, loading: boolean) {
+    async getDataMartTable(options?: ApiOptions) {
       try {
-        const { data } = await useApi(ApiDataMart.List, {
-          cached,
-          loading,
+        const { data, execute } = await useApi(ApiDataMart.List, {
+          ...options,
+          immediate: false,
         });
-        const table = _useMap(data as DataMartListRes[], (list, index) => {
-          return {
-            ...list,
-            rowNumber: index + 1,
-          };
-        });
-        this.dataMartTable = table;
+        await execute();
+        const table = data.value as ApiResponse;
+        this.dataMartTable = _useMap(
+          table.data as DataMartListRes[],
+          (list, index) => {
+            return {
+              ...list,
+              rowNumber: index + 1,
+            };
+          },
+        );
       } catch (error) {
         console.log(error); // eslint-disable-line no-console
       }
     },
-    async getDataMartUpdate(
-      datamartId: string,
-      isActivate: boolean,
-    ): Promise<boolean> {
-      const data = await useApi(ApiDataMart.Update, {
-        params: {
-          datamartId,
-          isActivate,
-        },
-      });
-      return data.code === ApiResponseCode.Success;
+    async getDataMartUpdate(datamartId: string, isActivate: boolean) {
+      try {
+        const { data } = await useApi(ApiDataMart.Update, {
+          params: {
+            datamartId,
+            isActivate,
+          },
+        });
+        const update = data.value as ApiResponse;
+        return update.code === ApiResponseCode.Success;
+      } catch (error) {
+        console.error(error); // eslint-disable-line no-console
+      }
     },
 
     async getDataMartQuery() {
@@ -47,7 +64,18 @@ export const useDataMartStore = defineStore("dataMart", {
             datamartId: route.query.datamartId,
           },
         });
-        this.dataMartInfo = data as DataMartInfo;
+        const query = data.value as ApiResponse;
+        this.dataMartQueryRes = query.data;
+        const { dbConnection, ...rest } = this.dataMartQueryRes;
+        const { connInfo, ...conn } = dbConnection;
+        const { host, database } = connInfo;
+        this.dataMartSetForm = {
+          ...rest,
+          ...conn,
+          host,
+          database,
+          isActivate: true,
+        };
       } catch (error) {
         console.log(error); // eslint-disable-line no-console
       }
@@ -58,45 +86,41 @@ export const useDataMartStore = defineStore("dataMart", {
         const { data } = await useApi(ApiDataMart.Save, {
           params,
         });
-        console.log("getDataMartSave", data);
+        const save = data.value as ApiResponse;
+        return save.code === ApiResponseCode.Success;
       } catch (error) {
-        console.log(error); // eslint-disable-line no-console
+        console.error(error); // eslint-disable-line no-console
       }
     },
 
-    async getDataMartExport(datamartId: string): Promise<Blob> {
-      let data: any;
+    async getDataMartExport(datamartId: string): Promise<Blob | undefined> {
+      let dbml;
       try {
-        data = await useApi(ApiDataMart.Export, {
+        const { data } = await useApi(ApiDataMart.Export, {
           params: {
             datamartId,
           },
         });
-        console.log("getDataMartExport", data);
+        dbml = data.value as Blob;
       } catch (error) {
-        console.log(error); // eslint-disable-line no-console
+        console.error(error); // eslint-disable-line no-console
       }
-      return data;
+      return dbml;
     },
 
-    // resetDataMartForm() {
-    //   this.dataMartInfo = {
-    //     datamartName: "",
-    //     description: "",
-    //     dbConnection: {
-    //       connId: "",
-    //       dbType: "",
-    //       connName: "",
-    //       connInfo: {
-    //         username: "",
-    //         password: "",
-    //         host: "",
-    //         port: "",
-    //         database: "",
-    //       },
-    //     },
-    //     DBML: "",
-    //   };
-    // },
+    resetDataMartSetForm() {
+      this.dataMartSetForm = {
+        connId: "",
+        connName: "",
+        datamartId: "",
+        dbType: "",
+        database: "",
+        datamartName: "",
+        description: "",
+        dbName: "",
+        host: "",
+        isActivate: false,
+      };
+    },
   },
 });

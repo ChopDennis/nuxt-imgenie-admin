@@ -23,6 +23,19 @@ declare global {
     DBML?: any;
     [key: string]: any;
   }
+
+  interface DataMartSetForm {
+    connId: string;
+    connName: string;
+    datamartId: string;
+    dbType: string;
+    database: string;
+    datamartName: string;
+    description: string;
+    dbName: string;
+    host: string;
+    isActivate: boolean;
+  }
 }
 
 export {};

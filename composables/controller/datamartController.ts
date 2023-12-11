@@ -5,8 +5,8 @@ export class DataMartController {
   }
 
   async getList(): Promise<DataMartListRes[]> {
-    await this.store.getDataMartList(false, false);
-    return this.store.dataMartList;
+    await this.store.getDataMartTable();
+    return this.store.dataMartListRes;
   }
 
   async getTable(): Promise<DataMartTable[]> {

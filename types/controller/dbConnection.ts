@@ -18,7 +18,8 @@ declare global {
 
   interface DbConnListMap {
     connId: string;
-    connTypeName: string;
+    connType: string;
+    connName: string;
     updateTime: string;
     connInfoHostPort: string;
     connInfoDatabase: string;
@@ -48,7 +49,14 @@ declare global {
     username?: string;
     password?: string;
     database: string;
-    ssl?: any;
+    ssl?: {
+      isSSL: boolean;
+      isClientCertificate: boolean;
+      ca: string;
+      clientCertificate: string;
+      clientKey: string;
+      // TODO: File
+    };
     [key: string]: any;
   }
 

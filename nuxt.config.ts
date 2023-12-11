@@ -17,17 +17,17 @@ export default defineNuxtConfig({
       },
       token: {
         signInResponseTokenPointer: "/accessToken",
-        maxAgeInSeconds: 60 * 15,
+        maxAgeInSeconds: 60 * 14,
       },
       refreshToken: {
         signInResponseRefreshTokenPointer: "/refreshToken",
         maxAgeInSeconds: 60 * 60 * 24,
       },
     },
+    // baseURL: "https://imgenie-app-admin-pcpt4o333q-de.a.run.app",
     baseURL: "http://localhost:3000",
     // globalAppMiddleware: {
     //   isEnabled: true,
-    //   addDefaultCallbackUrl: "/data-mart",
     // },
     session: {
       enableRefreshPeriodically: false,

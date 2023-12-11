@@ -13,6 +13,7 @@ declare global {
     loading?: boolean;
     encrypt?: boolean;
     decrypt?: boolean;
+    immediate?: boolean;
   }
 }
 
@@ -44,6 +45,7 @@ enum ApiDbConnection {
   Test = "/api/datamart/dbconnection/test-connection",
   Query = "/api/datamart/dbconnection/query",
   Update = "/api/datamart/dbconnection/update",
+  Schemas = "/api/datamart/dbconnection/schemas",
 }
 
 enum ApiDataMart {
