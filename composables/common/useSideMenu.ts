@@ -37,7 +37,7 @@ const sideMenuList = [
         path: "/db-connection",
       },
       {
-        title: "Data Mart 設定",
+        title: "資料模型設定",
         path: "/data-mart",
       },
     ],

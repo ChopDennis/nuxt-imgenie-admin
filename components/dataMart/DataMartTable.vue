@@ -5,7 +5,7 @@
         <ElTable :data="currentPageData" max-height="650" size="large">
           <ElTableColumn
             prop="dataMartName"
-            label="Data Mart 名稱"
+            label="資料模型名稱"
             min-width="150"
           />
           <ElTableColumn

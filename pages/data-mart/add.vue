@@ -6,15 +6,15 @@
       >
         <div class="flex text-sm">
           <p class="text-gray-300">
-            首頁&nbsp;/&nbsp;系統管理&nbsp;/&nbsp;DataMart&nbsp;設定&nbsp;/&nbsp;
+            首頁&nbsp;/&nbsp;系統管理&nbsp;/&nbsp;資料模型&nbsp;設定&nbsp;/&nbsp;
           </p>
-          <p>DataMart 新增</p>
+          <p>資料模型新增</p>
         </div>
         <div class="flex justify-start">
-          <h1 class="text-xl font-bold tracking-wide">DataMart 新增</h1>
+          <h1 class="text-xl font-bold tracking-wide">資料模型新增</h1>
         </div>
       </div>
-      <DataMartSetForm :file="null" />
+      <DataMartSetForm />
     </div>
   </div>
 </template>

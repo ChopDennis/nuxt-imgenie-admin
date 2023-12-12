@@ -6,22 +6,16 @@
       >
         <div class="flex text-sm">
           <p class="text-gray-300">首頁／系統管理／</p>
-          <p>Data Mart 設定</p>
+          <p>資料模型設定</p>
         </div>
         <div class="flex justify-between">
-          <h1 class="text-xl font-bold tracking-wide">Data Mart 設定</h1>
+          <h1 class="text-xl font-bold tracking-wide">資料模型設定</h1>
           <div>
-            <ElButton
-              :icon="ElIconRefresh"
-              type="primary"
-              @click="store.getDataMartTable()"
-              >重新整理</ElButton
-            >
             <ElButton
               :icon="ElIconPlus"
               type="primary"
               @click="navigateTo({ path: '/data-mart/add' })"
-              >新增 Data Mart</ElButton
+              >新增資料模型</ElButton
             >
           </div>
         </div>

@@ -3,18 +3,12 @@ import { jwtDecode } from "jwt-decode";
 import type { AsyncData } from "nuxt/dist/app/composables";
 
 export const useLoading = () => {
-  return useState<boolean>("isLoading", () => false);
+  return useState<boolean>("isLoading", () => true);
 };
 
 export const useApi = (
   url: string,
-  options: ApiOptions = {
-    cached: false,
-    encrypt: false,
-    decrypt: false,
-    loading: true,
-    immediate: true,
-  },
+  options?: ApiOptions,
 ): AsyncData<ApiResponse | Blob, Error | null> => {
   const nuxtApp = useNuxtApp();
   const headers = new Headers();
@@ -59,7 +53,7 @@ export const useApi = (
       headers.append("TXNSEQ", uuid);
       headers.append("IS_ENCRYPT", _useToString(isEncrypt));
       headers.append("ID_TOKEN", uuid.replace(/-/g, ""));
-      isLoading.value = options.loading ?? false;
+      isLoading.value = options?.loading ?? false;
     },
     onResponse() {
       isLoading.value = false;
@@ -71,7 +65,7 @@ export const useApi = (
     getCachedData: (key) =>
       options?.cached ? nuxtApp.payload.data[key] : null,
     transform: (response: ApiResponse) => {
-      if (options.decrypt) response.data = decryptData(response.data, uuid);
+      if (options?.decrypt) response.data = decryptData(response.data, uuid);
       return response;
     },
     immediate: options?.immediate,

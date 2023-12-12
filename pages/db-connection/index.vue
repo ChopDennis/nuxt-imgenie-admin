@@ -12,12 +12,6 @@
         <div class="flex justify-between">
           <h1 class="text-xl font-bold tracking-wide">資料庫連線</h1>
           <div>
-            <ElButton
-              :icon="ElIconRefresh"
-              type="primary"
-              @click="store.getDbConnTable()"
-              >重新整理</ElButton
-            >
             <ElButton :icon="ElIconPlus" type="primary" @click="clickAddNewConn"
               >新增連線</ElButton
             >

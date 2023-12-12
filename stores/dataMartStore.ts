@@ -14,7 +14,7 @@ export const useDataMartStore = defineStore("dataMart", {
         description: "",
         dbName: "",
         host: "",
-        isActivate: false,
+        isActivate: true,
       } as DataMartSetForm,
     };
   },
@@ -84,6 +84,7 @@ export const useDataMartStore = defineStore("dataMart", {
       try {
         const { data } = await useApi(ApiDataMart.Save, {
           params,
+          loading: true,
         });
         const save = data.value as ApiResponse;
         return save.code === ApiResponseCode.Success;
@@ -118,7 +119,7 @@ export const useDataMartStore = defineStore("dataMart", {
         description: "",
         dbName: "",
         host: "",
-        isActivate: false,
+        isActivate: true,
       };
     },
   },

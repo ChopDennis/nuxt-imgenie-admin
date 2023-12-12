@@ -37,6 +37,7 @@
     "@sidebase/nuxt-auth": "^0.6.3-alpha.1",
     "crypto-js": "^4.2.0",
     "element-plus": "^2.4.2",
+    "highlight.js": "^11.9.0",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "next-auth": "4.21.1",

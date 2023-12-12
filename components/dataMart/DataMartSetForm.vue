@@ -1,19 +1,19 @@
 <template>
   <div class="px-5 mt-4">
     <div class="bg-white rounded-lg p-5 shadow-custom-lg">
-      <h1 class="text-xl font-bold tracking-wide">DataMart 資料</h1>
+      <h1 class="text-xl font-bold tracking-wide">資料模型資料</h1>
       <ElDivider />
       <ElForm
         ref="dataMartSetFormRef"
         :model="dataMartStore.dataMartSetForm"
         label-width="250px"
       >
-        <ElFormItem label="Data Mart 名稱: ">
+        <ElFormItem label="資料模型名稱: ">
           <ElInput
             v-model="dataMartStore.dataMartSetForm.datamartName"
           ></ElInput>
         </ElFormItem>
-        <ElFormItem label="Data Mart 說明: ">
+        <ElFormItem label="資料模型說明: ">
           <ElInput
             v-model="dataMartStore.dataMartSetForm.description"
           ></ElInput>
@@ -80,18 +80,7 @@
           </div>
         </ClientOnly>
         <ElFormItem label="請輸入資料庫Schema(DBML格式): ">
-          <div class="w-full">
-            <ElUpload
-              v-model:file-list="fileList"
-              :multiple="false"
-              :on-change="handleChange"
-              :auto-upload="false"
-              :before-remove="beforeRemove"
-              :limit="1"
-            >
-              <el-button>上傳 DBML</el-button>
-            </ElUpload>
-          </div>
+          <DataMartUpload @upload="fileFormUpload" />
         </ElFormItem>
       </ElForm>
       <div class="flex w-full justify-end gap-2">
@@ -102,18 +91,15 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { UploadProps, UploadUserFile } from "element-plus";
+import type { UploadRawFile } from "element-plus";
 
-const props = defineProps<{
-  file: File | null;
-}>();
 const dataMartStore = useDataMartStore();
 const dbConnStore = useDbConnectionStore();
 const icons = dynamicImportDbConnectionIcons();
-
-const fileList = ref<UploadUserFile[]>([]);
+const dbmlFile = ref<UploadRawFile | File>();
 const connTable = ref<any>([]);
 const dialog = ref(false);
+
 const { dbType, connName, host, database, dbName } =
   dataMartStore.dataMartSetForm;
 
@@ -125,22 +111,10 @@ connTable.value.push({
   dbName,
 });
 
-let dbmlFile: unknown = props.file;
-
-if (!isNull(dbmlFile)) {
-  const fileWithUid = { ...(dbmlFile as File), uid: 0 };
-
-  fileList.value.push({
-    name: `${dataMartStore.dataMartSetForm.dbName}.dbml`,
-    raw: fileWithUid,
-  });
-}
-
-const handleChange: UploadProps["onChange"] = (uploadFile) => {
-  fileList.value.pop();
-  fileList.value.push(uploadFile);
-  dbmlFile = fileList.value[0].raw;
+const fileFormUpload = (fileFormUpload: UploadRawFile | File) => {
+  dbmlFile.value = fileFormUpload;
 };
+
 const clickUpload = async () => {
   const formData = new FormData();
 
@@ -151,12 +125,16 @@ const clickUpload = async () => {
       type: "application/json",
     },
   );
+  // console.log(props.file);
 
-  formData.append("data", data);
-  formData.append("file", dbmlFile as File);
-  await dataMartStore.getDataMartSave(formData);
-  await dataMartStore.getDataMartTable();
-  navigateTo({ path: "/data-mart" });
+  if (dbmlFile.value) {
+    console.log(await dbmlFile.value.text());
+    formData.append("data", data);
+    formData.append("file", dbmlFile.value as File);
+    await dataMartStore.getDataMartSave(formData);
+    await dataMartStore.getDataMartTable();
+    // navigateTo({ path: "/data-mart" });
+  }
 };
 
 const clickConfirm = async () => {
@@ -165,16 +143,13 @@ const clickConfirm = async () => {
   connTable.value.pop();
   connTable.value.push({
     ...dbConnStore.dbConnSetTable,
-    dbName: dataMartStore.dataMartSetForm.dbName,
+    // dbName: dataMartStore.dataMartSetForm.dbName,
+    dbName: "public",
   });
-};
-
-const beforeRemove: UploadProps["beforeRemove"] = (uploadFile) => {
-  return ElMessageBox.confirm(
-    `Cancel the transfer of ${uploadFile.name} ?`,
-  ).then(
-    () => true,
-    () => false,
-  );
+  dataMartStore.dataMartSetForm.dbType = dbConnStore.dbConnSetTable.dbType;
+  dataMartStore.dataMartSetForm.connName = dbConnStore.dbConnSetTable.connName;
+  dataMartStore.dataMartSetForm.database = dbConnStore.dbConnSetTable.database;
+  dataMartStore.dataMartSetForm.host = dbConnStore.dbConnSetTable.host;
+  dataMartStore.dataMartSetForm.dbName = "public";
 };
 </script>
