@@ -40,7 +40,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         });
         await execute();
         const table = data.value as ApiResponse;
-        const mappingData = _useMap(table.data, (list, index) => {
+        const mappingData = _useMap(table.data, (list) => {
           const { connInfo, dbType, connName, ...rest } = list;
           const { host, port, database } = connInfo;
           return {
@@ -49,7 +49,6 @@ export const useDbConnectionStore = defineStore("dbConnection", {
             connName,
             connInfoHostPort: `${host}:${port}`,
             connInfoDatabase: database,
-            rowNumber: index + 1,
           };
         });
 
@@ -62,21 +61,17 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       try {
         const { data } = await useApi(ApiDbConnection.List);
         const list = data.value as ApiResponse;
-        const mappingData = _useMap(
-          list.data as DbConnListRes[],
-          (list, index) => {
-            const { connInfo, dbType, connName, ...rest } = list;
-            const { host, port, database } = connInfo;
-            return {
-              ...rest,
-              connType: _useUpperFirst(dbType),
-              connName,
-              connInfoHostPort: `${host}:${port}`,
-              connInfoDatabase: database,
-              rowNumber: index + 1,
-            };
-          },
-        );
+        const mappingData = _useMap(list.data as DbConnListRes[], (list) => {
+          const { connInfo, dbType, connName, ...rest } = list;
+          const { host, port, database } = connInfo;
+          return {
+            ...rest,
+            connType: _useUpperFirst(dbType),
+            connName,
+            connInfoHostPort: `${host}:${port}`,
+            connInfoDatabase: database,
+          };
+        });
 
         this.dbConnListMap = mappingData;
       } catch (error) {

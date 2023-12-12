@@ -4,12 +4,11 @@
       <ClientOnly>
         <ElTable :data="currentPageData" max-height="650" size="large">
           <ElTableColumn
-            prop="rowNumber"
-            label="編號"
-            width="70"
-            align="center"
-          />
-          <ElTableColumn prop="connTypeName" label="連線名稱" min-width="150">
+            prop="connTypeName"
+            label="連線名稱"
+            min-width="150"
+            sortable
+          >
             <template #default="scope">
               {{ scope.row.connType }}-{{ scope.row.connName }}
             </template>
@@ -18,11 +17,13 @@
             prop="connInfoDatabase"
             label="資料庫名稱"
             min-width="150"
+            sortable
           />
           <ElTableColumn
             prop="connInfoHostPort"
             label="主機名稱及IP"
             min-width="150"
+            sortable
           />
           <ElTableColumn
             label="狀態"
@@ -66,7 +67,7 @@
           :current-page="currentPage"
           :page-sizes="[10, 20, 40]"
           :page-size="pageSize"
-          :total="store.dbConnListMap.length"
+          :total="store.dbConnTable.length"
           background
           layout="total, sizes, prev, pager, next"
           @size-change="handleSizeChange"

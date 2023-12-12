@@ -12,10 +12,9 @@ export class DataMartController {
   async getTable(): Promise<DataMartTable[]> {
     const list = await this.getList();
 
-    this.store.dataMartTable = _useMap(list, (list, index) => {
+    this.store.dataMartTable = _useMap(list, (list) => {
       return {
         ...list,
-        rowNumber: index + 1,
       };
     });
     return this.store.dataMartTable;

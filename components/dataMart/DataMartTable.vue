@@ -4,12 +4,6 @@
       <ClientOnly>
         <ElTable :data="currentPageData" max-height="650" size="large">
           <ElTableColumn
-            prop="rowNumber"
-            label="編號"
-            width="70"
-            align="center"
-          />
-          <ElTableColumn
             prop="dataMartName"
             label="Data Mart 名稱"
             min-width="150"

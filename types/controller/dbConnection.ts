@@ -24,7 +24,6 @@ declare global {
     connInfoHostPort: string;
     connInfoDatabase: string;
     isActivate: boolean;
-    rowNumber: number;
   }
 
   interface DbConnTypesRes {

@@ -30,10 +30,9 @@ export const useDataMartStore = defineStore("dataMart", {
         const table = data.value as ApiResponse;
         this.dataMartTable = _useMap(
           table.data as DataMartListRes[],
-          (list, index) => {
+          (list) => {
             return {
               ...list,
-              rowNumber: index + 1,
             };
           },
         );

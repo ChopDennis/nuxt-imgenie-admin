@@ -5,7 +5,6 @@ declare global {
     dbType: string;
     icon: string;
     isActivate: boolean;
-    rowNumber: number;
     updateTime: string;
   }
 

@@ -39,3 +39,7 @@ th:not(:last-child) .cell {
 #dbTypeSelectButton:focus {
   border: 1px solid rgba(69, 109, 236, 1);
 }
+
+.login-model {
+  width: 500px;
+}
