@@ -1,6 +1,6 @@
 export default defineNuxtPlugin({
   name: "my-plugin",
-  enforce: "pre", // or 'post'
+  enforce: "pre",
   hooks: {
     "app:beforeMount": async () => {
       const { refreshToken, status, refresh } = useAuth();

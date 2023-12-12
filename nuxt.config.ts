@@ -21,14 +21,11 @@ export default defineNuxtConfig({
       },
       refreshToken: {
         signInResponseRefreshTokenPointer: "/refreshToken",
-        maxAgeInSeconds: 60 * 60 * 24,
+        maxAgeInSeconds: 60 * 60 * 23,
       },
     },
     // baseURL: "https://imgenie-app-admin-pcpt4o333q-de.a.run.app",
     baseURL: "http://localhost:3000",
-    // globalAppMiddleware: {
-    //   isEnabled: true,
-    // },
     session: {
       enableRefreshPeriodically: false,
       enableRefreshOnWindowFocus: false,

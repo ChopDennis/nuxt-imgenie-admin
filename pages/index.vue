@@ -4,20 +4,20 @@
       <h1 class="text-center font-bold text-2xl mb-12">IMGenie 管理平台</h1>
       <ElForm
         ref="loginFormRef"
-        :model="loginForm"
+        :model="credentials"
         class="flex flex-col gap-2"
         :rules="loginFormRules"
       >
         <ElFormItem prop="account">
           <ElInput
-            v-model="loginForm.account"
+            v-model="credentials.account"
             type="text"
             placeholder="輸入Email"
           />
         </ElFormItem>
         <ElFormItem prop="password">
           <ElInput
-            v-model="loginForm.password"
+            v-model="credentials.password"
             type="password"
             placeholder="輸入密碼"
           />
@@ -28,7 +28,7 @@
         <ElButton
           class="w-full"
           type="primary"
-          @click="clickLoginButton(loginFormRef)"
+          @click="loginController.clickLoginButton(loginFormRef, credentials)"
           >登入</ElButton
         >
       </ElForm>
@@ -37,50 +37,25 @@
 </template>
 <script setup lang="ts">
 import type { FormInstance, FormRules } from "element-plus";
-interface LoginForm {
+
+interface Credentials {
   account: string;
   password: string;
 }
+
 definePageMeta({
-  auth: {
-    unauthenticatedOnly: true,
-    navigateAuthenticatedTo: "/",
-  },
   layout: "login",
 });
-const { signIn } = useAuth();
-const loginFormRef = ref<FormInstance>();
-const loginForm = reactive<LoginForm>({
-  account: "imgenie_admin",
-  password: "test",
+
+const credentials = reactive<Credentials>({
+  account: "",
+  password: "",
 });
-const rememberEmail = ref(true);
-
-const clickLoginButton = async (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  await formEl.validate(async (valid, fields) => {
-    if (valid) {
-      try {
-        await signIn(
-          { account: loginForm.account, password: loginForm.password },
-          { callbackUrl: "/data-mart" },
-        );
-      } catch (error) {
-        console.error(error); // eslint-disable-line no-console
-      }
-    } else {
-      console.log("error submit!", fields); // eslint-disable-line no-console
-    }
-  });
-};
-
-const loginFormRules = reactive<FormRules<LoginForm>>({
+const loginController = new LoginController();
+const loginFormRef = ref<FormInstance>();
+const loginFormRules = reactive<FormRules<Credentials>>({
   account: [{ required: true, message: "請輸入帳號", trigger: "blur" }],
   password: [{ required: true, message: "請輸入密碼", trigger: "blur" }],
 });
+const rememberEmail = ref(true);
 </script>
-<style scoped>
-.login-model {
-  width: 500px;
-}
-</style>
