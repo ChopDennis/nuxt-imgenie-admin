@@ -91,7 +91,13 @@ const store = useDbConnectionStore();
 const currentPage = ref(1);
 const pageSize = ref(10);
 const icons = dynamicImportDbConnectionIcons();
-const sortTable = ref<any>(store.dbConnTable);
+const sortOrder = ref<"desc" | "asc" | null>(null);
+const sortProp = ref("");
+const sortTable = computed(() =>
+  !isNull(sortOrder.value)
+    ? _useOrderBy(store.dbConnTable, [sortProp.value], [sortOrder.value])
+    : store.dbConnTable,
+);
 const currentPageData = computed(() => {
   return (
     _useChunk(sortTable.value, pageSize.value)[currentPage.value - 1] || []
@@ -122,14 +128,12 @@ const changeDbActivate = async (
 
 interface SortChangeParams {
   prop: string;
-  order: "descending" | "ascending";
+  order: "descending" | "ascending" | null;
 }
 
 const sortChange = ({ prop, order }: SortChangeParams) => {
-  if (order === "descending")
-    sortTable.value = _useOrderBy(store.dbConnTable, [prop], ["desc"]);
-  if (order === "ascending")
-    sortTable.value = _useOrderBy(store.dbConnTable, [prop], ["asc"]);
-  else sortTable.value = store.dbConnTable;
+  sortProp.value = prop;
+  sortOrder.value =
+    order === "descending" ? "desc" : order === "ascending" ? "asc" : null;
 };
 </script>

@@ -80,7 +80,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
     },
 
     async getDbConnTypes() {
-      const { data } = await useApi(ApiDbConnection.Types, { cached: true });
+      const { data } = await useApi(ApiDbConnection.Types);
       const types = data.value as ApiResponse;
       this.dbConnTypesRes = types.data;
     },

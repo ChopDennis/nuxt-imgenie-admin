@@ -73,7 +73,7 @@ sideMenuActive.value = "2-1";
 const dbConnectionSetRef = ref<InstanceType<typeof DbConnectionSet> | null>(
   null,
 );
-await store.getDbConnTable({ cached: true });
+await store.getDbConnTable();
 
 const clickAddNewConn = async () => {
   await store.getDbConnTypes();

@@ -159,6 +159,8 @@ const changeDbType = (type: string) => {
   selectDbType.value = type;
   selectConnId.value = "";
   selectSchemas.value = "";
+  searchText.value = "";
+  dbConnStore.dbConnSchemaRes = [];
 };
 </script>
 <style>

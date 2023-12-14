@@ -26,7 +26,7 @@
 </template>
 <script setup lang="ts">
 const store = useDataMartStore();
-await store.getDataMartTable({ cached: true });
+await store.getDataMartTable();
 const sideMenuActive = useSideMenuActive();
 sideMenuActive.value = "2-2";
 </script>
