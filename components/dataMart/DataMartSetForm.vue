@@ -9,18 +9,22 @@
         <ElForm
           ref="dataMartSetFormRef"
           :model="dataMartStore.dataMartSetForm"
-          label-width="250px"
+          label-width="120px"
         >
           <ElFormItem label="資料模型名稱">
-            <ElInput
-              v-model="dataMartStore.dataMartSetForm.datamartName"
-            ></ElInput>
+            <div class="ml-2 w-full">
+              <ElInput
+                v-model="dataMartStore.dataMartSetForm.datamartName"
+              ></ElInput>
+            </div>
           </ElFormItem>
           <ElFormItem label="資料模型說明">
-            <ElInput
-              v-model="dataMartStore.dataMartSetForm.description"
-              type="textarea"
-            ></ElInput>
+            <div class="ml-2 w-full">
+              <ElInput
+                v-model="dataMartStore.dataMartSetForm.description"
+                type="textarea"
+              ></ElInput>
+            </div>
           </ElFormItem>
 
           <ElDialog
@@ -88,7 +92,9 @@
             </div>
           </ClientOnly>
           <ElFormItem label="資料說明文件">
-            <DataMartUpload @upload="fileFormUpload" />
+            <div class="ml-2 w-full">
+              <DataMartUpload @upload="fileFormUpload" />
+            </div>
           </ElFormItem>
         </ElForm>
       </div>

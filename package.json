@@ -36,7 +36,7 @@
     "@pinia/nuxt": "^0.5.1",
     "@sidebase/nuxt-auth": "^0.6.3-alpha.1",
     "crypto-js": "^4.2.0",
-    "element-plus": "^2.4.2",
+    "element-plus": "^2.4.3",
     "highlight.js": "^11.9.0",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",

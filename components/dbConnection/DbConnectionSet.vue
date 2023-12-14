@@ -18,7 +18,7 @@
       ref="dbConnSetFormRef"
       :model="store.dbConnSetForm"
       :rules="formRules"
-      label-width="150px"
+      label-width="110px"
     >
       <div v-for="(value, key) in store.dbConnSetForm" :key="key">
         <ElFormItem
@@ -26,14 +26,16 @@
           :label="formLabel[_useToString(key)]"
           :prop="_useToString(key)"
         >
-          <ElInput
-            v-model="store.dbConnSetForm[_useToString(key)]"
-            :validate-event="false"
-            :placeholder="
-              _useToString(key) === 'connName' ? '自訂連線名稱' : ''
-            "
-            :type="`${_useToString(key)}`"
-          />
+          <div class="ml-2 w-full">
+            <ElInput
+              v-model="store.dbConnSetForm[_useToString(key)]"
+              :validate-event="false"
+              :placeholder="
+                _useToString(key) === 'connName' ? '自訂連線名稱' : ''
+              "
+              :type="`${_useToString(key)}`"
+            />
+          </div>
         </ElFormItem>
       </div>
       <!-- <div>

@@ -35,8 +35,26 @@
           :disabled="selectDbType === ''"
           @change="changeSelectConn()"
         >
+          <template #header
+            ><div>
+              <ElInput
+                v-model="searchText"
+                placeholder="請輸入搜尋資料庫名稱/連線名稱/主機名稱或IP"
+              >
+                <template #suffix>
+                  <div
+                    class="border-l h-full w-full flex justify-center items-center"
+                  >
+                    <img
+                      class="ml-2"
+                      src="~/assets/icons/data-mart/ic_search.svg"
+                    />
+                  </div>
+                </template>
+              </ElInput></div
+          ></template>
           <ElOption
-            v-for="list in optionList"
+            v-for="list in filteredList"
             :key="list.connId"
             :label="`${list.connName}`"
             :value="list.connId"
@@ -82,6 +100,7 @@ const icons = dynamicImportDbConnectionIcons();
 const selectConnId = ref("");
 const selectSchemas = ref("");
 const selectDbType = ref("");
+const searchText = ref("");
 await dbConnStore.getDbConnActiveList();
 await dbConnStore.getDbConnTypes();
 const dbTypeTitle = ref<{ [key: string]: any }>({
@@ -114,6 +133,18 @@ const optionList = computed(() => {
     "connType",
     _useUpperFirst(selectDbType.value),
   ]);
+});
+
+const filteredList = computed(() => {
+  return _useFilter(optionList.value, (list) => {
+    const text = searchText.value.toLocaleLowerCase();
+    const connName = list.connName.toLocaleLowerCase();
+    return (
+      _useIncludes(connName, text) ||
+      _useIncludes(list.connInfoDatabase, text) ||
+      _useIncludes(list.connInfoHostPort, text)
+    );
+  });
 });
 
 const changeSelectConn = async () => {

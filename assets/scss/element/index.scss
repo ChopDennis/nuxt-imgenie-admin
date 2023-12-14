@@ -117,15 +117,20 @@ $-colors: (
   padding: 0 !important;
 }
 .el-scrollbar__view.el-select-dropdown__list {
-  padding: 8px!important;
+  padding: 8px !important;
 }
 
 .el-select-dropdown__item.selected {
-  color: rgba(0, 0, 0, 0.87)!important;
-  font-weight: normal!important;
+  color: rgba(0, 0, 0, 0.87) !important;
+  font-weight: normal !important;
 }
 
 .el-form-item__label {
   padding: 0 !important;
   margin-top: 0.25rem;
+}
+
+.el-select-dropdown__header {
+  border-bottom: 0 !important;
+  padding-bottom: 0 !important;
 }
