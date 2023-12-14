@@ -29,10 +29,11 @@
             modal-class="backdrop-blur-sm"
             :destroy-on-close="true"
             align-center
+            width="572"
           >
             <DataMartSetDialog />
             <template #footer>
-              <div class="flex justify-center">
+              <div class="flex justify-center pt-3">
                 <ElButton @click="dialog = false">取消</ElButton>
                 <ElButton type="primary" @click="clickConfirm()">儲存</ElButton>
               </div>

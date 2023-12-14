@@ -1,22 +1,27 @@
 <template>
   <div class="">
-    <ElForm label-width="150px">
+    <ElForm label-width="70px" label-position="right">
       <ElFormItem label="連線類型">
-        <div
-          v-for="(type, index) in dbConnStore.dbConnTypesRes"
-          :key="index"
-          style="width: 130px"
-          class="flex items-center gap-2 cursor-pointer border p-2 mx-2 rounded-lg justify-center text-sm"
-          :class="{
-            'db-type-active': selectDbType === type.itemId,
-          }"
-          @click="changeDbType(type.itemId)"
-        >
-          <div>
-            <img :src="icons[`ic_${type.itemId}`]" class="w-6" width="24" />
-          </div>
-          <div>
-            {{ dbTypeTitle[`${type.itemId}`] }}
+        <div class="flex justify-between gap-2 ml-2 -mt-1">
+          <div
+            v-for="(type, index) in dbConnStore.dbConnTypesRes"
+            :key="index"
+            style="width: 140px"
+            @click="changeDbType(type.itemId)"
+          >
+            <div
+              class="flex p-3 gap-2 justify-center cursor-pointer border rounded-lg text-sm"
+              :class="{
+                'db-type-active': selectDbType === type.itemId,
+              }"
+            >
+              <div>
+                <img :src="icons[`ic_${type.itemId}`]" class="w-6" width="24" />
+              </div>
+              <div>
+                {{ dbTypeTitle[`${type.itemId}`] }}
+              </div>
+            </div>
           </div>
         </div>
       </ElFormItem>
@@ -26,7 +31,7 @@
           v-model="selectConnId"
           placeholder="請選擇資料來源"
           class="ml-2"
-          style="width: 425px"
+          style="width: 436px"
           :disabled="selectDbType === ''"
           @change="changeSelectConn()"
         >
@@ -36,15 +41,17 @@
             :label="`${list.connName}`"
             :value="list.connId"
           >
-            <span style="float: left">{{ list.connName }}</span>
-            <span
-              style="
-                float: right;
-                color: var(--el-text-color-secondary);
-                font-size: 13px;
-              "
-              >{{ list.connInfoHostPort }}/{{ list.connInfoDatabase }}</span
-            >
+            <template #default>
+              <div class="flex flex-col pb-2 rounded-lg">
+                <div class="px-3 py-1">{{ list.connName }}</div>
+                <div
+                  class="text-xs px-3"
+                  style="color: var(--el-text-color-secondary)"
+                >
+                  {{ list.connInfoHostPort }}/{{ list.connInfoDatabase }}
+                </div>
+              </div>
+            </template>
           </ElOption>
         </ElSelect>
       </ElFormItem>
@@ -53,7 +60,7 @@
           v-model="selectSchemas"
           placeholder="請選擇 Schema"
           class="ml-2"
-          style="width: 425px"
+          style="width: 436px"
           :disabled="selectDbType === ''"
           @change="changeSelectSchemas()"
         >
@@ -85,13 +92,15 @@ const dbTypeTitle = ref<{ [key: string]: any }>({
 const route = useRoute();
 
 onMounted(async () => {
-  const { data, execute } = useApi(ApiDbConnection.Schemas, {
-    params: { connId: selectConnId.value },
-    immediate: false,
-  });
-  await execute();
-  const schemas = data.value as ApiResponse;
-  dbConnStore.dbConnSchemaRes = schemas.data;
+  if (route.query.datamartId) {
+    const { data, execute } = useApi(ApiDbConnection.Schemas, {
+      params: { connId: selectConnId.value },
+      immediate: false,
+    });
+    await execute();
+    const schemas = data.value as ApiResponse;
+    dbConnStore.dbConnSchemaRes = schemas.data;
+  }
 });
 
 if (route.query.datamartId) {

@@ -60,6 +60,7 @@ $-colors: (
 .el-dialog__body {
   border-top: 1px solid lightgray;
   border-bottom: 1px solid lightgray;
+  padding: 24px !important;
 }
 
 .el-alert--error.is-light {
@@ -108,4 +109,23 @@ $-colors: (
 
 .bg-white.rounded-lg.p-5.shadow-custom-lg {
   height: 818px !important;
+}
+
+.el-select-dropdown__item {
+  height: auto !important;
+  border-radius: 0.25rem !important;
+  padding: 0 !important;
+}
+.el-scrollbar__view.el-select-dropdown__list {
+  padding: 8px!important;
+}
+
+.el-select-dropdown__item.selected {
+  color: rgba(0, 0, 0, 0.87)!important;
+  font-weight: normal!important;
+}
+
+.el-form-item__label {
+  padding: 0 !important;
+  margin-top: 0.25rem;
 }
