@@ -50,6 +50,7 @@ $-colors: (
 
 .el-loading-mask {
   height: 100% !important;
+  z-index: 9999 !important;
 }
 
 .el-alert--success.is-light {
@@ -94,4 +95,17 @@ $-colors: (
 
 .el-alert .el-alert__icon.is-big {
   margin-top: -24px !important;
+}
+
+.el-form-item.is-error.is-required.asterisk-left {
+  margin-bottom: 34px !important;
+}
+
+.el-form-item {
+  height: 40px !important;
+  // margin-bottom: 32px !important;
+}
+
+.bg-white.rounded-lg.p-5.shadow-custom-lg {
+  height: 818px !important;
 }

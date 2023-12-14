@@ -2,16 +2,35 @@
   <div class="px-5 mt-4">
     <div class="bg-white rounded-lg p-5 shadow-custom-lg">
       <ClientOnly>
-        <ElTable :data="currentPageData" max-height="650" size="large">
+        <ElTable
+          :data="currentPageData"
+          max-height="650"
+          size="large"
+          @sort-change="sortChange"
+        >
           <ElTableColumn
-            prop="connTypeName"
+            prop="dbType"
+            label="資料庫類型"
+            width="150"
+            align="center"
+            sortable
+          >
+            <template #default="scope">
+              <div>
+                <img
+                  :src="icons[`ic_${scope.row.dbType}`]"
+                  class="m-auto"
+                  width="24"
+                />
+              </div>
+            </template>
+          </ElTableColumn>
+          <ElTableColumn
+            prop="connName"
             label="連線名稱"
             min-width="150"
             sortable
           >
-            <template #default="scope">
-              {{ scope.row.connType }}-{{ scope.row.connName }}
-            </template>
           </ElTableColumn>
           <ElTableColumn
             prop="connInfoDatabase"
@@ -21,26 +40,16 @@
           />
           <ElTableColumn
             prop="connInfoHostPort"
-            label="主機名稱及IP"
+            label="主機名稱或ＩＰ"
             min-width="150"
             sortable
           />
           <ElTableColumn
+            prop="isActivate"
             label="狀態"
             width="90"
             align="center"
             sortable
-            :sort-method="
-              (a, b) => {
-                if (a.isActivate && !b.isActivate) {
-                  return -1;
-                } else if (!a.isActivate && b.isActivate) {
-                  return 1;
-                } else {
-                  return 0;
-                }
-              }
-            "
           >
             <template #default="scope">
               <ElSwitch
@@ -81,10 +90,11 @@
 const store = useDbConnectionStore();
 const currentPage = ref(1);
 const pageSize = ref(10);
-
+const icons = dynamicImportDbConnectionIcons();
+const sortTable = ref<any>(store.dbConnTable);
 const currentPageData = computed(() => {
   return (
-    _useChunk(store.dbConnTable, pageSize.value)[currentPage.value - 1] || []
+    _useChunk(sortTable.value, pageSize.value)[currentPage.value - 1] || []
   );
 });
 
@@ -108,5 +118,18 @@ const changeDbActivate = async (
   isActivate: boolean,
 ): Promise<boolean> => {
   return await store.getDbConnUpdate(connId, isActivate);
+};
+
+interface SortChangeParams {
+  prop: string;
+  order: "descending" | "ascending";
+}
+
+const sortChange = ({ prop, order }: SortChangeParams) => {
+  if (order === "descending")
+    sortTable.value = _useOrderBy(store.dbConnTable, [prop], ["desc"]);
+  if (order === "ascending")
+    sortTable.value = _useOrderBy(store.dbConnTable, [prop], ["asc"]);
+  else sortTable.value = store.dbConnTable;
 };
 </script>

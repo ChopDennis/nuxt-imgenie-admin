@@ -10,8 +10,8 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       dbConnSetTitle: "",
       dbConnSetName: "",
       dbConnSetIsNew: false as boolean,
-      dbConnSetActivate: false as boolean,
-      dbConnTestRes: null as boolean | null,
+      dbConnSetActivate: true as boolean,
+      dbConnTestRes: "" as string,
       dbConnDialog: {
         categories: false,
         connSetting: false,
@@ -45,9 +45,9 @@ export const useDbConnectionStore = defineStore("dbConnection", {
           const { host, port, database } = connInfo;
           return {
             ...rest,
-            connType: _useUpperFirst(dbType),
+            dbType,
             connName,
-            connInfoHostPort: `${host}:${port}`,
+            connInfoHostPort: `${host}: ${port}`,
             connInfoDatabase: database,
           };
         });
@@ -68,7 +68,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
             ...rest,
             connType: _useUpperFirst(dbType),
             connName,
-            connInfoHostPort: `${host}:${port}`,
+            connInfoHostPort: `${host}: ${port}`,
             connInfoDatabase: database,
           };
         });
@@ -94,6 +94,12 @@ export const useDbConnectionStore = defineStore("dbConnection", {
     },
 
     async getDbConnQuery(id: string) {
+      const dbTypeTitle: { [key: string]: any } = {
+        postgresql: "Postgre SQL",
+        bigquery: "Big Query",
+        presto: "Presto",
+      };
+
       const { data } = await useApi(ApiDbConnection.Query, {
         params: {
           connId: id,
@@ -123,7 +129,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       };
       this.dbConnSetId = connId;
       this.dbConnSetType = dbType;
-      this.dbConnSetTitle = _useUpperFirst(dbType);
+      this.dbConnSetTitle = dbTypeTitle[`${dbType}`];
       this.dbConnSetActivate = isActivate;
     },
 
@@ -154,10 +160,11 @@ export const useDbConnectionStore = defineStore("dbConnection", {
           connInfo: JSON.stringify(connInfo),
         },
         encrypt: true,
+        loading: true,
       });
       const test = data.value as ApiResponse;
       this.dbConnSetName = connName;
-      this.dbConnTestRes = test.data as boolean;
+      this.dbConnTestRes = test.data;
     },
 
     async getDbConnUpdate(
@@ -193,9 +200,9 @@ export const useDbConnectionStore = defineStore("dbConnection", {
     },
 
     onCloseDbConnSetForm() {
-      this.dbConnDialog.categories = this.dbConnSetIsNew;
+      // this.dbConnDialog.categories = this.dbConnSetIsNew;
       this.resetDbConnSetForm();
-      this.dbConnTestRes = null;
+      this.dbConnTestRes = "";
     },
   },
 });

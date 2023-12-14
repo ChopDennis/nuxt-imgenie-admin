@@ -4,9 +4,9 @@
       <ElUpload
         :on-change="handleChange"
         :multiple="false"
+        :show-file-list="false"
         :auto-upload="false"
         :drag="true"
-        :limit="1"
       >
         <p>將資料拖曳此處，或點擊上傳</p>
       </ElUpload>
@@ -29,6 +29,7 @@
         />
       </div>
     </div>
+
     <ElDialog
       v-model="dbmlPreviewDialog"
       width="auto"
@@ -63,39 +64,67 @@ if (route.query.datamartId) {
   const dbml = await store.getDataMartExport(
     _useToString(route.query.datamartId),
   );
-
   if (dbml) {
-    userUploadFile.value = new File(
-      [dbml],
-      `public.dbml`, // TODO:
-      {
-        type: "application/octet-stream",
-      },
-    );
-    isUpload.value = true;
-    uploadName.value = userUploadFile.value.name;
-    dbmlPreviewContent.value = await userUploadFile.value.text();
-    emit("upload", userUploadFile.value);
+    if (dbml.size < 1000 * 1000) {
+      userUploadFile.value = new File(
+        [dbml],
+        `${store.dataMartQueryFileName}`,
+        {
+          type: "application/octet-stream",
+        },
+      );
+      isUpload.value = true;
+      uploadName.value = userUploadFile.value.name;
+      dbmlPreviewContent.value = await userUploadFile.value.text();
+      emit("upload", userUploadFile.value);
+    } else {
+      ElMessageBox.confirm("檔案大小超過 1MB 限制", "系統提示", {
+        confirmButtonText: "確認",
+        cancelButtonText: "取消",
+      })
+        .then(() => (isUpload.value = false))
+        .catch(() => false);
+    }
   }
-  console.log(await userUploadFile.value?.text());
 }
 
 const handleChange: UploadProps["onChange"] = async (uploadFile) => {
   if (uploadFile.raw) {
-    userUploadFile.value = uploadFile.raw;
-    isUpload.value = true;
-    uploadName.value = uploadFile.raw.name;
-    dbmlPreviewContent.value = await userUploadFile.value.text();
-    emit("upload", userUploadFile.value);
+    if (uploadFile.raw.name.split(".")[1] === "dbml") {
+      if (uploadFile.raw.size < 1000 * 1000) {
+        userUploadFile.value = uploadFile.raw;
+        isUpload.value = true;
+        uploadName.value = uploadFile.name;
+        dbmlPreviewContent.value = await userUploadFile.value.text();
+        emit("upload", userUploadFile.value);
+      } else {
+        isUpload.value = await ElMessageBox.confirm(
+          "檔案大小超過 1MB 限制",
+          "系統提示",
+          {
+            confirmButtonText: "確認",
+            cancelButtonText: "取消",
+          },
+        )
+          .then(() => false)
+          .catch(() => false);
+      }
+    } else {
+      isUpload.value = await ElMessageBox.confirm(
+        "限制只能上傳 DBML 檔",
+        "系統提示",
+        {
+          confirmButtonText: "確認",
+          cancelButtonText: "取消",
+        },
+      )
+        .then(() => false)
+        .catch(() => false);
+    }
   }
 };
 
 const clickRemoveIcon = () => {
-  return ElMessageBox.confirm("確認移除檔案，重新上傳？", "系統提示", {
-    confirmButtonText: "確認",
-    cancelButtonText: "取消",
-  })
-    .then(() => (isUpload.value = false))
-    .catch(() => false);
+  isUpload.value = false;
 };
 </script>

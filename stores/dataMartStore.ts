@@ -3,6 +3,7 @@ export const useDataMartStore = defineStore("dataMart", {
     return {
       dataMartListRes: [] as DataMartListRes[],
       dataMartQueryRes: {} as DataMartQueryRes,
+      dataMartQueryFileName: "" as string,
       dataMartTable: [] as DataMartTable[],
       dataMartSetForm: {
         connId: "",
@@ -65,7 +66,7 @@ export const useDataMartStore = defineStore("dataMart", {
         });
         const query = data.value as ApiResponse;
         this.dataMartQueryRes = query.data;
-        const { dbConnection, ...rest } = this.dataMartQueryRes;
+        const { dbConnection, fileName, ...rest } = this.dataMartQueryRes;
         const { connInfo, ...conn } = dbConnection;
         const { host, database } = connInfo;
         this.dataMartSetForm = {
@@ -75,6 +76,7 @@ export const useDataMartStore = defineStore("dataMart", {
           database,
           isActivate: true,
         };
+        this.dataMartQueryFileName = fileName;
       } catch (error) {
         console.log(error); // eslint-disable-line no-console
       }

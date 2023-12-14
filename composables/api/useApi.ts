@@ -3,7 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import type { AsyncData } from "nuxt/dist/app/composables";
 
 export const useLoading = () => {
-  return useState<boolean>("isLoading", () => true);
+  return useState<boolean>("isLoading", () => false);
 };
 
 export const useApi = (
@@ -40,6 +40,7 @@ export const useApi = (
       isTokenValid = currentDate < expDate;
     }
   } else {
+    // refresh();
     throw new Error("登入驗證失敗");
   }
 

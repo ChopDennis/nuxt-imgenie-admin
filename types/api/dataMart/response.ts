@@ -22,6 +22,7 @@ declare global {
       connName: string;
       connInfo: ConnInfo;
     };
+    fileName: string;
     [key: string]: any;
   }
 }

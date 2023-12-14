@@ -9,7 +9,7 @@
       @click="goToLogin()"
     />
     <div class="self-center px-2">
-      <h1 class="align-middle font-bold">Avatar</h1>
+      <h1 class="align-middle font-bold">imgenie_admin</h1>
     </div>
   </div>
 </template>

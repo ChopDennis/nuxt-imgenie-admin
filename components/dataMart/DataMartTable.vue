@@ -2,17 +2,18 @@
   <div class="px-5 mt-4">
     <div class="bg-white rounded-lg p-5 shadow-custom-lg">
       <ClientOnly>
-        <ElTable :data="currentPageData" max-height="650" size="large">
-          <ElTableColumn
-            prop="dataMartName"
-            label="資料模型名稱"
-            min-width="150"
-          />
+        <ElTable
+          :data="currentPageData"
+          max-height="650"
+          size="large"
+          @sort-change="sortChange"
+        >
           <ElTableColumn
             prop="dbType"
             label="資料庫類型"
-            width="120"
+            width="150"
             align="center"
+            sortable
             ><template #default="">
               <img
                 class="m-auto"
@@ -20,24 +21,24 @@
               />
             </template>
           </ElTableColumn>
-          <ElTableColumn prop="connName" label="資料庫來源" min-width="150" />
-          <ElTableColumn prop="updateTime" label="建立時間" min-width="150" />
           <ElTableColumn
+            prop="dataMartName"
+            label="資料模型名稱"
+            min-width="250"
+            sortable
+          />
+          <ElTableColumn
+            prop="connName"
+            label="資料庫來源"
+            min-width="250"
+            sortable
+          />
+          <ElTableColumn
+            prop="isActivate"
             label="狀態"
             align="center"
             width="90"
             sortable
-            :sort-method="
-              (a, b) => {
-                if (a.isActivate && !b.isActivate) {
-                  return -1;
-                } else if (!a.isActivate && b.isActivate) {
-                  return 1;
-                } else {
-                  return 0;
-                }
-              }
-            "
           >
             <template #default="scope">
               <ElSwitch
@@ -82,12 +83,15 @@ const store = useDataMartStore();
 const props = defineProps<{
   table: DataMartTable[];
 }>();
+const sortTable = ref<any>(props.table);
 
 const currentPage = ref(1);
 const pageSize = ref(10);
 
 const currentPageData = computed(() => {
-  return _useChunk(props.table, pageSize.value)[currentPage.value - 1] || [];
+  return (
+    _useChunk(sortTable.value, pageSize.value)[currentPage.value - 1] || []
+  );
 });
 
 const handleSizeChange = (val: number) => {
@@ -106,5 +110,18 @@ const toEditDataMart = async (datamartId: string) => {
       datamartId,
     },
   });
+};
+
+interface SortChangeParams {
+  prop: string;
+  order: "descending" | "ascending";
+}
+
+const sortChange = ({ prop, order }: SortChangeParams) => {
+  if (order === "descending")
+    sortTable.value = _useOrderBy(props.table, [prop], ["desc"]);
+  if (order === "ascending")
+    sortTable.value = _useOrderBy(props.table, [prop], ["asc"]);
+  else sortTable.value = props.table;
 };
 </script>

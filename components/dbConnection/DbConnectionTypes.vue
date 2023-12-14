@@ -9,7 +9,7 @@
         'db-category-active': false,
         'shadow-custom-md': true,
       }"
-      @click="clickEditNewConn(type.title, type.itemId)"
+      @click="clickEditNewConn(type.itemId)"
     >
       <div>
         <img :src="icons[`ic_${type.itemId}`]" class="w-6" />
@@ -25,8 +25,13 @@
 const store = useDbConnectionStore();
 const icons = dynamicImportDbConnectionIcons();
 
-const clickEditNewConn = (title: string, dbType: string) => {
-  store.dbConnSetTitle = title;
+const clickEditNewConn = (dbType: string) => {
+  const dbTypeTitle: { [key: string]: any } = {
+    postgresql: "Postgre SQL",
+    bigquery: "Big Query",
+    presto: "Presto",
+  };
+  store.dbConnSetTitle = dbTypeTitle[`${dbType}`];
   store.dbConnSetType = dbType;
   store.dbConnSetIsNew = true;
   store.resetDbConnSetForm();

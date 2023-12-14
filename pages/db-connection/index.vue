@@ -50,12 +50,12 @@
       <DbConnectionSet ref="dbConnectionSetRef" />
       <template #footer>
         <div class="flex justify-between">
-          <ElButton @click="store.getDbConnTest()">連線測試</ElButton>
+          <ElButton @click="clickConnTestButton">連線測試</ElButton>
           <span>
             <ElButton @click="store.dbConnDialog.connSetting = false"
               >取消</ElButton
             >
-            <ElButton type="primary" @click="clickConfirm">確認</ElButton>
+            <ElButton type="primary" @click="clickConfirm">儲存</ElButton>
           </span>
         </div>
       </template>
@@ -80,11 +80,17 @@ const clickAddNewConn = async () => {
   store.dbConnDialog.categories = true;
 };
 
-function clickConfirm() {
+const clickConfirm = () => {
   dbConnectionSetRef.value?.submitForm(
     dbConnectionSetRef.value?.dbConnSetFormRef,
   );
-}
+};
+
+const clickConnTestButton = () => {
+  dbConnectionSetRef.value?.testConn(
+    dbConnectionSetRef.value?.dbConnSetFormRef,
+  );
+};
 </script>
 <style scoped>
 .db-category-active {

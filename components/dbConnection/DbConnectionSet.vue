@@ -1,16 +1,16 @@
 <template>
   <div class="flex flex-col gap-4">
     <ElAlert
-      v-if="store.dbConnTestRes === true"
+      v-if="store.dbConnTestRes === 'true'"
       title="連線成功"
       type="success"
       show-icon
       class="font-black"
     />
     <ElAlert
-      v-if="store.dbConnTestRes === false"
-      title="無法連結到localhost: "
-      description="錯誤訊息"
+      v-if="store.dbConnTestRes !== 'true' && store.dbConnTestRes !== ''"
+      :title="`無法連結到: ${store.dbConnSetForm.host}:${store.dbConnSetForm.port}`"
+      :description="`${store.dbConnTestRes}`"
       type="error"
       show-icon
     />
@@ -28,7 +28,10 @@
         >
           <ElInput
             v-model="store.dbConnSetForm[_useToString(key)]"
-            :placeholder="`請輸入${formLabel[_useToString(key)]}`"
+            :validate-event="false"
+            :placeholder="
+              _useToString(key) === 'connName' ? '自訂連線名稱' : ''
+            "
             :type="`${_useToString(key)}`"
           />
         </ElFormItem>
@@ -62,19 +65,19 @@
     </ElForm>
   </div>
 </template>
-s
+
 <script setup lang="ts">
 import type { FormInstance, FormRules } from "element-plus";
 const dbConnSetFormRef = ref<FormInstance>();
 const store = useDbConnectionStore();
 
 const formLabel: DbConnSetForm = {
-  connName: "連線名稱:",
-  host: "主機名稱或IP:",
-  port: "通訊埠:",
-  username: "使用者名稱:",
-  password: "密碼:",
-  database: "資料庫名稱:",
+  connName: "連線名稱",
+  host: "主機名稱或IP",
+  port: "通訊埠",
+  username: "使用者名稱",
+  password: "密碼",
+  database: "資料庫名稱",
   isSSL: "啟用SSL",
   isClientCertificate: "啟用用戶端驗證",
   CAFile: "SSL",
@@ -83,24 +86,46 @@ const formLabel: DbConnSetForm = {
   clientCertificate: "Client Certificate:",
 };
 
+// const errorDescription = computed(() => {});
+
 const formRules = reactive<FormRules<DbConnSetForm>>({
-  connName: [{ required: true, message: "請輸入連線名稱", trigger: "change" }],
-  host: [{ required: true, message: "請輸入主機名稱或IP", trigger: "change" }],
-  port: [{ required: true, message: "請輸入通訊埠", trigger: "change" }],
-  username: [
-    { required: true, message: "請輸入使用者名稱", trigger: "change" },
-  ],
-  password: [{ required: true, message: "請輸入密碼", trigger: "change" }],
-  database: [
-    { required: true, message: "請輸入資料庫名稱", trigger: "change" },
-  ],
+  connName: [{ required: true, message: "請輸入連線名稱" }],
+  host: [{ required: true, message: "請輸入主機名稱或IP" }],
+  port: [{ required: true, message: "請輸入通訊埠" }],
+  username: [{ required: true, message: "請輸入使用者名稱" }],
+  password: [{ required: true, message: "請輸入密碼" }],
+  database: [{ required: true, message: "請輸入資料庫名稱" }],
 });
 
+// const beforeFormAction = () => {
+//   store.dbConnSetForm = _useMapValues(store.dbConnSetForm, value => isString(value)? _useTrim(value) : value)
+
+// }
+
 const submitForm = async (formEl: FormInstance | undefined) => {
+  store.dbConnSetForm = _useMapValues(store.dbConnSetForm, (value) =>
+    isString(value) ? _useTrim(value) : value,
+  );
+
   if (!formEl) return;
-  await formEl.validate((valid, fields) => {
+  await formEl.validate(async (valid, fields) => {
     if (valid) {
-      store.getDbConnSave();
+      await store.getDbConnSave();
+    } else {
+      console.log("error submit!", fields); // eslint-disable-line no-console
+    }
+  });
+};
+
+const testConn = async (formEl: FormInstance | undefined) => {
+  store.dbConnTestRes = "";
+  store.dbConnSetForm = _useMapValues(store.dbConnSetForm, (value) =>
+    isString(value) ? _useTrim(value) : value,
+  );
+  if (!formEl) return;
+  await formEl.validate(async (valid, fields) => {
+    if (valid) {
+      await store.getDbConnTest();
     } else {
       console.log("error submit!", fields); // eslint-disable-line no-console
     }
@@ -109,6 +134,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
 defineExpose({
   submitForm,
+  testConn,
   dbConnSetFormRef,
 });
 

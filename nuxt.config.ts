@@ -24,8 +24,10 @@ export default defineNuxtConfig({
         maxAgeInSeconds: 60 * 60 * 23,
       },
     },
-    // baseURL: "https://imgenie-app-admin-pcpt4o333q-de.a.run.app",
-    baseURL: "http://localhost:3000",
+    baseURL:
+      process.env.NODE_ENV === "production"
+        ? "https://imgenie-app-admin-pcpt4o333q-de.a.run.app"
+        : "http://localhost:3000",
     session: {
       enableRefreshPeriodically: false,
       enableRefreshOnWindowFocus: false,
