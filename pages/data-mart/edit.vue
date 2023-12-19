@@ -4,8 +4,6 @@
   </div>
 </template>
 <script setup lang="ts">
-const sideMenuActive = useSideMenuActive();
-sideMenuActive.value = "2-2";
 // const dbConnStore = useDbConnectionStore();
 const store = useDataMartStore();
 await store.getDataMartQuery();

@@ -14,7 +14,7 @@
             :src="icons['ic_menu_collapse']"
             width="24"
             :class="[isCollapse ? 'icon-menu-collapse' : 'icon-menu-expend']"
-            @click="isCollapse = !isCollapse"
+            @click="collapseSideMenu"
           />
           <template #title>
             <div v-if="!isCollapse" class="text-white font-bold text-base">
@@ -24,7 +24,7 @@
         </ElMenuItem>
 
         <ElSubMenu
-          v-for="(menu, menuIndex) in sideMenuList"
+          v-for="(menu, menuIndex) in useLayoutStore().sideMenu.list"
           :key="menuIndex"
           :index="_useToString(menuIndex + 1)"
         >
@@ -49,10 +49,15 @@
   </div>
 </template>
 <script setup lang="ts">
-const sideMenuActive = useSideMenuActive();
-const isCollapse = useSideMenuCollapse();
-const sideMenuList = useSideMenuList();
+const sideMenuActive = computed(
+  () => useLayoutStore().pageLayout[useRoute().path].sideMenuIndex,
+);
+const isCollapse = computed(() => useLayoutStore().sideMenu.collapse);
 const icons = dynamicImportSideMenuIcons();
+
+const collapseSideMenu = () => {
+  useLayoutStore().sideMenu.collapse = !useLayoutStore().sideMenu.collapse;
+};
 </script>
 <style>
 .icon-menu-collapse {

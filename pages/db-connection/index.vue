@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 資料庫連線 -->
-    <AdminSortableTable :list="store.dbConnTable" :column="displayContent" />
+    <AdminSortableTable :list="store.dbConnTable" :column="column" />
 
     <!-- 選擇連線類型 -->
     <ElDialog
@@ -47,15 +47,11 @@
 </template>
 <script setup lang="ts">
 import DbConnectionSet from "~/components/dbConnection/DbConnectionSet.vue";
-const displayContent = {
-  connName: "連線名稱",
-  database: "資料庫名稱",
-  host: "主機名稱或IP",
-};
+const pageLayout = useLayoutStore().pageLayout[useRoute().path];
+const column = computed(() => pageLayout.tableColumn ?? {});
+
 const store = useDbConnectionStore();
 const icons = dynamicImportDbConnectionIcons();
-const sideMenuActive = useSideMenuActive();
-sideMenuActive.value = "2-1";
 
 const dbConnectionSetRef = ref<InstanceType<typeof DbConnectionSet> | null>(
   null,

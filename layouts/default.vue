@@ -34,13 +34,8 @@
 </template>
 <script setup lang="ts">
 const isLoading = useLoading();
-const isCollapse = useSideMenuCollapse();
-const useLayout = useLayoutStore();
-const titleInfo = ref();
-watchEffect(() => {
-  const currentPath = useRoute().path;
-  titleInfo.value = useLayout.pageLayout[currentPath];
-});
+const isCollapse = computed(() => useLayoutStore().sideMenu.collapse);
+const titleInfo = computed(() => useLayoutStore().pageLayout[useRoute().path]);
 </script>
 
 <style></style>

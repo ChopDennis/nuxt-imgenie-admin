@@ -2,7 +2,6 @@ interface TitleInfo {
   breadcrumb: string;
   pageName: string;
   btnName: string;
-  btnFn: Function;
   tableColumn?: { [keys: string]: string };
   sideMenuIndex: string;
 }
@@ -30,11 +29,6 @@ export const useLayoutStore = defineStore("layout", {
           breadcrumb: "首頁 / 系統管理 /",
           pageName: "資料庫連線",
           btnName: "新增連線",
-          btnFn: async () => {
-            const store = useDbConnectionStore();
-            await store.getDbConnTypes();
-            store.dbConnDialog.categories = true;
-          },
           tableColumn: {
             connName: "連線名稱",
             database: "資料庫名稱",
@@ -46,9 +40,6 @@ export const useLayoutStore = defineStore("layout", {
           breadcrumb: "首頁 / 系統管理 /",
           pageName: "資料模型設定",
           btnName: "新增資料模型",
-          btnFn: () => {
-            navigateTo({ path: "/data-mart/add" });
-          },
           tableColumn: {
             dataMartName: "資料模型名稱",
             connName: "連線名稱",
@@ -59,21 +50,18 @@ export const useLayoutStore = defineStore("layout", {
           breadcrumb: "首頁 / 系統管理 /",
           pageName: "資料模型新增",
           btnName: "",
-          btnFn: () => {},
           sideMenuIndex: "2-2",
         },
         "/data-mart/edit": {
           breadcrumb: "首頁 / 系統管理 /",
           pageName: "資料模型編輯",
           btnName: "",
-          btnFn: () => {},
           sideMenuIndex: "2-2",
         },
         "/": {
           breadcrumb: "",
           pageName: "",
           btnName: "",
-          btnFn: () => {},
           sideMenuIndex: "",
         },
       } as PageLayout,
@@ -113,7 +101,6 @@ export const useLayoutStore = defineStore("layout", {
           },
         ] as SideMenuList[],
         collapse: false,
-        activeIndex: "",
       },
     };
   },
