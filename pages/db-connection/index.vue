@@ -1,31 +1,14 @@
 <template>
   <div>
     <!-- 資料庫連線 -->
-    <div class="flex flex-col">
-      <div
-        class="flex flex-col gap-4 px-5 pb-4 sticky top-0 bg-white -mt-1 z-50"
-      >
-        <div class="flex text-sm">
-          <p class="text-gray-300">首頁／系統管理／</p>
-          <p>資料庫連線</p>
-        </div>
-        <div class="flex justify-between">
-          <h1 class="text-xl font-bold tracking-wide">資料庫連線</h1>
-          <div>
-            <ElButton :icon="ElIconPlus" type="primary" @click="clickAddNewConn"
-              >新增連線</ElButton
-            >
-          </div>
-        </div>
-      </div>
-      <DbConnectionList />
-    </div>
+    <AdminSortableTable :list="store.dbConnTable" :column="displayContent" />
 
     <!-- 選擇連線類型 -->
     <ElDialog
       v-model="store.dbConnDialog.categories"
       title="選擇連線類型"
       modal-class="backdrop-blur-sm"
+      width="576"
       align-center
     >
       <DbConnectionTypes />
@@ -64,7 +47,11 @@
 </template>
 <script setup lang="ts">
 import DbConnectionSet from "~/components/dbConnection/DbConnectionSet.vue";
-
+const displayContent = {
+  connName: "連線名稱",
+  database: "資料庫名稱",
+  host: "主機名稱或IP",
+};
 const store = useDbConnectionStore();
 const icons = dynamicImportDbConnectionIcons();
 const sideMenuActive = useSideMenuActive();
@@ -74,11 +61,6 @@ const dbConnectionSetRef = ref<InstanceType<typeof DbConnectionSet> | null>(
   null,
 );
 await store.getDbConnTable();
-
-const clickAddNewConn = async () => {
-  await store.getDbConnTypes();
-  store.dbConnDialog.categories = true;
-};
 
 const clickConfirm = () => {
   dbConnectionSetRef.value?.submitForm(

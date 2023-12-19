@@ -18,33 +18,23 @@
               ></ElInput>
             </div>
           </ElFormItem>
-          <ElFormItem label="資料模型說明">
+          <ElFormItem label="資料模型說明" style="margin-top: 40px">
             <div class="ml-2 w-full">
               <ElInput
                 v-model="dataMartStore.dataMartSetForm.description"
-                type="textarea"
+                maxlength="125"
+                style="height: 54px !important"
               ></ElInput>
             </div>
-          </ElFormItem>
-
-          <ElDialog
-            v-model="dialog"
-            title="資料庫連線設定"
-            modal-class="backdrop-blur-sm"
-            :destroy-on-close="true"
-            align-center
-            width="572"
-          >
-            <DataMartSetDialog />
-            <template #footer>
-              <div class="flex justify-center pt-3">
-                <ElButton @click="dialog = false">取消</ElButton>
-                <ElButton type="primary" @click="clickConfirm()">儲存</ElButton>
+            <div class="flex justify-between w-full mb-4 px-3">
+              <div>限制125字元</div>
+              <div class="text-gray-400">
+                {{ dataMartStore.dataMartSetForm.description.length }}/125
               </div>
-            </template>
-          </ElDialog>
-          <ClientOnly>
-            <div class="flex flex-col w-full gap-2 mb-4">
+            </div>
+          </ElFormItem>
+          <ElFormItem label="資料庫連線設定" style="margin-top: 96px">
+            <div class="w-full pl-2 -mt-10">
               <div class="flex justify-end">
                 <div
                   style="height: 32px; width: 110px"
@@ -55,44 +45,42 @@
                   <div>連線設定</div>
                 </div>
               </div>
-              <div class="flex justify-end w-full pl-36">
-                <div style="width: 100%">
-                  <ElTable :data="connTable" max-height="650" size="large">
-                    <ElTableColumn label="資料庫來源" width="300"
-                      ><template #default="scope">
-                        <div class="flex gap-2">
-                          <img
-                            :src="icons[`ic_${scope.row.dbType}`]"
-                            class="w-6"
-                            width="24"
-                          />
-                          {{ scope.row.connName }}
-                        </div>
-                      </template>
-                    </ElTableColumn>
-                    <ElTableColumn
-                      prop="database"
-                      label="資料庫名稱"
-                      min-width="150"
-                    />
-                    <ElTableColumn
-                      prop="host"
-                      label="主機名稱及IP"
-                      min-width="150"
-                    />
+              <ClientOnly>
+                <ElTable :data="connTable" max-height="650" size="large">
+                  <ElTableColumn label="資料庫來源" width="300"
+                    ><template #default="scope">
+                      <div class="flex gap-2">
+                        <img
+                          :src="icons[`ic_${scope.row.dbType}`]"
+                          class="w-6"
+                          width="24"
+                        />
+                        {{ scope.row.connName }}
+                      </div>
+                    </template>
+                  </ElTableColumn>
+                  <ElTableColumn
+                    prop="database"
+                    label="資料庫名稱"
+                    min-width="150"
+                  />
+                  <ElTableColumn
+                    prop="host"
+                    label="主機名稱及IP"
+                    min-width="150"
+                  />
 
-                    <ElTableColumn prop="dbName" label="Schema" min-width="150">
-                      <template #default="scope">
-                        {{ scope.row.database }}/{{ scope.row.dbName }}
-                      </template>
-                    </ElTableColumn>
-                  </ElTable>
-                </div>
-              </div>
+                  <ElTableColumn prop="dbName" label="Schema" min-width="150">
+                    <template #default="scope">
+                      {{ scope.row.database }}/{{ scope.row.dbName }}
+                    </template>
+                  </ElTableColumn>
+                </ElTable>
+              </ClientOnly>
             </div>
-          </ClientOnly>
-          <ElFormItem label="資料說明文件">
-            <div class="ml-2 w-full">
+          </ElFormItem>
+          <ElFormItem label="資料說明文件" style="margin-top: 80px">
+            <div class="pl-2 w-full">
               <DataMartUpload @upload="fileFormUpload" />
             </div>
           </ElFormItem>
@@ -104,6 +92,22 @@
         <ElButton type="primary" @click="clickUpload()">儲存</ElButton>
       </div>
     </div>
+    <ElDialog
+      v-model="dialog"
+      title="資料庫連線設定"
+      modal-class="backdrop-blur-sm"
+      :destroy-on-close="true"
+      align-center
+      width="572"
+    >
+      <DataMartSetDialog />
+      <template #footer>
+        <div class="flex justify-center pt-3">
+          <ElButton @click="dialog = false">取消</ElButton>
+          <ElButton type="primary" @click="clickConfirm()">儲存</ElButton>
+        </div>
+      </template>
+    </ElDialog>
   </div>
 </template>
 <script setup lang="ts">
@@ -141,10 +145,8 @@ const clickUpload = async () => {
       type: "application/json",
     },
   );
-  // console.log(props.file);
 
   if (dbmlFile.value) {
-    // console.log(await dbmlFile.value.text());
     formData.append("data", data);
     formData.append("file", dbmlFile.value as File);
     await dataMartStore.getDataMartSave(formData);

@@ -1,14 +1,9 @@
 <template>
-  <div class="px-5 mt-4">
-    <div class="bg-white rounded-lg p-5 shadow-custom-lg">
+  <div class="p-6">
+    <div class="bg-white rounded-lg p-4 shadow-custom-lg">
       <ClientOnly>
-        <ElTable
-          :data="currentPageData"
-          max-height="650"
-          size="large"
-          @sort-change="sortChange"
-        >
-          <ElTableColumn
+        <ElTable :data="currentPageData" size="large" @sort-change="sortChange"
+          ><ElTableColumn
             prop="dbType"
             label="資料庫類型"
             width="150"
@@ -25,23 +20,12 @@
               </div>
             </template>
           </ElTableColumn>
-          <ElTableColumn
-            prop="connName"
-            label="連線名稱"
-            min-width="150"
-            sortable
-          />
 
           <ElTableColumn
-            prop="connInfoDatabase"
-            label="資料庫名稱"
-            min-width="150"
-            sortable
-          />
-          <ElTableColumn
-            prop="connInfoHostPort"
-            label="主機名稱或ＩＰ"
-            min-width="150"
+            v-for="(value, index) in column"
+            :key="index"
+            :prop="index.toString()"
+            :label="value"
             sortable
           />
           <ElTableColumn
@@ -54,9 +38,7 @@
             <template #default="scope">
               <ElSwitch
                 v-model="scope.row.isActivate"
-                @change="
-                  changeDbActivate(scope.row.connId, scope.row.isActivate)
-                "
+                @change="changRowSwitch(scope.row.id, scope.row.isActivate)"
               />
             </template>
           </ElTableColumn>
@@ -65,20 +47,18 @@
               <img
                 class="m-auto"
                 src="~/assets/icons/dbConnection/ic_db_edit.svg"
-                @click="clickEditActiveConn(scope.row.connId)"
+                @click="clickRowEditBtn(scope.row.id)"
               />
             </template>
-          </ElTableColumn>
-        </ElTable>
-      </ClientOnly>
+          </ElTableColumn> </ElTable
+      ></ClientOnly>
       <div class="flex justify-end mt-4">
         <ElPagination
           :current-page="currentPage"
-          :page-sizes="[10, 20, 40]"
           :page-size="pageSize"
-          :total="store.dbConnTable.length"
+          :total="props.list.length"
           background
-          layout="total, sizes, prev, pager, next"
+          layout="total, prev, pager, next"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         />
@@ -86,23 +66,50 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends { id: string; isActivate: boolean }">
+interface SortChangeParams {
+  prop: string;
+  order: "descending" | "ascending" | null;
+}
+
+const props = defineProps<{
+  list: T[];
+  column: {
+    [keys: string]: string;
+  };
+}>();
+
 const store = useDbConnectionStore();
-const currentPage = ref(1);
-const pageSize = ref(10);
-const icons = dynamicImportDbConnectionIcons();
 const sortOrder = ref<"desc" | "asc" | null>(null);
 const sortProp = ref("");
+const currentPage = ref(1);
+const pageSize = ref(10);
+
 const sortTable = computed(() =>
   !isNull(sortOrder.value)
-    ? _useOrderBy(store.dbConnTable, [sortProp.value], [sortOrder.value])
-    : store.dbConnTable,
+    ? _useOrderBy(props.list, [sortProp.value], [sortOrder.value])
+    : props.list,
 );
-const currentPageData = computed(() => {
-  return (
-    _useChunk(sortTable.value, pageSize.value)[currentPage.value - 1] || []
-  );
-});
+const currentPageData = computed(
+  () => _useChunk(sortTable.value, pageSize.value)[currentPage.value - 1] || [],
+);
+const icons = dynamicImportDbConnectionIcons();
+
+const changRowSwitch = async (id: string, value: boolean) => {
+  return await store.getDbConnUpdate(id, value);
+};
+
+const clickRowEditBtn = async (id: string) => {
+  await store.getDbConnQuery(id);
+  store.dbConnSetIsNew = false;
+  store.dbConnDialog.connSetting = true;
+};
+
+const sortChange = ({ prop, order }: SortChangeParams) => {
+  sortProp.value = prop;
+  sortOrder.value =
+    order === "descending" ? "desc" : order === "ascending" ? "asc" : null;
+};
 
 const handleSizeChange = (val: number) => {
   pageSize.value = val;
@@ -111,29 +118,5 @@ const handleSizeChange = (val: number) => {
 
 const handleCurrentChange = (val: number) => {
   currentPage.value = val;
-};
-
-const clickEditActiveConn = async (id: string) => {
-  await store.getDbConnQuery(id);
-  store.dbConnSetIsNew = false;
-  store.dbConnDialog.connSetting = true;
-};
-
-const changeDbActivate = async (
-  connId: string,
-  isActivate: boolean,
-): Promise<boolean> => {
-  return await store.getDbConnUpdate(connId, isActivate);
-};
-
-interface SortChangeParams {
-  prop: string;
-  order: "descending" | "ascending" | null;
-}
-
-const sortChange = ({ prop, order }: SortChangeParams) => {
-  sortProp.value = prop;
-  sortOrder.value =
-    order === "descending" ? "desc" : order === "ascending" ? "asc" : null;
 };
 </script>

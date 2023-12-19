@@ -1,5 +1,6 @@
 declare global {
   interface DataMartTable {
+    id: string;
     connName: string;
     dataMartName: string;
     dbType: string;

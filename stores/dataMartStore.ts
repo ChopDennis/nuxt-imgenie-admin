@@ -32,8 +32,10 @@ export const useDataMartStore = defineStore("dataMart", {
         this.dataMartTable = _useMap(
           table.data as DataMartListRes[],
           (list) => {
+            const { datamartId, ...rest } = list;
             return {
-              ...list,
+              id: datamartId,
+              ...rest,
             };
           },
         );

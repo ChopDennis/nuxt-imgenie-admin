@@ -1,7 +1,8 @@
 export const useDbConnectionStore = defineStore("dbConnection", {
   state: () => {
     return {
-      dbConnListMap: [] as DbConnListMap[],
+      dbConnListMap: [] as any[],
+      dbConnTable: [] as DbConnTable[],
       dbConnTypesRes: [] as DbConnTypesRes[],
       dbConnSchemaRes: [],
       dbConnSetForm: {} as DbConnSetForm,
@@ -27,7 +28,6 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         host: string;
         database: string;
       },
-      dbConnTable: [] as DbConnListMap[],
     };
   },
 
@@ -40,15 +40,16 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         });
         await execute();
         const table = data.value as ApiResponse;
-        const mappingData = _useMap(table.data, (list) => {
-          const { connInfo, dbType, connName, ...rest } = list;
+        const mappingData = _useMap(table.data as DbConnListRes[], (list) => {
+          const { connInfo, dbType, connName, connId, isActivate } = list;
           const { host, port, database } = connInfo;
           return {
-            ...rest,
+            id: connId,
             dbType,
             connName,
-            connInfoHostPort: `${host}: ${port}`,
-            connInfoDatabase: database,
+            host: `${host}: ${port}`,
+            database,
+            isActivate,
           };
         });
 

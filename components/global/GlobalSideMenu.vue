@@ -60,6 +60,6 @@ const icons = dynamicImportSideMenuIcons();
 }
 .icon-menu-expend {
   position: absolute;
-  left: 276px;
+  left: 280px;
 }
 </style>

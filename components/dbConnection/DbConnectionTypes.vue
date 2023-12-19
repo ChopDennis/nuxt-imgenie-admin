@@ -4,10 +4,9 @@
       v-for="(type, index) in store.dbConnTypesRes"
       id="dbTypeSelectButton"
       :key="index"
-      class="rounded-lg p-4 h-auto flex justify-start gap-2 transition-all items-center"
+      class="rounded-lg p-4 h-auto flex justify-start border gap-2 transition-all items-center hover:shadow-custom-md"
       :class="{
         'db-category-active': false,
-        'shadow-custom-md': true,
       }"
       @click="clickEditNewConn(type.itemId)"
     >

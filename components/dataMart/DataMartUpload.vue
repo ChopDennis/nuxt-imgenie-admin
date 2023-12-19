@@ -7,9 +7,21 @@
         :show-file-list="false"
         :auto-upload="false"
         :drag="true"
+        :class="{
+          'upload-error': errorMessage !== '',
+        }"
       >
-        <p>將資料拖曳此處，或點擊上傳</p>
+        <div class="flex flex-col items-center gap-4">
+          <div>
+            <img src="~/assets/icons/data-mart/ic_upload.svg" width="48" />
+          </div>
+          <div>
+            <p>將資料拖曳此處，或點擊上傳</p>
+            <p style="color: rgba(0, 0, 0, 0.45)">限.dbml格式(1MB以內)</p>
+          </div>
+        </div>
       </ElUpload>
+      <div class="text-red-400 px-1">{{ errorMessage }}</div>
     </div>
     <div v-else class="flex w-full">
       <div class="flex justify-between w-full border pl-4 mr-4 rounded-lg">
@@ -52,6 +64,7 @@ const emit = defineEmits<{
 
 const isUpload = ref(false);
 const uploadName = ref("");
+const errorMessage = ref("");
 
 const dbmlPreviewDialog = ref(false);
 const dbmlPreviewContent = ref();
@@ -74,16 +87,12 @@ if (route.query.datamartId) {
         },
       );
       isUpload.value = true;
+      errorMessage.value = "";
       uploadName.value = userUploadFile.value.name;
       dbmlPreviewContent.value = await userUploadFile.value.text();
       emit("upload", userUploadFile.value);
     } else {
-      ElMessageBox.confirm("檔案大小超過 1MB 限制", "系統提示", {
-        confirmButtonText: "確認",
-        cancelButtonText: "取消",
-      })
-        .then(() => (isUpload.value = false))
-        .catch(() => false);
+      errorMessage.value = "檔案大小超過1MB限制";
     }
   }
 }
@@ -94,32 +103,15 @@ const handleChange: UploadProps["onChange"] = async (uploadFile) => {
       if (uploadFile.raw.size < 1000 * 1000) {
         userUploadFile.value = uploadFile.raw;
         isUpload.value = true;
+        errorMessage.value = "";
         uploadName.value = uploadFile.name;
         dbmlPreviewContent.value = await userUploadFile.value.text();
         emit("upload", userUploadFile.value);
       } else {
-        isUpload.value = await ElMessageBox.confirm(
-          "檔案大小超過 1MB 限制",
-          "系統提示",
-          {
-            confirmButtonText: "確認",
-            cancelButtonText: "取消",
-          },
-        )
-          .then(() => false)
-          .catch(() => false);
+        errorMessage.value = "檔案大小超過1MB限制";
       }
     } else {
-      isUpload.value = await ElMessageBox.confirm(
-        "限制只能上傳 DBML 檔",
-        "系統提示",
-        {
-          confirmButtonText: "確認",
-          cancelButtonText: "取消",
-        },
-      )
-        .then(() => false)
-        .catch(() => false);
+      errorMessage.value = "限制只能上傳DBML檔";
     }
   }
 };
@@ -128,3 +120,9 @@ const clickRemoveIcon = () => {
   isUpload.value = false;
 };
 </script>
+<style scoped>
+.upload-error {
+  border: 1px solid rgb(248 113 113 /400);
+  border-radius: 8px;
+}
+</style>

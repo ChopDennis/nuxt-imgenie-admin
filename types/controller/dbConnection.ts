@@ -16,13 +16,12 @@ declare global {
     isActivate: boolean;
   }
 
-  interface DbConnListMap {
-    connId: string;
-    connType: string;
+  interface DbConnTable {
+    id: string;
+    dbType: string;
     connName: string;
-    updateTime: string;
-    connInfoHostPort: string;
-    connInfoDatabase: string;
+    host: string;
+    database: string;
     isActivate: boolean;
   }
 
