@@ -11,6 +11,7 @@
         <ElFormItem prop="account">
           <ElInput
             v-model="credentials.account"
+            size="large"
             type="text"
             placeholder="輸入Email"
           />
@@ -18,6 +19,7 @@
         <ElFormItem prop="password">
           <ElInput
             v-model="credentials.password"
+            size="large"
             type="password"
             placeholder="輸入密碼"
           />
@@ -27,6 +29,7 @@
         </ElFormItem>
         <ElButton
           class="w-full"
+          size="large"
           type="primary"
           @click="loginController.clickLoginButton(loginFormRef, credentials)"
           >登入</ElButton

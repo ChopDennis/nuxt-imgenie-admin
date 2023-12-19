@@ -1,8 +1,12 @@
 <template>
-  <div class="p-6">
+  <div>
     <div class="bg-white rounded-lg p-4 shadow-custom-lg">
       <ClientOnly>
-        <ElTable :data="currentPageData" size="large" @sort-change="sortChange"
+        <ElTable
+          :data="currentPageData"
+          size="large"
+          :height="tableHeight"
+          @sort-change="sortChange"
           ><ElTableColumn
             prop="dbType"
             label="資料庫類型"
@@ -52,14 +56,17 @@
             </template>
           </ElTableColumn> </ElTable
       ></ClientOnly>
-      <div class="flex justify-end mt-4">
+      <div class="flex justify-end mt-4 items-center gap-4">
+        <div>
+          共 {{ props.list.length }} 筆 第 {{ currentPage }} /
+          {{ Math.ceil(props.list.length / pageSize) }} 頁
+        </div>
         <ElPagination
           :current-page="currentPage"
           :page-size="pageSize"
           :total="props.list.length"
           background
-          layout="total, prev, pager, next"
-          @size-change="handleSizeChange"
+          layout=" prev, pager, next"
           @current-change="handleCurrentChange"
         />
       </div>
@@ -78,12 +85,12 @@ const props = defineProps<{
     [keys: string]: string;
   };
 }>();
-
 const store = useDbConnectionStore();
 const sortOrder = ref<"desc" | "asc" | null>(null);
+const tableHeight = ref(500);
 const sortProp = ref("");
 const currentPage = ref(1);
-const pageSize = ref(10);
+const pageSize = computed(() => Math.floor(tableHeight.value / 57));
 
 const sortTable = computed(() =>
   !isNull(sortOrder.value)
@@ -111,12 +118,21 @@ const sortChange = ({ prop, order }: SortChangeParams) => {
     order === "descending" ? "desc" : order === "ascending" ? "asc" : null;
 };
 
-const handleSizeChange = (val: number) => {
-  pageSize.value = val;
-  currentPage.value = 1;
-};
-
 const handleCurrentChange = (val: number) => {
   currentPage.value = val;
 };
+
+const getBrowserHeight = () => {
+  tableHeight.value = window.innerHeight - 284;
+};
+if (process.client) {
+  getBrowserHeight();
+  window.addEventListener("resize", _useDebounce(getBrowserHeight, 200));
+}
+
+onBeforeUnmount(() => {
+  if (process.client) {
+    window.removeEventListener("resize", _useDebounce(getBrowserHeight, 200));
+  }
+});
 </script>

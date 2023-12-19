@@ -4,31 +4,39 @@
     <GlobalHeader />
 
     <div
-      class="w-full transition-spacing ease-linear overflow-y-scroll pb-4"
+      class="w-full transition-spacing ease-linear"
       :class="[isCollapse ? 'pl-16' : 'pl-64']"
-      style="height: calc(100vh - 64px)"
     >
-      <div class="flex flex-col top-0 px-6 pt-4 gap-4 bg-white z-50 pb-3">
-        <div class="flex text-sm">
-          <p class="text-gray-300">{{ titleInfo.breadcrumb }}&nbsp;</p>
-          <p>{{ titleInfo.pageName }}</p>
-        </div>
-        <div class="flex justify-between">
-          <h1 class="text-xl font-bold tracking-wide">
-            {{ titleInfo.pageName }}
-          </h1>
-          <div>
-            <ElButton
-              v-if="titleInfo.btnName"
-              :icon="ElIconPlus"
-              type="primary"
-              @click="titleInfo.btnFn"
-              >{{ titleInfo.btnName }}</ElButton
-            >
+      <ElRow class="px-6 pt-4">
+        <ElCol :span="24" class="text-sm"
+          ><div class="flex">
+            <p class="text-gray-300">{{ titleInfo.breadcrumb }}&nbsp;</p>
+            <p>{{ titleInfo.pageName }}</p>
           </div>
-        </div>
+        </ElCol>
+        <ElCol class="pt-4">
+          <div class="flex justify-between">
+            <div class="self-end">
+              <h1 class="text-xl font-bold tracking-wide">
+                {{ titleInfo.pageName }}
+              </h1>
+            </div>
+            <div>
+              <ElButton
+                v-if="titleInfo.btnName"
+                :icon="ElIconPlus"
+                size="large"
+                type="primary"
+                @click="clickBtn(titleInfo.btnName)"
+                >{{ titleInfo.btnName }}</ElButton
+              >
+            </div>
+          </div>
+        </ElCol>
+      </ElRow>
+      <div style="height: calc(100vh - 180px)" class="p-6">
+        <slot />
       </div>
-      <slot />
     </div>
   </div>
 </template>
@@ -36,6 +44,15 @@
 const isLoading = useLoading();
 const isCollapse = computed(() => useLayoutStore().sideMenu.collapse);
 const titleInfo = computed(() => useLayoutStore().pageLayout[useRoute().path]);
+const clickBtn = async (btn: string) => {
+  if (btn === "新增連線") {
+    const store = useDbConnectionStore();
+    await store.getDbConnTypes();
+    store.dbConnDialog.categories = true;
+  } else {
+    navigateTo({ path: "/data-mart/add" });
+  }
+};
 </script>
 
 <style></style>

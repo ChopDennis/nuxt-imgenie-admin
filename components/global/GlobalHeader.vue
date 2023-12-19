@@ -1,15 +1,20 @@
 <template>
-  <div class="w-full h-16 flex justify-end items-stretch px-5">
-    <div class="self-center px-8">
-      <!-- <ElBadge :value="12" class="item"> <ElIconBell width="24" /> </ElBadge> -->
+  <div class="w-full h-16 flex justify-end px-6 gap-2 items-center">
+    <div>
+      <img
+        src="~/assets/icons/header/ic_avatar.svg"
+        width="40"
+        @click="goToLogin()"
+      />
     </div>
-    <img
-      src="~/assets/icons/header/ic_avatar.svg"
-      width="40"
-      @click="goToLogin()"
-    />
-    <div class="self-center px-2">
-      <h1 class="align-middle font-bold">imgenie_admin</h1>
+    <div class="flex gap-2 mr-2">
+      <h1 class="font-bold">imgenie_admin</h1>
+      <el-popover placement="bottom" trigger="click">
+        <template #reference>
+          <ElIconArrowDown width="16"></ElIconArrowDown>
+        </template>
+        <ElButton class="border-0" @click="goToLogin">登出</ElButton>
+      </el-popover>
     </div>
   </div>
 </template>
