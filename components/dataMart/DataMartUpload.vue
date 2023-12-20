@@ -36,7 +36,7 @@
       >
         <img
           class="m-auto"
-          src="~/assets/icons/data-mart/data-mart-export-dbml.svg"
+          src="~/assets/icons/data-mart/ic_export_dbml.svg"
           @click="dbmlPreviewDialog = true"
         />
       </div>

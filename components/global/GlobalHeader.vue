@@ -5,11 +5,21 @@
     </div>
     <div class="flex gap-2">
       <h1 class="font-bold">imgenie_admin</h1>
-      <el-tooltip content="登出" placement="bottom" effect="light">
+      <el-tooltip
+        :show-arrow="false"
+        content="登出"
+        placement="bottom-end"
+        effect="light"
+        :offset="0"
+      >
         <template #content>
-          <ElButton style="border: 0" @click="goToLogin">登出</ElButton>
+          <ElButton style="border: 0px; box-shadow: none" @click="goToLogin"
+            >登出</ElButton
+          >
         </template>
-        <ElIconArrowDown width="16"></ElIconArrowDown>
+        <ElButton size="small" style="border: 0px; box-shadow: none; padding: 0"
+          ><ElIconArrowDown width="16"></ElIconArrowDown
+        ></ElButton>
       </el-tooltip>
     </div>
   </div>

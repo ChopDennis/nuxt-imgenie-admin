@@ -39,10 +39,6 @@ th:not(:last-child) .cell {
   padding-right: 8px;
 }
 
-.login-model {
-  width: 480px;
-}
-
 .db-type-select-active {
   border: 1px solid #456dec;
   background: white;
@@ -58,4 +54,18 @@ th:not(:last-child) .cell {
 
 .db-type-select:focus {
   background: #eff4fe;
+}
+
+.bg-white.rounded-lg.p-5.shadow-custom-lg {
+  height: calc(100vh - 204px);
+}
+
+/* Login */
+
+.login-model {
+  width: 480px;
+}
+
+.login-backdrop {
+  backdrop-filter: blur(5px)
 }

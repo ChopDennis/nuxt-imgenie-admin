@@ -1,5 +1,5 @@
 <template>
-  <div class="backdrop-blur-sm w-full self-center">
+  <div class="w-full flex login-backdrop">
     <div class="login-model bg-white p-12 rounded-3xl m-auto">
       <h1 class="text-center font-bold text-2xl mb-16">IMGenie 管理平台</h1>
       <ElForm
@@ -33,9 +33,8 @@
         class="w-full"
         type="primary"
         size="large"
-        style="padding: 8px 24px 8px 24px !important; height: 48px! !important"
         @click="login.clickLoginButton(loginFormRef, credentials)"
-        ><div class="text-2xl" style="line-height: 34px">登入</div>
+        ><div class="text-2xl font-bold" style="line-height: 34px">登入</div>
       </ElButton>
     </div>
   </div>
