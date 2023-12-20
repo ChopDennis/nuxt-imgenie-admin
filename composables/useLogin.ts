@@ -4,7 +4,7 @@ interface Credentials {
   password: string;
 }
 
-export class LoginController {
+export class UseLogin {
   async clickLoginButton(
     formEl: FormInstance | undefined,
     credentials: Credentials,

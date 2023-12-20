@@ -1,0 +1,16 @@
+body .el-button {
+  box-shadow: var(--el-box-shadow-button);
+}
+
+body .el-button:hover {
+  --el-button-hover-text-color: #2f4ee0;
+  --el-button-hover-bg-color: white;
+  --el-button-hover-border-color: #2f4ee0;
+  box-shadow: var(--el-box-shadow-button-hover);
+}
+
+body .el-button.el-button--primary:hover {
+  --el-button-hover-text-color: white;
+  --el-button-hover-bg-color: #2f4ee0;
+  box-shadow: var(--el-box-shadow-button-hover);
+}

@@ -2,11 +2,10 @@
   <div class="grid grid-cols-2 gap-4">
     <div
       v-for="(type, index) in store.dbConnTypesRes"
-      id="dbTypeSelectButton"
       :key="index"
-      class="rounded-lg p-4 h-auto flex justify-start border gap-2 transition-all items-center hover:shadow-custom-md"
+      class="rounded-lg p-4 h-auto flex justify-start border gap-2 transition-all items-center db-type-select"
       :class="{
-        'db-category-active': false,
+        'db-type-select-active': type.itemId === store.dbConnSetType,
       }"
       @click="clickEditNewConn(type.itemId)"
     >
@@ -22,7 +21,7 @@
 </template>
 <script setup lang="ts">
 const store = useDbConnectionStore();
-const icons = dynamicImportDbConnectionIcons();
+const icons = useDbConnIcons();
 
 const clickEditNewConn = (dbType: string) => {
   const dbTypeTitle: { [key: string]: any } = {
@@ -34,7 +33,9 @@ const clickEditNewConn = (dbType: string) => {
   store.dbConnSetType = dbType;
   store.dbConnSetIsNew = true;
   store.resetDbConnSetForm();
-  store.dbConnDialog.categories = false;
-  store.dbConnDialog.connSetting = true;
+  setTimeout(() => {
+    store.dbConnDialog.categories = false;
+    store.dbConnDialog.connSetting = true;
+  }, 500);
 };
 </script>

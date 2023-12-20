@@ -1,6 +1,6 @@
 import { filename } from "pathe/utils";
 
-export const dynamicImportDbConnectionIcons = () => {
+export const useDbConnIcons = () => {
   const glob = import.meta.glob("@/assets/icons/dbConnection/*.svg", {
     eager: true,
   });
@@ -13,7 +13,7 @@ export const dynamicImportDbConnectionIcons = () => {
   return imageUrls;
 };
 
-export const dynamicImportSideMenuIcons = () => {
+export const useSideMenuIcons = () => {
   const glob = import.meta.glob("@/assets/icons/sideMenu/*.svg", {
     eager: true,
   });

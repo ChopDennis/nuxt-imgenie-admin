@@ -90,7 +90,7 @@ const sortOrder = ref<"desc" | "asc" | null>(null);
 const tableHeight = ref(500);
 const sortProp = ref("");
 const currentPage = ref(1);
-const pageSize = computed(() => Math.floor(tableHeight.value / 57));
+const pageSize = computed(() => Math.floor(tableHeight.value / 60) + 5);
 
 const sortTable = computed(() =>
   !isNull(sortOrder.value)
@@ -100,16 +100,25 @@ const sortTable = computed(() =>
 const currentPageData = computed(
   () => _useChunk(sortTable.value, pageSize.value)[currentPage.value - 1] || [],
 );
-const icons = dynamicImportDbConnectionIcons();
+const icons = useDbConnIcons();
 
 const changRowSwitch = async (id: string, value: boolean) => {
   return await store.getDbConnUpdate(id, value);
 };
 
 const clickRowEditBtn = async (id: string) => {
-  await store.getDbConnQuery(id);
-  store.dbConnSetIsNew = false;
-  store.dbConnDialog.connSetting = true;
+  if (useRoute().path === "/data-mart") {
+    navigateTo({
+      path: "/data-mart/edit",
+      query: {
+        datamartId: id,
+      },
+    });
+  } else {
+    await store.getDbConnQuery(id);
+    store.dbConnSetIsNew = false;
+    store.dbConnDialog.connSetting = true;
+  }
 };
 
 const sortChange = ({ prop, order }: SortChangeParams) => {

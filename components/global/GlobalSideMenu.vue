@@ -53,7 +53,7 @@ const sideMenuActive = computed(
   () => useLayoutStore().pageLayout[useRoute().path].sideMenuIndex,
 );
 const isCollapse = computed(() => useLayoutStore().sideMenu.collapse);
-const icons = dynamicImportSideMenuIcons();
+const icons = useSideMenuIcons();
 
 const collapseSideMenu = () => {
   useLayoutStore().sideMenu.collapse = !useLayoutStore().sideMenu.collapse;

@@ -1,5 +1,5 @@
 <template>
-  <div class="px-5 mt-4">
+  <div>
     <div
       class="bg-white rounded-lg p-5 shadow-custom-lg grid-cols-1 grid gap-0"
     >
@@ -8,6 +8,7 @@
         <ElDivider />
         <ElForm
           ref="dataMartSetFormRef"
+          class="data-mart-form"
           :model="dataMartStore.dataMartSetForm"
           label-width="120px"
         >
@@ -18,22 +19,22 @@
               ></ElInput>
             </div>
           </ElFormItem>
-          <ElFormItem label="資料模型說明" style="margin-top: 40px">
+          <ElFormItem label="資料模型說明">
             <div class="ml-2 w-full">
               <ElInput
                 v-model="dataMartStore.dataMartSetForm.description"
-                maxlength="125"
+                maxlength="100"
                 style="height: 54px !important"
               ></ElInput>
             </div>
-            <div class="flex justify-between w-full mb-4 px-3">
-              <div>限制125字元</div>
+            <div class="flex justify-between w-full mb-4 pl-2">
+              <div>限制100字元</div>
               <div class="text-gray-400">
-                {{ dataMartStore.dataMartSetForm.description.length }}/125
+                {{ dataMartStore.dataMartSetForm.description.length }}/100
               </div>
             </div>
           </ElFormItem>
-          <ElFormItem label="資料庫連線設定" style="margin-top: 96px">
+          <ElFormItem label="資料庫連線設定">
             <div class="w-full pl-2 -mt-10">
               <div class="flex justify-end">
                 <div
@@ -46,7 +47,12 @@
                 </div>
               </div>
               <ClientOnly>
-                <ElTable :data="connTable" max-height="650" size="large">
+                <ElTable
+                  :data="connTable"
+                  max-height="650"
+                  size="large"
+                  empty-text="尚未設定"
+                >
                   <ElTableColumn label="資料庫來源" width="300"
                     ><template #default="scope">
                       <div class="flex gap-2">
@@ -79,18 +85,23 @@
               </ClientOnly>
             </div>
           </ElFormItem>
-          <ElFormItem label="資料說明文件" style="margin-top: 80px">
+          <ElFormItem
+            label="資料說明文件"
+            style="margin-top: 80px"
+            class="data-mart-upload"
+          >
             <div class="pl-2 w-full">
               <DataMartUpload @upload="fileFormUpload" />
             </div>
           </ElFormItem>
         </ElForm>
       </div>
-
-      <div class="flex w-full justify-end gap-2">
-        <ElButton @click="navigateTo({ path: '/data-mart' })">取消</ElButton>
-        <ElButton type="primary" @click="clickUpload()">儲存</ElButton>
-      </div>
+    </div>
+    <div
+      class="flex w-full justify-end gap-2 bg-slate-400 fixed bottom-0 left-0 py-2 px-6 data-mart-bottom"
+    >
+      <ElButton @click="navigateTo({ path: '/data-mart' })">取消</ElButton>
+      <ElButton type="primary" @click="clickUpload()">儲存</ElButton>
     </div>
     <ElDialog
       v-model="dialog"
@@ -99,10 +110,11 @@
       :destroy-on-close="true"
       align-center
       width="572"
+      class="conn-set-dialog"
     >
       <DataMartSetDialog />
       <template #footer>
-        <div class="flex justify-center pt-3">
+        <div class="flex justify-center">
           <ElButton @click="dialog = false">取消</ElButton>
           <ElButton type="primary" @click="clickConfirm()">儲存</ElButton>
         </div>
@@ -115,7 +127,7 @@ import type { UploadRawFile } from "element-plus";
 
 const dataMartStore = useDataMartStore();
 const dbConnStore = useDbConnectionStore();
-const icons = dynamicImportDbConnectionIcons();
+const icons = useDbConnIcons();
 const dbmlFile = ref<UploadRawFile | File>();
 const connTable = ref<any>([]);
 const dialog = ref(false);
@@ -123,13 +135,15 @@ const dialog = ref(false);
 const { dbType, connName, host, database, dbName } =
   dataMartStore.dataMartSetForm;
 
-connTable.value.push({
-  dbType,
-  connName,
-  host,
-  database,
-  dbName,
-});
+if (useRoute().query.datamartId) {
+  connTable.value.push({
+    dbType,
+    connName,
+    host,
+    database,
+    dbName,
+  });
+}
 
 const fileFormUpload = (fileFormUpload: UploadRawFile | File) => {
   dbmlFile.value = fileFormUpload;
@@ -169,3 +183,10 @@ const clickConfirm = async () => {
   dataMartStore.dataMartSetForm.host = dbConnStore.dbConnSetTable.host;
 };
 </script>
+<style scoped>
+.data-mart-bottom {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.49) 0%, #fff 100%);
+  box-shadow: 0px -2px 10px 0px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(2px);
+}
+</style>

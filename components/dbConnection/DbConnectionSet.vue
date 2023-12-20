@@ -19,25 +19,26 @@
       :model="store.dbConnSetForm"
       :rules="formRules"
       label-width="110px"
+      class="conn-set-form"
     >
-      <div v-for="(value, key) in store.dbConnSetForm" :key="key">
-        <ElFormItem
-          v-if="typeof value === 'string'"
-          :label="formLabel[_useToString(key)]"
-          :prop="_useToString(key)"
-        >
-          <div class="ml-2 w-full">
-            <ElInput
-              v-model="store.dbConnSetForm[_useToString(key)]"
-              :validate-event="false"
-              :placeholder="
-                _useToString(key) === 'connName' ? '自訂連線名稱' : ''
-              "
-              :type="`${_useToString(key)}`"
-            />
-          </div>
-        </ElFormItem>
-      </div>
+      <ElFormItem
+        v-for="(value, key) in store.dbConnSetForm"
+        :key="key"
+        :label="formLabel[_useToString(key)]"
+        :prop="_useToString(key)"
+      >
+        <div class="ml-2 w-full">
+          <ElInput
+            v-model="store.dbConnSetForm[_useToString(key)]"
+            :validate-event="false"
+            :placeholder="
+              _useToString(key) === 'connName' ? '自訂連線名稱' : ''
+            "
+            :type="`${_useToString(key)}`"
+          />
+        </div>
+      </ElFormItem>
+
       <!-- <div>
         <ElFormItem :label="formLabel['ca']" prop="ca">
           <ElInput
@@ -88,8 +89,6 @@ const formLabel: DbConnSetForm = {
   clientCertificate: "Client Certificate:",
 };
 
-// const errorDescription = computed(() => {});
-
 const formRules = reactive<FormRules<DbConnSetForm>>({
   connName: [{ required: true, message: "請輸入連線名稱" }],
   host: [{ required: true, message: "請輸入主機名稱或IP" }],
@@ -98,11 +97,6 @@ const formRules = reactive<FormRules<DbConnSetForm>>({
   password: [{ required: true, message: "請輸入密碼" }],
   database: [{ required: true, message: "請輸入資料庫名稱" }],
 });
-
-// const beforeFormAction = () => {
-//   store.dbConnSetForm = _useMapValues(store.dbConnSetForm, value => isString(value)? _useTrim(value) : value)
-
-// }
 
 const submitForm = async (formEl: FormInstance | undefined) => {
   store.dbConnSetForm = _useMapValues(store.dbConnSetForm, (value) =>

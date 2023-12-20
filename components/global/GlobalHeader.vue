@@ -1,20 +1,16 @@
 <template>
   <div class="w-full h-16 flex justify-end px-6 gap-2 items-center">
     <div>
-      <img
-        src="~/assets/icons/header/ic_avatar.svg"
-        width="40"
-        @click="goToLogin()"
-      />
+      <img src="~/assets/icons/header/ic_avatar.svg" width="40" />
     </div>
-    <div class="flex gap-2 mr-2">
+    <div class="flex gap-2">
       <h1 class="font-bold">imgenie_admin</h1>
-      <el-popover placement="bottom" trigger="click">
-        <template #reference>
-          <ElIconArrowDown width="16"></ElIconArrowDown>
+      <el-tooltip content="登出" placement="bottom" effect="light">
+        <template #content>
+          <ElButton style="border: 0" @click="goToLogin">登出</ElButton>
         </template>
-        <ElButton class="border-0" @click="goToLogin">登出</ElButton>
-      </el-popover>
+        <ElIconArrowDown width="16"></ElIconArrowDown>
+      </el-tooltip>
     </div>
   </div>
 </template>

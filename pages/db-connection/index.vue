@@ -8,7 +8,7 @@
       v-model="store.dbConnDialog.categories"
       title="選擇連線類型"
       modal-class="backdrop-blur-sm"
-      width="576"
+      width="572"
       align-center
     >
       <DbConnectionTypes />
@@ -21,9 +21,10 @@
       modal-class="backdrop-blur-sm"
       align-center
       width="576"
+      class="conn-set-dialog"
     >
       <template #header
-        ><div class="h-auto flex items-center gap-2">
+        ><div class="flex items-center gap-2 text-xl">
           <div>
             <img :src="icons[`ic_${store.dbConnSetType}`]" />
           </div>
@@ -35,7 +36,11 @@
         <div class="flex justify-between">
           <ElButton @click="clickConnTestButton">連線測試</ElButton>
           <span>
-            <ElButton @click="store.dbConnDialog.connSetting = false"
+            <ElButton
+              @click="
+                store.dbConnDialog.connSetting = false;
+                store.dbConnSetType = '';
+              "
               >取消</ElButton
             >
             <ElButton type="primary" @click="clickConfirm">儲存</ElButton>
@@ -51,7 +56,7 @@ const pageLayout = useLayoutStore().pageLayout[useRoute().path];
 const column = computed(() => pageLayout.tableColumn ?? {});
 
 const store = useDbConnectionStore();
-const icons = dynamicImportDbConnectionIcons();
+const icons = useDbConnIcons();
 
 const dbConnectionSetRef = ref<InstanceType<typeof DbConnectionSet> | null>(
   null,
@@ -59,6 +64,7 @@ const dbConnectionSetRef = ref<InstanceType<typeof DbConnectionSet> | null>(
 await store.getDbConnTable();
 
 const clickConfirm = () => {
+  store.dbConnSetType = "";
   dbConnectionSetRef.value?.submitForm(
     dbConnectionSetRef.value?.dbConnSetFormRef,
   );
@@ -70,9 +76,3 @@ const clickConnTestButton = () => {
   );
 };
 </script>
-<style scoped>
-.db-category-active {
-  border: 1px solid rgb(69, 109, 236);
-  background-color: rgba(246, 247, 249, 1);
-}
-</style>

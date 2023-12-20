@@ -15,7 +15,7 @@
           </div>
         </ElCol>
         <ElCol class="pt-4">
-          <div class="flex justify-between">
+          <div class="flex justify-between h-10">
             <div class="self-end">
               <h1 class="text-xl font-bold tracking-wide">
                 {{ titleInfo.pageName }}
@@ -25,7 +25,6 @@
               <ElButton
                 v-if="titleInfo.btnName"
                 :icon="ElIconPlus"
-                size="large"
                 type="primary"
                 @click="clickBtn(titleInfo.btnName)"
                 >{{ titleInfo.btnName }}</ElButton

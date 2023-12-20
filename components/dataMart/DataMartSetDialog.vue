@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <ElForm label-width="70px" label-position="right">
+    <ElForm label-width="70px" label-position="right" class="conn-set-form">
       <ElFormItem label="連線類型">
         <div class="flex justify-between gap-2 ml-2 -mt-1">
           <div
@@ -10,9 +10,9 @@
             @click="changeDbType(type.itemId)"
           >
             <div
-              class="flex p-3 gap-2 justify-center cursor-pointer border rounded-lg text-sm"
+              class="flex p-3 gap-2 justify-center cursor-pointer border rounded-lg text-sm db-type-select"
               :class="{
-                'db-type-active': selectDbType === type.itemId,
+                'db-type-select-active': selectDbType === type.itemId,
               }"
             >
               <div>
@@ -33,6 +33,7 @@
           class="ml-2"
           style="width: 436px"
           :disabled="selectDbType === ''"
+          no-data-text="查無資料"
           @change="changeSelectConn()"
         >
           <template #header
@@ -80,6 +81,7 @@
           class="ml-2"
           style="width: 436px"
           :disabled="selectDbType === ''"
+          no-data-text="請選擇資料來源"
           @change="changeSelectSchemas()"
         >
           <ElOption
@@ -96,7 +98,7 @@
 <script setup lang="ts">
 const dbConnStore = useDbConnectionStore();
 const dataMartStore = useDataMartStore();
-const icons = dynamicImportDbConnectionIcons();
+const icons = useDbConnIcons();
 const selectConnId = ref("");
 const selectSchemas = ref("");
 const selectDbType = ref("");
@@ -156,15 +158,10 @@ const changeSelectSchemas = () => {
 };
 
 const changeDbType = (type: string) => {
-  selectDbType.value = type;
+  selectDbType.value = selectDbType.value !== type ? type : "";
   selectConnId.value = "";
   selectSchemas.value = "";
   searchText.value = "";
   dbConnStore.dbConnSchemaRes = [];
 };
 </script>
-<style>
-.db-type-active {
-  background-color: rgba(239, 244, 254, 1);
-}
-</style>
