@@ -48,7 +48,7 @@
               </div>
               <ClientOnly>
                 <ElTable
-                  :data="connTable"
+                  :data="connSetTable"
                   max-height="650"
                   size="large"
                   empty-text="尚未設定"
@@ -124,26 +124,22 @@
 </template>
 <script setup lang="ts">
 import type { UploadRawFile } from "element-plus";
-
+interface ConnSetTable {
+  dbType: string;
+  connName: string;
+  host: string;
+  database: string;
+  dbName: string;
+}
+const props = defineProps<{
+  table: ConnSetTable[];
+}>();
 const dataMartStore = useDataMartStore();
 const dbConnStore = useDbConnectionStore();
 const icons = useDbConnIcons();
 const dbmlFile = ref<UploadRawFile | File>();
-const connTable = ref<any>([]);
+const connSetTable = ref<any>(props.table);
 const dialog = ref(false);
-
-const { dbType, connName, host, database, dbName } =
-  dataMartStore.dataMartSetForm;
-
-if (useRoute().query.datamartId) {
-  connTable.value.push({
-    dbType,
-    connName,
-    host,
-    database,
-    dbName,
-  });
-}
 
 const fileFormUpload = (fileFormUpload: UploadRawFile | File) => {
   dbmlFile.value = fileFormUpload;
@@ -151,7 +147,9 @@ const fileFormUpload = (fileFormUpload: UploadRawFile | File) => {
 
 const clickUpload = async () => {
   const formData = new FormData();
-
+  dataMartStore.dataMartSetForm = useForm().trim(
+    dataMartStore.dataMartSetForm,
+  ) as DataMartSetForm;
   const data = new File(
     [JSON.stringify(dataMartStore.dataMartSetForm)],
     "data.json",
@@ -159,7 +157,6 @@ const clickUpload = async () => {
       type: "application/json",
     },
   );
-
   if (dbmlFile.value) {
     formData.append("data", data);
     formData.append("file", dbmlFile.value as File);
@@ -172,8 +169,8 @@ const clickUpload = async () => {
 const clickConfirm = async () => {
   dialog.value = false;
   await dbConnStore.getDbConnQuery(dataMartStore.dataMartSetForm.connId);
-  connTable.value.pop();
-  connTable.value.push({
+  connSetTable.value.pop();
+  connSetTable.value.push({
     ...dbConnStore.dbConnSetTable,
     dbName: dataMartStore.dataMartSetForm.dbName,
   });
@@ -183,10 +180,3 @@ const clickConfirm = async () => {
   dataMartStore.dataMartSetForm.host = dbConnStore.dbConnSetTable.host;
 };
 </script>
-<style scoped>
-.data-mart-bottom {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.49) 0%, #fff 100%);
-  box-shadow: 0px -2px 10px 0px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(2px);
-}
-</style>

@@ -73,29 +73,31 @@ const userUploadFile = ref<UploadRawFile | File>();
 
 const store = useDataMartStore();
 const route = useRoute();
-if (route.query.datamartId) {
-  const dbml = await store.getDataMartExport(
-    _useToString(route.query.datamartId),
-  );
-  if (dbml) {
-    if (dbml.size < 1000 * 1000) {
-      userUploadFile.value = new File(
-        [dbml],
-        `${store.dataMartQueryFileName}`,
-        {
-          type: "application/octet-stream",
-        },
-      );
-      isUpload.value = true;
-      errorMessage.value = "";
-      uploadName.value = userUploadFile.value.name;
-      dbmlPreviewContent.value = await userUploadFile.value.text();
-      emit("upload", userUploadFile.value);
-    } else {
-      errorMessage.value = "檔案大小超過1MB限制";
+setTimeout(async () => {
+  if (route.query.datamartId) {
+    const dbml = await store.getDataMartExport(
+      _useToString(route.query.datamartId),
+    );
+    if (dbml) {
+      if (dbml.size < 1000 * 1000) {
+        userUploadFile.value = new File(
+          [dbml],
+          `${store.dataMartQueryFileName}`,
+          {
+            type: "application/octet-stream",
+          },
+        );
+        isUpload.value = true;
+        errorMessage.value = "";
+        uploadName.value = userUploadFile.value.name;
+        dbmlPreviewContent.value = await userUploadFile.value.text();
+        emit("upload", userUploadFile.value);
+      } else {
+        errorMessage.value = "檔案大小超過1MB限制";
+      }
     }
   }
-}
+}, 500);
 
 const handleChange: UploadProps["onChange"] = async (uploadFile) => {
   if (uploadFile.raw) {

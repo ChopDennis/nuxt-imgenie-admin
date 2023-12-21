@@ -1,19 +1,24 @@
 <template>
   <div>
-    <DataMartSetForm />
+    <DataMartSetForm :table="connSetTable" />
   </div>
 </template>
 <script setup lang="ts">
-// const dbConnStore = useDbConnectionStore();
 const store = useDataMartStore();
-await store.getDataMartQuery();
-// const { connId } = store.dataMartSetForm;
-// const { data, execute } = useApi(ApiDbConnection.Schemas, {
-//   params: { connId },
-//   immediate: false,
-// });
-// await execute();
-// const schemas = data.value as ApiResponse;
-// dbConnStore.dbConnSchemaRes = schemas.data;
+const connSetTable = ref<any>([]);
+
+setTimeout(async () => {
+  await store.getDataMartQuery();
+  const { dbType, connName, host, database, dbName } = store.dataMartSetForm;
+
+  if (useRoute().query.datamartId) {
+    connSetTable.value.push({
+      dbType,
+      connName,
+      host,
+      database,
+      dbName,
+    });
+  }
+}, 100);
 </script>
-<style scoped></style>
