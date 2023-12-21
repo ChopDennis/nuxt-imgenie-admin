@@ -98,39 +98,22 @@ const formRules = reactive<FormRules<DbConnSetForm>>({
   database: [{ required: true, message: "請輸入資料庫名稱" }],
 });
 
-const submitForm = async (formEl: FormInstance | undefined) => {
-  store.dbConnSetForm = _useMapValues(store.dbConnSetForm, (value) =>
-    isString(value) ? _useTrim(value) : value,
-  );
-
-  if (!formEl) return;
-  await formEl.validate(async (valid, fields) => {
-    if (valid) {
-      await store.getDbConnSave();
-    } else {
-      console.log("error submit!", fields); // eslint-disable-line no-console
-    }
-  });
-};
-
-const testConn = async (formEl: FormInstance | undefined) => {
-  store.dbConnTestRes = "";
-  store.dbConnSetForm = _useMapValues(store.dbConnSetForm, (value) =>
-    isString(value) ? _useTrim(value) : value,
-  );
-  if (!formEl) return;
-  await formEl.validate(async (valid, fields) => {
-    if (valid) {
+const connSetBtn = async (action: string) => {
+  store.dbConnSetForm = useForm().trim(store.dbConnSetForm) as DbConnSetForm;
+  const valid = await useForm().validate(dbConnSetFormRef.value);
+  if (valid) {
+    if (action === "test") {
+      store.dbConnTestRes = "";
       await store.getDbConnTest();
-    } else {
-      console.log("error submit!", fields); // eslint-disable-line no-console
     }
-  });
+    if (action === "save") await store.getDbConnSave();
+  } else {
+    console.error("欄位錯誤"); // eslint-disable-line no-console
+  }
 };
 
 defineExpose({
-  submitForm,
-  testConn,
+  connSetBtn,
   dbConnSetFormRef,
 });
 

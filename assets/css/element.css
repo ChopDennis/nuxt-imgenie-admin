@@ -1,62 +1,6 @@
 :root {
   --el-color-primary-dark: #2f4ee0;
-  --el-border-radius-base: 8px;
-  --el-overlay-color-lighter: rgba(0, 0, 0, 0.5);
 }
-
-/* .el-menu */
-body .el-menu-item.is-active {
-  background-color: var(--el-color-primary);
-  border-right: 3px solid #6893f2;
-  color: var(--el-color-white);
-}
-
-body .el-menu-item-group__title {
-  padding: 0;
-}
-
-body .el-menu-vertical:not(.el-menu--collapse) {
-  width: 256px;
-  height: 100%;
-}
-
-body .el-menu-vertical.el-menu--collapse {
-  height: 100%;
-}
-
-body .el-sub-menu {
-  padding-top: 0.5rem;
-}
-
-body .el-sub-menu__title.el-tooltip__trigger {
-  justify-content: center;
-}
-/* .el-menu END */
-
-/* .el-button */
-body .el-button {
-  box-shadow: var(--el-box-shadow-button);
-}
-
-body .el-button:hover {
-  --el-button-hover-text-color: var(--el-color-primary-dark);
-  --el-button-hover-bg-color: var(--el-color-white);
-  --el-button-hover-border-color: var(--el-color-primary-dark);
-  box-shadow: var(--el-box-shadow-button-hover);
-}
-
-body .el-button.el-button--primary:hover {
-  --el-button-hover-text-color: var(--el-color-white);
-  --el-button-hover-bg-color: var(--el-color-primary-dark);
-  box-shadow: var(--el-box-shadow-button-hover);
-}
-/* .el-button END*/
-
-/* .el-form */
-.login-form > .el-form-item {
-  margin-bottom: 2rem;
-}
-/* .el-form END */
 
 /* .el-alert */
 .el-alert--success.is-light {
@@ -91,6 +35,25 @@ body .el-button.el-button--primary:hover {
 }
 /* .el-alert END*/
 
+/* .el-button */
+body .el-button {
+  box-shadow: var(--el-box-shadow-button);
+}
+
+body .el-button:hover {
+  --el-button-hover-text-color: var(--el-color-primary-dark);
+  --el-button-hover-bg-color: var(--el-color-white);
+  --el-button-hover-border-color: var(--el-color-primary-dark);
+  box-shadow: var(--el-box-shadow-button-hover);
+}
+
+body .el-button.el-button--primary:hover {
+  --el-button-hover-text-color: var(--el-color-white);
+  --el-button-hover-bg-color: var(--el-color-primary-dark);
+  box-shadow: var(--el-box-shadow-button-hover);
+}
+/* .el-button END */
+
 /* .el-dialog */
 .el-dialog__header {
   font-weight: bold;
@@ -108,15 +71,63 @@ body .el-button.el-button--primary:hover {
 }
 /* .el-dialog END*/
 
-/* .el-table */
-.el-table__row:last-child > td {
-  border-bottom: 0;
+/* .el-form */
+.login-form > .el-form-item {
+  margin-bottom: 2rem;
+}
+/* .el-form END */
+
+/* .el-form-item */
+.el-form-item__error {
+  margin: 4px 8px 4px 8px !important;
 }
 
-.el-table .caret-wrapper {
-  margin-top: 3px;
+.el-form-item__label {
+  padding: 0 !important;
+  margin-top: 0.25rem;
 }
-/* .el-table END*/
+
+.conn-set-form > .el-form-item:not(:last-child) {
+  margin-bottom: 2rem;
+}
+
+.data-mart-upload.el-form-item {
+  align-items: center;
+}
+
+.data-mart-form > .el-form-item:not(:last-child) {
+  margin-bottom: 2rem;
+}
+/* .el-form-item END */
+
+/* .el-menu */
+body .el-menu-item.is-active {
+  background-color: var(--el-color-primary);
+  border-right: 3px solid #6893f2;
+  color: var(--el-color-white);
+}
+
+body .el-menu-item-group__title {
+  padding: 0;
+}
+
+body .el-menu-vertical:not(.el-menu--collapse) {
+  width: 256px;
+  height: 100%;
+}
+
+body .el-menu-vertical.el-menu--collapse {
+  height: 100%;
+}
+
+body .el-sub-menu {
+  padding-top: 0.5rem;
+}
+
+body .el-sub-menu__title.el-tooltip__trigger {
+  justify-content: center;
+}
+/* .el-menu END */
 
 /* .el-pagination */
 .el-pagination.is-background .btn-prev:disabled,
@@ -149,29 +160,6 @@ body .el-button.el-button--primary:hover {
 }
 /* .el-pagination END */
 
-/* .el-form-item */
-.el-form-item__error {
-  margin: 4px 8px 4px 8px !important;
-}
-
-.el-form-item__label {
-  padding: 0 !important;
-  margin-top: 0.25rem;
-}
-
-.conn-set-form > .el-form-item:not(:last-child) {
-  margin-bottom: 2rem;
-}
-
-.data-mart-upload.el-form-item {
-  align-items: center;
-}
-
-.data-mart-form > .el-form-item:not(:last-child) {
-  margin-bottom: 2rem;
-}
-/* .el-form-item END */
-
 /* .el-select */
 .el-select-dropdown__item {
   height: auto !important;
@@ -190,6 +178,16 @@ body .el-button.el-button--primary:hover {
 }
 /* .el-select END */
 
+/* .el-table */
+.el-table__row:last-child > td {
+  border-bottom: 0;
+}
+
+.el-table .caret-wrapper {
+  margin-top: 3px;
+}
+/* .el-table END*/
+
 .el-loading-mask {
   height: 100% !important;
   z-index: 9999 !important;
@@ -201,4 +199,8 @@ body .el-button.el-button--primary:hover {
 
 .el-scrollbar__view.el-select-dropdown__list {
   padding: 8px !important;
+}
+
+.el-checkbox__input.is-checked {
+  padding-top: 2px;
 }

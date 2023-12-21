@@ -54,7 +54,11 @@
                 @click="clickRowEditBtn(scope.row.id)"
               />
             </template>
-          </ElTableColumn> </ElTable
+          </ElTableColumn>
+          <template #empty
+            ><div class="flex w-full h-full justify-center">
+              <img src="~/assets/images/imgenie_empty_table.svg" /></div
+          ></template> </ElTable
       ></ClientOnly>
       <div class="flex justify-end mt-4 items-center gap-4">
         <div>

@@ -2,6 +2,9 @@
   $button-padding-horizontal: (
     'default': 17px
   ),
+  $border-radius: (
+    'base': 8px
+  ),
   $box-shadow: (
     'button': 0px 2px 2px 0px rgba(0, 0, 0, 0.15),
     'button-hover:': 0px 2px 2px 0px rgba(8, 98, 189, 0.2)
@@ -26,6 +29,9 @@
       'base': #758199
     )
   ),
+  $checkbox: (
+    'checked-text-color': #20222f
+  ),
   $common-component-size: (
     'large': 48px,
     'default': 40px,
@@ -38,9 +44,12 @@
     'padding-footer': 1rem 1.5rem,
     'title-font-size': 20px
   ),
+  $input: (
+    'placeholder-color': #00000099
+  ),  
   $menu: (
     'level-padding': 1.5rem,
     'item-height': 3rem,
     'sub-item-height': 3rem
-  )
+  ),
 );

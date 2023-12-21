@@ -13,6 +13,7 @@
             v-model="credentials.account"
             type="text"
             placeholder="輸入Email"
+            style="--el-input-bg-color: #f2f4f5"
           />
         </ElFormItem>
         <ElFormItem prop="password">
@@ -20,7 +21,14 @@
             v-model="credentials.password"
             type="password"
             placeholder="輸入密碼"
-          />
+            style="--el-input-bg-color: #f2f4f5"
+          >
+            <template #suffix>
+              <div class="px-4">
+                <img src="~/assets/icons/login/ic_eye_invisible.svg" />
+              </div>
+            </template>
+          </ElInput>
         </ElFormItem>
         <ElFormItem>
           <div class="px-1">

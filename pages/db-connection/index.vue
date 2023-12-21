@@ -64,15 +64,10 @@ const dbConnectionSetRef = ref<InstanceType<typeof DbConnectionSet> | null>(
 await store.getDbConnTable();
 
 const clickConfirm = () => {
-  store.dbConnSetType = "";
-  dbConnectionSetRef.value?.submitForm(
-    dbConnectionSetRef.value?.dbConnSetFormRef,
-  );
+  dbConnectionSetRef.value?.connSetBtn("save");
 };
 
 const clickConnTestButton = () => {
-  dbConnectionSetRef.value?.testConn(
-    dbConnectionSetRef.value?.dbConnSetFormRef,
-  );
+  dbConnectionSetRef.value?.connSetBtn("test");
 };
 </script>

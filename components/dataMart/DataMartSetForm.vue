@@ -23,14 +23,14 @@
             <div class="ml-2 w-full">
               <ElInput
                 v-model="dataMartStore.dataMartSetForm.description"
-                maxlength="100"
+                maxlength="200"
                 style="height: 54px !important"
               ></ElInput>
             </div>
             <div class="flex justify-between w-full mb-4 pl-2">
-              <div>限制100字元</div>
+              <div>限制200字元</div>
               <div class="text-gray-400">
-                {{ dataMartStore.dataMartSetForm.description.length }}/100
+                {{ dataMartStore.dataMartSetForm.description.length }}/200
               </div>
             </div>
           </ElFormItem>
