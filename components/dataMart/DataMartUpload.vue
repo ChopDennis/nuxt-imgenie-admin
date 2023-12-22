@@ -11,13 +11,15 @@
           'upload-error': errorMessage !== '',
         }"
       >
-        <div class="flex flex-col items-center gap-4">
+        <div class="flex flex-col items-center gap-2">
           <div>
             <img src="~/assets/icons/data-mart/ic_upload.svg" width="48" />
           </div>
           <div>
             <p>將資料拖曳此處，或點擊上傳</p>
-            <p style="color: rgba(0, 0, 0, 0.45)">限.dbml格式(1MB以內)</p>
+            <p style="color: rgba(0, 0, 0, 0.45)" class="-mt-2">
+              限.dbml格式(1MB以內)
+            </p>
           </div>
         </div>
       </ElUpload>
@@ -49,6 +51,7 @@
       modal-class="backdrop-blur-sm"
       :destroy-on-close="true"
       align-center
+      class="dbml-dialog"
       ><div v-highlight>
         <pre><code>{{ dbmlPreviewContent }}</code></pre>
       </div></ElDialog

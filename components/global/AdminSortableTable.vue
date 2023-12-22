@@ -90,6 +90,7 @@ const props = defineProps<{
   };
 }>();
 const store = useDbConnectionStore();
+const dataMartStore = useDataMartStore();
 const sortOrder = ref<"desc" | "asc" | null>(null);
 const tableHeight = ref(500);
 const sortProp = ref("");
@@ -107,7 +108,11 @@ const currentPageData = computed(
 const icons = useDbConnIcons();
 
 const changRowSwitch = async (id: string, value: boolean) => {
-  return await store.getDbConnUpdate(id, value);
+  if (useRoute().path === "/data-mart") {
+    return await dataMartStore.getDataMartUpdate(id, value);
+  } else {
+    return await store.getDbConnUpdate(id, value);
+  }
 };
 
 const clickRowEditBtn = async (id: string) => {

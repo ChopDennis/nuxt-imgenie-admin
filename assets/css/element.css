@@ -3,35 +3,35 @@
 }
 
 /* .el-alert */
-.el-alert--success.is-light {
+body .el-alert--success.is-light {
   border: 1px solid;
   margin-top: -1rem;
 }
 
-.el-alert--error.is-light {
-  border: 1px solid !important;
+body .el-alert--error.is-light {
+  border: 1px solid;
   margin-top: -1rem;
 }
 
-.el-alert__content {
+body .el-alert__content {
   color: black !important;
-  font-weight: 400 !important;
+  font-weight: 400;
 }
 
-.el-alert__title.is-bold {
-  font-weight: 400 !important;
+body .el-alert__title.is-bold {
+  font-weight: 400;
 }
 
-.el-alert__description {
+body .el-alert__description {
   color: black !important;
 }
 
-.el-alert {
-  --el-alert-icon-large-size: 24px !important;
+body .el-alert {
+  --el-alert-icon-large-size: 24px;
 }
 
-.el-alert .el-alert__icon.is-big {
-  margin-top: -24px !important;
+body .el-alert .el-alert__icon.is-big {
+  margin-top: -24px;
 }
 /* .el-alert END*/
 
@@ -55,47 +55,53 @@ body .el-button.el-button--primary:hover {
 /* .el-button END */
 
 /* .el-dialog */
-.el-dialog__header {
+body .el-dialog__header {
   font-weight: bold;
   letter-spacing: 1px;
   padding: var(--el-dialog-padding-header);
 }
 
-.el-dialog__body {
+body .el-dialog__body {
   border-top: 1px solid lightgray;
 }
+body .conn-set-dialog > .el-dialog__body {
+  padding-bottom: 1rem;
+}
 
-.el-dialog__footer {
+body .el-dialog__footer {
   border-top: 1px solid lightgray;
   padding: var(--el-dialog-padding-footer);
 }
 /* .el-dialog END*/
 
 /* .el-form */
-.login-form > .el-form-item {
+body .login-form > .el-form-item {
   margin-bottom: 2rem;
 }
 /* .el-form END */
 
 /* .el-form-item */
-.el-form-item__error {
-  margin: 4px 8px 4px 8px !important;
+body .el-form-item__error {
+  margin: 4px 8px 4px 8px;
 }
 
-.el-form-item__label {
-  padding: 0 !important;
-  margin-top: 0.25rem;
+body .el-form-item__label {
+  padding: 0;
+  /* margin-top: 0.25rem; */
 }
 
-.conn-set-form > .el-form-item:not(:last-child) {
+body .conn-set-form > .el-form-item:not(:last-child) {
   margin-bottom: 2rem;
 }
 
-.data-mart-upload.el-form-item {
-  align-items: center;
+body .data-mart-upload.el-form-item {
+  align-items: flex-start;
+}
+body .data-mart-upload.el-form-item__label {
+  align-items: flex-start;
 }
 
-.data-mart-form > .el-form-item:not(:last-child) {
+body .data-mart-form > .el-form-item:not(:last-child) {
   margin-bottom: 2rem;
 }
 /* .el-form-item END */
@@ -161,46 +167,71 @@ body .el-sub-menu__title.el-tooltip__trigger {
 /* .el-pagination END */
 
 /* .el-select */
-.el-select-dropdown__item {
-  height: auto !important;
-  border-radius: 0.25rem !important;
-  padding: 0 !important;
+body .el-select-dropdown__item {
+  height: auto;
+  border-radius: 0.25rem;
+  padding: 0;
 }
 
-.el-select-dropdown__item.selected {
-  color: rgba(0, 0, 0, 0.87) !important;
-  font-weight: normal !important;
+body .el-select-dropdown__item.selected {
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: normal;
 }
 
-.el-select-dropdown__header {
-  border-bottom: 0 !important;
-  padding-bottom: 0 !important;
+body .el-select-dropdown__header {
+  border-bottom: 0;
+  padding-bottom: 0;
 }
 /* .el-select END */
 
 /* .el-table */
-.el-table__row:last-child > td {
+body .el-table__row:last-child > td {
   border-bottom: 0;
 }
 
-.el-table .caret-wrapper {
+body .el-table .caret-wrapper {
   margin-top: 3px;
 }
 /* .el-table END*/
 
-.el-loading-mask {
-  height: 100% !important;
-  z-index: 9999 !important;
+body .el-loading-mask {
+  height: 100%;
+  z-index: 9999;
 }
 
-.el-upload-dragger {
-  background-color: rgba(250, 250, 250, 1) !important;
+body .el-upload-dragger {
+  background-color: rgba(250, 250, 250, 1);
 }
 
-.el-scrollbar__view.el-select-dropdown__list {
-  padding: 8px !important;
+body .upload-error  .el-upload-dragger {
+  border: none;
 }
 
-.el-checkbox__input.is-checked {
+body .el-scrollbar__view.el-select-dropdown__list {
+  padding: 8px;
+}
+
+body .el-checkbox__input.is-checked {
   padding-top: 2px;
+}
+
+body .dbml-dialog {
+  overflow: hidden;
+}
+
+body .dbml-dialog > .el-dialog__body {
+  background: #282c34;
+  border: none;
+  margin-top: -1px;
+}
+
+body .dbml-dialog > .el-dialog__header {
+  background: #373c55;
+  margin-right: 0;
+}
+
+body .dbml-dialog .el-dialog__title {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  color: white;
 }

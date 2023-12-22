@@ -46,6 +46,7 @@ const titleInfo = computed(() => useLayoutStore().pageLayout[useRoute().path]);
 const clickBtn = async (btn: string) => {
   if (btn === "新增連線") {
     const store = useDbConnectionStore();
+    store.dbConnSetActivate = true;
     await store.getDbConnTypes();
     store.dbConnDialog.categories = true;
   } else {

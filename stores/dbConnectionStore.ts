@@ -1,7 +1,7 @@
 export const useDbConnectionStore = defineStore("dbConnection", {
   state: () => {
     return {
-      dbConnListMap: [] as any[],
+      dbConnList: [] as DbConnList[],
       dbConnTable: [] as DbConnTable[],
       dbConnTypesRes: [] as DbConnTypesRes[],
       dbConnSchemaRes: [],
@@ -63,18 +63,18 @@ export const useDbConnectionStore = defineStore("dbConnection", {
         const { data } = await useApi(ApiDbConnection.List);
         const list = data.value as ApiResponse;
         const mappingData = _useMap(list.data as DbConnListRes[], (list) => {
-          const { connInfo, dbType, connName, ...rest } = list;
+          const { connInfo, dbType, connName, connId } = list;
           const { host, port, database } = connInfo;
           return {
-            ...rest,
+            connId,
             connType: _useUpperFirst(dbType),
             connName,
-            connInfoHostPort: `${host}: ${port}`,
-            connInfoDatabase: database,
+            host: `${host}: ${port}`,
+            database,
           };
         });
 
-        this.dbConnListMap = mappingData;
+        this.dbConnList = mappingData;
       } catch (error) {
         console.log(error); // eslint-disable-line no-console
       }

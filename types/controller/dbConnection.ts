@@ -16,6 +16,14 @@ declare global {
     isActivate: boolean;
   }
 
+  interface DbConnList {
+    connId: string;
+    connType: string;
+    connName: string;
+    host: string;
+    database: string;
+  }
+
   interface DbConnTable {
     id: string;
     dbType: string;

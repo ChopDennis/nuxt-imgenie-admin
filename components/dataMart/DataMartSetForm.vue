@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="bg-white rounded-lg p-5 shadow-custom-lg grid-cols-1 grid gap-0"
+      class="bg-white rounded-lg p-5 shadow-custom-lg grid-cols-1 grid gap-0 overflow-scroll"
     >
       <div>
         <h1 class="text-xl font-bold tracking-wide">資料模型資料</h1>
@@ -27,15 +27,15 @@
                 style="height: 54px !important"
               ></ElInput>
             </div>
-            <div class="flex justify-between w-full mb-4 pl-2">
-              <div>限制200字元</div>
+            <div class="flex justify-between w-full pl-2">
+              <div>限制 200 字元</div>
               <div class="text-gray-400">
                 {{ dataMartStore.dataMartSetForm.description.length }}/200
               </div>
             </div>
           </ElFormItem>
           <ElFormItem label="資料庫連線設定">
-            <div class="w-full pl-2 -mt-10">
+            <div class="w-full pt-2 pl-2 -mt-10">
               <div class="flex justify-end">
                 <div
                   style="height: 32px; width: 110px"
@@ -53,6 +53,18 @@
                   size="large"
                   empty-text="尚未設定"
                 >
+                  <!-- <template #empty>
+                    <div class="w-full flex justify-center">
+                      <div
+                        style="height: 32px; width: 110px"
+                        class="flex items-center justify-center gap-1 py-1 px-4 text-sm"
+                        @click="dialog = !dialog"
+                      >
+                        <div><ElIconSetting width="18"></ElIconSetting></div>
+                        <div>連線設定</div>
+                      </div>
+                    </div>
+                  </template> -->
                   <ElTableColumn label="資料庫來源" width="300"
                     ><template #default="scope">
                       <div class="flex gap-2">
@@ -85,15 +97,13 @@
               </ClientOnly>
             </div>
           </ElFormItem>
-          <ElFormItem
-            label="資料說明文件"
-            style="margin-top: 80px"
-            class="data-mart-upload"
-          >
-            <div class="pl-2 w-full">
-              <DataMartUpload @upload="fileFormUpload" />
-            </div>
-          </ElFormItem>
+          <div class="mt-9">
+            <ElFormItem label="資料說明文件" class="data-mart-upload">
+              <div class="pl-2 pb-12 w-full">
+                <DataMartUpload @upload="fileFormUpload" />
+              </div>
+            </ElFormItem>
+          </div>
         </ElForm>
       </div>
     </div>
@@ -138,7 +148,7 @@ const dataMartStore = useDataMartStore();
 const dbConnStore = useDbConnectionStore();
 const icons = useDbConnIcons();
 const dbmlFile = ref<UploadRawFile | File>();
-const connSetTable = ref<any>(props.table);
+const connSetTable = ref<ConnSetTable[]>(props.table);
 const dialog = ref(false);
 
 const fileFormUpload = (fileFormUpload: UploadRawFile | File) => {
@@ -169,7 +179,7 @@ const clickUpload = async () => {
 const clickConfirm = async () => {
   dialog.value = false;
   await dbConnStore.getDbConnQuery(dataMartStore.dataMartSetForm.connId);
-  connSetTable.value.pop();
+  if (connSetTable.value) connSetTable.value.pop();
   connSetTable.value.push({
     ...dbConnStore.dbConnSetTable,
     dbName: dataMartStore.dataMartSetForm.dbName,

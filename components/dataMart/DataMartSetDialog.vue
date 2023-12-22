@@ -67,7 +67,7 @@
                   class="text-xs px-3"
                   style="color: var(--el-text-color-secondary)"
                 >
-                  {{ list.connInfoHostPort }}/{{ list.connInfoDatabase }}
+                  {{ list.host }}/{{ list.database }}
                 </div>
               </div>
             </template>
@@ -113,7 +113,7 @@ const dbTypeTitle = ref<{ [key: string]: any }>({
 const route = useRoute();
 
 onMounted(async () => {
-  if (route.query.datamartId) {
+  if (route.query.datamartId && !isEmpty(dbConnStore.dbConnList)) {
     const { data, execute } = useApi(ApiDbConnection.Schemas, {
       params: { connId: selectConnId.value },
       immediate: false,
@@ -124,17 +124,19 @@ onMounted(async () => {
   }
 });
 
-if (route.query.datamartId) {
+if (route.query.datamartId && !isEmpty(dbConnStore.dbConnList)) {
   selectConnId.value = dataMartStore.dataMartSetForm.connId;
   selectSchemas.value = dataMartStore.dataMartSetForm.dbName;
   selectDbType.value = dataMartStore.dataMartSetForm.dbType;
 }
 
 const optionList = computed(() => {
-  return _useFilter(dbConnStore.dbConnListMap, [
-    "connType",
-    _useUpperFirst(selectDbType.value),
-  ]);
+  return dbConnStore.dbConnList
+    ? _useFilter(dbConnStore.dbConnList as DbConnList[], [
+        "connType",
+        _useUpperFirst(selectDbType.value),
+      ])
+    : [];
 });
 
 const filteredList = computed(() => {
@@ -143,8 +145,8 @@ const filteredList = computed(() => {
     const connName = list.connName.toLocaleLowerCase();
     return (
       _useIncludes(connName, text) ||
-      _useIncludes(list.connInfoDatabase, text) ||
-      _useIncludes(list.connInfoHostPort, text)
+      _useIncludes(list.database, text) ||
+      _useIncludes(list.host, text)
     );
   });
 });
