@@ -1,55 +1,55 @@
-@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+@forward "element-plus/theme-chalk/src/common/var.scss" with (
   $button-padding-horizontal: (
-    'default': 17px
+    "default": 17px,
   ),
   $border-radius: (
-    'base': 8px
+    "base": 8px,
   ),
   $box-shadow: (
-    'button': 0px 2px 2px 0px rgba(0, 0, 0, 0.15),
-    'button-hover:': 0px 2px 2px 0px rgba(8, 98, 189, 0.2)
+    "button": 0px 2px 2px 0px rgba(0, 0, 0, 0.15),
+    "button-hover:": 0px 2px 2px 0px rgba(8, 98, 189, 0.2),
   ),
   $colors: (
-    'primary': (
-      'base': #456dec
+    "primary": (
+      "base": #456dec,
     ),
-    'success': (
-      'base': #67c23a
+    "success": (
+      "base": #67c23a,
     ),
-    'warning': (
-      'base': #e6a23c
+    "warning": (
+      "base": #e6a23c,
     ),
-    'danger': (
-      'base': #f56c6c
+    "danger": (
+      "base": #f56c6c,
     ),
-    'error': (
-      'base': #f56c6c
+    "error": (
+      "base": #f56c6c,
     ),
-    'info': (
-      'base': #758199
-    )
+    "info": (
+      "base": #758199,
+    ),
   ),
   $checkbox: (
-    'checked-text-color': #20222f
+    "checked-text-color": #20222f,
   ),
   $common-component-size: (
-    'large': 48px,
-    'default': 40px,
-    'small': 32px
+    "large": 48px,
+    "default": 40px,
+    "small": 32px,
   ),
   $dialog: (
-    'border-radius': var(--el-border-radius-base),
-    'padding-header': 1rem 1.5rem,
-    'padding-primary': 1.5rem,
-    'padding-footer': 1.5rem,
-    'title-font-size': 20px
+    "border-radius": var(--el-border-radius-base),
+    "padding-header": 1rem 1.5rem,
+    "padding-primary": 1.5rem,
+    "padding-footer": 1.5rem,
+    "title-font-size": 20px,
   ),
   $input: (
-    'placeholder-color': #00000099
-  ),  
-  $menu: (
-    'level-padding': 1.5rem,
-    'item-height': 3rem,
-    'sub-item-height': 3rem
+    "placeholder-color": #00000099,
   ),
+  $menu: (
+    "level-padding": 1.5rem,
+    "item-height": 3rem,
+    "sub-item-height": 3rem,
+  )
 );

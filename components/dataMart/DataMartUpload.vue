@@ -16,7 +16,9 @@
             <img src="~/assets/icons/data-mart/ic_upload.svg" width="48" />
           </div>
           <div>
-            <p>將資料拖曳此處，或點擊上傳</p>
+            <p style="color: rgba(0, 0, 0, 0.87) !important">
+              將資料拖曳此處，或點擊上傳
+            </p>
             <p style="color: rgba(0, 0, 0, 0.45)" class="-mt-2">
               限.dbml格式(1MB以內)
             </p>
@@ -33,7 +35,7 @@
         </div>
       </div>
       <div
-        class="border p-2 rounded-lg"
+        class="border p-2 rounded-lg -ml-1 icon-hover"
         style="box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.15)"
       >
         <img

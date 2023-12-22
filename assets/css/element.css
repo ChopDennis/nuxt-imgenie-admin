@@ -203,7 +203,7 @@ body .el-upload-dragger {
   background-color: rgba(250, 250, 250, 1);
 }
 
-body .upload-error  .el-upload-dragger {
+body .upload-error .el-upload-dragger {
   border: none;
 }
 
@@ -217,16 +217,21 @@ body .el-checkbox__input.is-checked {
 
 body .dbml-dialog {
   overflow: hidden;
+  background: #282c34;
+  height: 80%;
 }
 
 body .dbml-dialog > .el-dialog__body {
   background: #282c34;
   border: none;
   margin-top: -1px;
+  overflow-y: scroll;
+  height: 90%;
 }
 
 body .dbml-dialog > .el-dialog__header {
   background: #373c55;
+  border: 1px solid #373c55;
   margin-right: 0;
 }
 
@@ -234,4 +239,9 @@ body .dbml-dialog .el-dialog__title {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
   color: white;
+}
+
+body .el-upload-dragger:hover {
+  border: 1px solid var(--el-color-primary);
+  background: var(--Color-Brand-50, #eff4fe);
 }

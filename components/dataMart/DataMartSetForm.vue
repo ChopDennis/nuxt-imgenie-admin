@@ -23,8 +23,11 @@
             <div class="ml-2 w-full">
               <ElInput
                 v-model="dataMartStore.dataMartSetForm.description"
+                :autosize="{ minRows: 2, maxRows: 6 }"
+                type="textarea"
+                resize="none"
                 maxlength="200"
-                style="height: 54px !important"
+                style=""
               ></ElInput>
             </div>
             <div class="flex justify-between w-full pl-2">
@@ -39,7 +42,7 @@
               <div class="flex justify-end">
                 <div
                   style="height: 32px; width: 110px"
-                  class="flex items-center justify-center gap-1 py-1 px-4 text-sm"
+                  class="flex items-center justify-center gap-1 py-1 px-4 mb-1 text-sm text-hover"
                   @click="dialog = !dialog"
                 >
                   <div><ElIconSetting width="18"></ElIconSetting></div>
