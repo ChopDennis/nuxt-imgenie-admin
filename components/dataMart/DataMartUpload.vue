@@ -65,11 +65,13 @@ import type { UploadProps, UploadRawFile } from "element-plus";
 
 const emit = defineEmits<{
   upload: [dbml: UploadRawFile | File];
+  remove: any;
 }>();
 
 const isUpload = ref(false);
 const uploadName = ref("");
 const errorMessage = ref("");
+const errorStatus = ref(false);
 
 const dbmlPreviewDialog = ref(false);
 const dbmlPreviewContent = ref();
@@ -83,6 +85,8 @@ setTimeout(async () => {
     const dbml = await store.getDataMartExport(
       _useToString(route.query.datamartId),
     );
+    console.log(store.dataMartFileName);
+
     if (dbml) {
       if (dbml.size < 1000 * 1000) {
         userUploadFile.value = new File(
@@ -94,7 +98,7 @@ setTimeout(async () => {
         );
         isUpload.value = true;
         errorMessage.value = "";
-        uploadName.value = userUploadFile.value.name;
+        uploadName.value = store.dataMartFileName;
         dbmlPreviewContent.value = await userUploadFile.value.text();
         emit("upload", userUploadFile.value);
       } else {
@@ -125,7 +129,17 @@ const handleChange: UploadProps["onChange"] = async (uploadFile) => {
 
 const clickRemoveIcon = () => {
   isUpload.value = false;
+  emit("remove", null);
 };
+
+const setErrorUpload = (message: string) => {
+  errorMessage.value = message;
+  errorStatus.value = true;
+  console.log(errorMessage.value);
+};
+defineExpose({
+  setErrorUpload,
+});
 </script>
 <style scoped>
 .upload-error {

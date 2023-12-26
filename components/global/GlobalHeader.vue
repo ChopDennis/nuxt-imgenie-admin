@@ -4,7 +4,7 @@
       <img src="~/assets/icons/header/ic_avatar.svg" width="40" />
     </div>
     <div class="flex gap-2">
-      <h1 class="font-bold">imgenie_admin</h1>
+      <h1 class="font-bold">{{ jwtName }}</h1>
       <el-tooltip
         :show-arrow="false"
         content="登出"
@@ -25,7 +25,11 @@
   </div>
 </template>
 <script setup lang="ts">
-const { signOut } = useAuth();
+import { jwtDecode } from "jwt-decode";
+const { signOut, token } = useAuth();
+const jwtName = computed(() => {
+  return token.value ? jwtDecode(token.value).preferred_username : "";
+});
 const goToLogin = async () => {
   try {
     await signOut({ callbackUrl: "/" });

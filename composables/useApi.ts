@@ -56,8 +56,22 @@ export const useApi = (
       headers.append("ID_TOKEN", uuid.replace(/-/g, ""));
       isLoading.value = options?.loading ?? false;
     },
-    onResponse() {
+    onResponse({ response }) {
       isLoading.value = false;
+      if (url === "/api/datamart/datamart/export-file") {
+        console.log(url);
+        console.log(response.headers.has("Content-Disposition"));
+        console.log(response.headers.get("Content-Disposition"));
+        if (response.headers.has("content-disposition")) {
+          if (response.headers.get("content-disposition")) {
+            localStorage.setItem(
+              "fileName",
+              response.headers.get("Content-Disposition") as string,
+            );
+          }
+        }
+      }
+
       console.log(`useFetch ${url} success`); // eslint-disable-line no-console
     },
     onResponseError({ response }) {

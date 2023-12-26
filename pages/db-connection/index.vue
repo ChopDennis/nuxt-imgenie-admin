@@ -10,6 +10,11 @@
       modal-class="backdrop-blur-sm"
       width="572"
       align-center
+      :on-close="
+        () => {
+          store.dbConnSetType = '';
+        }
+      "
     >
       <DbConnectionTypes />
     </ElDialog>
@@ -18,6 +23,7 @@
     <ElDialog
       v-model="store.dbConnDialog.connSetting"
       :destroy-on-close="true"
+      :close-on-click-modal="false"
       modal-class="backdrop-blur-sm"
       align-center
       width="576"

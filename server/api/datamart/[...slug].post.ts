@@ -21,6 +21,17 @@ export default defineEventHandler(async (event) => {
     method: "post",
     headers,
     body,
+    onResponse({ response }) {
+      if (response.headers.has("content-disposition")) {
+        if (response.headers.get("content-disposition")) {
+          appendResponseHeader(
+            event,
+            "content-disposition",
+            response.headers.get("content-disposition") as string,
+          );
+        }
+      }
+    },
   });
 
   return response;

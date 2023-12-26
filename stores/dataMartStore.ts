@@ -17,6 +17,7 @@ export const useDataMartStore = defineStore("dataMart", {
         host: "",
         isActivate: true,
       } as DataMartSetForm,
+      dataMartFileName: "",
     };
   },
 
@@ -106,6 +107,9 @@ export const useDataMartStore = defineStore("dataMart", {
           },
         });
         dbml = data.value as Blob;
+        this.dataMartFileName = localStorage
+          .getItem("fileName")
+          ?.split("''")[1] as string;
       } catch (error) {
         console.error(error); // eslint-disable-line no-console
       }

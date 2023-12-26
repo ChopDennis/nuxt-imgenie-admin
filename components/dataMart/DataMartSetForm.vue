@@ -4,7 +4,7 @@
       class="bg-white rounded-lg p-5 shadow-custom-lg grid-cols-1 grid gap-0 overflow-scroll"
     >
       <div>
-        <h1 class="text-xl font-bold tracking-wide">資料模型資料</h1>
+        <h1 class="font-bold tracking-wide">資料模型資料</h1>
         <ElDivider />
         <ElForm
           ref="dataMartSetFormRef"
@@ -103,7 +103,11 @@
           <div class="mt-9">
             <ElFormItem label="資料說明文件" class="data-mart-upload">
               <div class="pl-2 pb-12 w-full">
-                <DataMartUpload @upload="fileFormUpload" />
+                <DataMartUpload
+                  ref="dataMartUploadRef"
+                  @upload="fileFormUpload"
+                  @remove="fileFormFileRemove"
+                />
               </div>
             </ElFormItem>
           </div>
@@ -137,6 +141,7 @@
 </template>
 <script setup lang="ts">
 import type { UploadRawFile } from "element-plus";
+import DataMartUpload from "~/components/dataMart/DataMartUpload.vue";
 interface ConnSetTable {
   dbType: string;
   connName: string;
@@ -147,15 +152,23 @@ interface ConnSetTable {
 const props = defineProps<{
   table: ConnSetTable[];
 }>();
+const dataMartUploadRef = ref<InstanceType<typeof DataMartUpload> | null>(null);
+
 const dataMartStore = useDataMartStore();
 const dbConnStore = useDbConnectionStore();
 const icons = useDbConnIcons();
-const dbmlFile = ref<UploadRawFile | File>();
+const dbmlFile = ref<UploadRawFile | File | null>(null);
 const connSetTable = ref<ConnSetTable[]>(props.table);
 const dialog = ref(false);
 
 const fileFormUpload = (fileFormUpload: UploadRawFile | File) => {
   dbmlFile.value = fileFormUpload;
+};
+
+const fileFormFileRemove = () => {
+  console.log("before", dbmlFile.value);
+  dbmlFile.value = null;
+  console.log("after", dbmlFile.value);
 };
 
 const clickUpload = async () => {
@@ -170,12 +183,16 @@ const clickUpload = async () => {
       type: "application/json",
     },
   );
-  if (dbmlFile.value) {
+  if (!isNull(dbmlFile.value)) {
     formData.append("data", data);
     formData.append("file", dbmlFile.value as File);
+    console.log("1", dbmlFile.value);
     await dataMartStore.getDataMartSave(formData);
     await dataMartStore.getDataMartTable();
     navigateTo({ path: "/data-mart" });
+  } else {
+    console.log("2", dataMartUploadRef.value);
+    dataMartUploadRef.value?.setErrorUpload("請上傳DBML(必填)");
   }
 };
 

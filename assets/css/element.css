@@ -245,3 +245,7 @@ body .el-upload-dragger:hover {
   border: 1px solid var(--el-color-primary);
   background: var(--Color-Brand-50, #eff4fe);
 }
+
+body .dbml-dialog .el-dialog__headerbtn .el-dialog__close {
+  color: white;
+}
