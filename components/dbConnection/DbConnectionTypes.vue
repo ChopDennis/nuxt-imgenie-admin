@@ -7,14 +7,14 @@
       :class="{
         'db-type-select-active': type.itemId === store.dbConnSetType,
       }"
-      @click="clickEditNewConn(type.itemId)"
+      @click="clickEditNewConn(type.itemId, type.title)"
     >
       <div>
-        <img :src="icons[`ic_${type.itemId}`]" class="w-6" />
+        <img :src="icons[type.icon.split('.')[0]]" class="w-6" />
       </div>
 
       <div class="font-medium text-lg">
-        {{ _useUpperFirst(type.title) }}
+        {{ type.title }}
       </div>
     </div>
   </div>
@@ -23,13 +23,8 @@
 const store = useDbConnectionStore();
 const icons = useDbConnIcons();
 
-const clickEditNewConn = (dbType: string) => {
-  const dbTypeTitle: { [key: string]: any } = {
-    postgresql: "Postgre SQL",
-    bigquery: "Big Query",
-    presto: "Presto",
-  };
-  store.dbConnSetTitle = dbTypeTitle[`${dbType}`];
+const clickEditNewConn = (dbType: string, title: string) => {
+  store.dbConnSetTitle = title;
   store.dbConnSetType = dbType;
   store.dbConnSetIsNew = true;
   store.resetDbConnSetForm();

@@ -97,9 +97,11 @@ export const useDbConnectionStore = defineStore("dbConnection", {
 
     async getDbConnQuery(id: string) {
       const dbTypeTitle: { [key: string]: any } = {
-        postgresql: "Postgre SQL",
-        bigquery: "Big Query",
+        postgresql: "PostgreSQL",
+        bigquery: "BigQuery",
         presto: "Presto",
+        mssql: "Microsoft SQL Server",
+        mysql: "MySQL",
       };
 
       const { data } = await useApi(ApiDbConnection.Query, {

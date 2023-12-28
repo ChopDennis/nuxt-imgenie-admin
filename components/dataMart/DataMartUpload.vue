@@ -85,7 +85,6 @@ setTimeout(async () => {
     const dbml = await store.getDataMartExport(
       _useToString(route.query.datamartId),
     );
-    console.log(store.dataMartFileName);
 
     if (dbml) {
       if (dbml.size < 1000 * 1000) {
@@ -135,7 +134,6 @@ const clickRemoveIcon = () => {
 const setErrorUpload = (message: string) => {
   errorMessage.value = message;
   errorStatus.value = true;
-  console.log(errorMessage.value);
 };
 defineExpose({
   setErrorUpload,

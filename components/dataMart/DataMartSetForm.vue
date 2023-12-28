@@ -26,14 +26,14 @@
                 :autosize="{ minRows: 2, maxRows: 6 }"
                 type="textarea"
                 resize="none"
-                maxlength="200"
+                maxlength="100"
                 style=""
               ></ElInput>
             </div>
             <div class="flex justify-between w-full pl-2">
-              <div>限制 200 字元</div>
+              <div>限制 100 字元</div>
               <div class="text-gray-400">
-                {{ dataMartStore.dataMartSetForm.description.length }}/200
+                {{ dataMartStore.dataMartSetForm.description.length }}/100
               </div>
             </div>
           </ElFormItem>
@@ -166,9 +166,7 @@ const fileFormUpload = (fileFormUpload: UploadRawFile | File) => {
 };
 
 const fileFormFileRemove = () => {
-  console.log("before", dbmlFile.value);
   dbmlFile.value = null;
-  console.log("after", dbmlFile.value);
 };
 
 const clickUpload = async () => {
@@ -186,12 +184,10 @@ const clickUpload = async () => {
   if (!isNull(dbmlFile.value)) {
     formData.append("data", data);
     formData.append("file", dbmlFile.value as File);
-    console.log("1", dbmlFile.value);
     await dataMartStore.getDataMartSave(formData);
     await dataMartStore.getDataMartTable();
     navigateTo({ path: "/data-mart" });
   } else {
-    console.log("2", dataMartUploadRef.value);
     dataMartUploadRef.value?.setErrorUpload("請上傳DBML(必填)");
   }
 };

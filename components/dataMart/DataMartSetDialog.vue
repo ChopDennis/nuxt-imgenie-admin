@@ -2,12 +2,12 @@
   <div class="">
     <ElForm label-width="70px" label-position="right" class="conn-set-form">
       <ElFormItem label="連線類型">
-        <div class="flex justify-between gap-2 ml-2 -mt-1">
+        <!-- <div class="flex justify-between gap-2 ml-2 -mt-1">
           <div
             v-for="(type, index) in dbConnStore.dbConnTypesRes"
             :key="index"
             style="width: 140px"
-            @click="changeDbType(type.itemId)"
+            @click="changeDbType()"
           >
             <div
               class="flex p-3 gap-2 justify-center cursor-pointer border rounded-lg text-sm db-type-select"
@@ -16,14 +16,47 @@
               }"
             >
               <div>
-                <img :src="icons[`ic_${type.itemId}`]" class="w-6" width="24" />
+                <img
+                  :src="icons[type.icon.split('.')[0]]"
+                  class="w-6"
+                  width="24"
+                />
               </div>
               <div>
-                {{ dbTypeTitle[`${type.itemId}`] }}
+                {{ type.title }}
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
+        <ElSelect
+          v-model="selectDbType"
+          placeholder="請選擇連線類型"
+          class="ml-2"
+          style="width: 436px"
+          @change="changeDbType()"
+        >
+          <ElOption
+            v-for="(type, index) in dbConnStore.dbConnTypesRes"
+            :key="index"
+            :label="type.title"
+            :value="type.itemId"
+          >
+            <template #default>
+              <div class="flex p-3 rounded-lg items-center gap-2">
+                <div class="">
+                  <img
+                    :src="icons[type.icon.split('.')[0]]"
+                    class="w-6"
+                    width="24"
+                  />
+                </div>
+                <div class="" style="color: var(--el-text-color-secondary)">
+                  {{ type.title }}
+                </div>
+              </div>
+            </template>
+          </ElOption>
+        </ElSelect>
       </ElFormItem>
       <ElFormItem label="資料來源">
         <ElSelect
@@ -103,13 +136,10 @@ const selectConnId = ref("");
 const selectSchemas = ref("");
 const selectDbType = ref("");
 const searchText = ref("");
+
 await dbConnStore.getDbConnActiveList();
 await dbConnStore.getDbConnTypes();
-const dbTypeTitle = ref<{ [key: string]: any }>({
-  postgresql: "Postgre SQL",
-  bigquery: "Big Query",
-  presto: "Presto",
-});
+
 const route = useRoute();
 
 onMounted(async () => {
@@ -159,8 +189,8 @@ const changeSelectSchemas = () => {
   dataMartStore.dataMartSetForm.dbName = selectSchemas.value;
 };
 
-const changeDbType = (type: string) => {
-  selectDbType.value = selectDbType.value !== type ? type : "";
+const changeDbType = () => {
+  // selectDbType.value = selectDbType.value !== type ? type : "";
   selectConnId.value = "";
   selectSchemas.value = "";
   searchText.value = "";
