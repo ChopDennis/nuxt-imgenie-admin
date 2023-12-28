@@ -24,6 +24,12 @@
       v-model="store.dbConnDialog.connSetting"
       :destroy-on-close="true"
       :close-on-click-modal="false"
+      :before-close="
+        (done) => {
+          store.dbConnTestStatus = null;
+          done();
+        }
+      "
       modal-class="backdrop-blur-sm"
       align-center
       width="576"
@@ -46,6 +52,7 @@
               @click="
                 store.dbConnDialog.connSetting = false;
                 store.dbConnSetType = '';
+                store.dbConnTestStatus = null;
               "
               >取消</ElButton
             >

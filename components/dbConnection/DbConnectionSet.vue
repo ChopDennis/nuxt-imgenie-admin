@@ -1,16 +1,16 @@
 <template>
   <div class="flex flex-col gap-4">
     <ElAlert
-      v-if="store.dbConnTestRes === 'true'"
+      v-if="store.dbConnTestStatus"
       title="連線成功"
       type="success"
       show-icon
       class="font-black"
     />
     <ElAlert
-      v-if="store.dbConnTestRes !== 'true' && store.dbConnTestRes !== ''"
+      v-if="!store.dbConnTestStatus && !isNull(store.dbConnTestStatus)"
       :title="`無法連結到: ${store.dbConnSetForm.host}:${store.dbConnSetForm.port}`"
-      :description="`${store.dbConnTestRes}`"
+      :description="`${store.dbConnTestMessage}`"
       type="error"
       show-icon
     />
@@ -103,8 +103,8 @@ const connSetBtn = async (action: string) => {
   const valid = await useForm().validate(dbConnSetFormRef.value);
   if (valid) {
     if (action === "test") {
-      store.dbConnTestRes = "";
-      await store.getDbConnTest();
+      // store.dbConnTestRes = "";
+      await dbConnectionApi().test();
     }
     if (action === "save") await store.getDbConnSave();
   } else {

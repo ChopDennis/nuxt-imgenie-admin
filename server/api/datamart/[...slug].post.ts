@@ -32,6 +32,11 @@ export default defineEventHandler(async (event) => {
         }
       }
     },
+  }).catch((error) => {
+    if (url !== "dbconnection/test-connection") {
+      setResponseStatus(event, 400, `${url} fetch error`);
+    }
+    return error.data;
   });
 
   return response;

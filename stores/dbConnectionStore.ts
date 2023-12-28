@@ -12,7 +12,8 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       dbConnSetName: "",
       dbConnSetIsNew: false as boolean,
       dbConnSetActivate: true as boolean,
-      dbConnTestRes: "" as string,
+      dbConnTestMessage: "" as string,
+      dbConnTestStatus: null as boolean | null,
       dbConnDialog: {
         categories: false,
         connSetting: false,
@@ -153,21 +154,6 @@ export const useDbConnectionStore = defineStore("dbConnection", {
       this.dbConnDialog.connSetting = false;
     },
 
-    async getDbConnTest() {
-      const { connName, ...connInfo } = this.dbConnSetForm;
-      const { data } = await useApi(ApiDbConnection.Test, {
-        params: {
-          dbType: this.dbConnSetType,
-          connInfo: JSON.stringify(connInfo),
-        },
-        encrypt: true,
-        loading: true,
-      });
-      const test = data.value as ApiResponse;
-      this.dbConnSetName = connName;
-      this.dbConnTestRes = test.data;
-    },
-
     async getDbConnUpdate(
       connId: string,
       isActivate: boolean,
@@ -203,7 +189,7 @@ export const useDbConnectionStore = defineStore("dbConnection", {
     onCloseDbConnSetForm() {
       // this.dbConnDialog.categories = this.dbConnSetIsNew;
       this.resetDbConnSetForm();
-      this.dbConnTestRes = "";
+      this.dbConnTestMessage = "";
     },
   },
 });

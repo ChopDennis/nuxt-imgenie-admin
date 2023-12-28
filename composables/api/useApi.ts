@@ -53,15 +53,15 @@ export const useApi = (
       if (token.value) headers.append("Authorization", token.value);
       headers.append("TXNSEQ", uuid);
       headers.append("IS_ENCRYPT", _useToString(isEncrypt));
-      headers.append("ID_TOKEN", uuid.replace(/-/g, ""));
+      headers.append(
+        "ID_TOKEN",
+        uuid.replace(/-/g, "").split("").reverse().join("").toString(),
+      );
       isLoading.value = options?.loading ?? false;
     },
     onResponse({ response }) {
       isLoading.value = false;
       if (url === "/api/datamart/datamart/export-file") {
-        console.log(url);
-        console.log(response.headers.has("Content-Disposition"));
-        console.log(response.headers.get("Content-Disposition"));
         if (response.headers.has("content-disposition")) {
           if (response.headers.get("content-disposition")) {
             localStorage.setItem(
@@ -71,11 +71,12 @@ export const useApi = (
           }
         }
       }
-
-      console.log(`useFetch ${url} success`); // eslint-disable-line no-console
+      if (response._data.code === ApiResponseCode.Success) {
+        console.log(`useFetch ${url} success`); // eslint-disable-line no-console
+      }
     },
     onResponseError({ response }) {
-      console.error("useFetch error: ", response._data.data); // eslint-disable-line no-console
+      console.log(response._data); // eslint-disable-line no-console
     },
     getCachedData: (key) =>
       options?.cached ? nuxtApp.payload.data[key] : null,

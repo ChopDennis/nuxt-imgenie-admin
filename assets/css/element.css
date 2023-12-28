@@ -31,7 +31,8 @@ body .el-alert {
 }
 
 body .el-alert .el-alert__icon.is-big {
-  margin-top: -24px;
+  align-self: flex-start;
+  margin-top: -1px;
 }
 /* .el-alert END*/
 
