@@ -8,6 +8,10 @@
           :height="tableHeight"
           @sort-change="sortChange"
           ><ElTableColumn
+            v-if="
+              useRoute().path === '/db-connection' ||
+              useRoute().path === '/data-mart'
+            "
             prop="dbType"
             label="資料庫類型"
             width="150"
@@ -123,10 +127,23 @@ const clickRowEditBtn = async (id: string) => {
         datamartId: id,
       },
     });
-  } else {
+  }
+
+  if (useRoute().path === "/db-connection") {
     await store.getDbConnQuery(id);
     store.dbConnSetIsNew = false;
     store.dbConnDialog.connSetting = true;
+  }
+
+  if (useRoute().path === "/user-group") {
+    navigateTo({
+      path: "/user-group/edit",
+    });
+  }
+  if (useRoute().path === "/data-mart-group") {
+    navigateTo({
+      path: "/data-mart-group/edit",
+    });
   }
 };
 

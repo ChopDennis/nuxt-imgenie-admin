@@ -58,6 +58,30 @@ export const useLayoutStore = defineStore("layout", {
           btnName: "",
           sideMenuIndex: "2-2",
         },
+        "/user-group": {
+          breadcrumb: "首頁 / 權限管理 /",
+          pageName: "使用者群組管理",
+          btnName: "建立群組",
+          sideMenuIndex: "1-3",
+        },
+        "/user-group/edit": {
+          breadcrumb: "首頁 / 權限管理 / 使用者群組管理 /",
+          pageName: "群組資料設定",
+          btnName: "",
+          sideMenuIndex: "1-3",
+        },
+        "/data-mart-group": {
+          breadcrumb: "首頁 / 權限管理 /",
+          pageName: "資料模型群組管理",
+          btnName: "建立群組",
+          sideMenuIndex: "1-4",
+        },
+        "/data-mart-group/edit": {
+          breadcrumb: "首頁 / 權限管理 / 資料模型群組管理 /",
+          pageName: "群組資料設定",
+          btnName: "",
+          sideMenuIndex: "1-4",
+        },
         "/": {
           breadcrumb: "",
           pageName: "",
@@ -80,8 +104,12 @@ export const useLayoutStore = defineStore("layout", {
                 path: "/",
               },
               {
-                title: "群組管理",
-                path: "/",
+                title: "使用者群組管理",
+                path: "/user-group",
+              },
+              {
+                title: "資料模型群組管理",
+                path: "/data-mart-group",
               },
             ],
           },

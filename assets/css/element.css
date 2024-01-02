@@ -250,3 +250,19 @@ body .el-upload-dragger:hover {
 body .dbml-dialog .el-dialog__headerbtn .el-dialog__close {
   color: white;
 }
+
+body .el-collapse-item__wrap, body .el-collapse, body .el-collapse-item__header {
+  border: none;
+}
+
+body .el-collapse-item__content {
+  padding: 0;
+}
+
+body .el-divider--horizontal {
+  margin: 16px 0;
+}
+
+body .el-collapse-item__header {
+  height: auto;
+}
