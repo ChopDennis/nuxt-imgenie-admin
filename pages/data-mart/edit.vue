@@ -9,8 +9,8 @@ const dbConnStore = useDbConnectionStore();
 const connSetTable = ref<any>([]);
 
 setTimeout(async () => {
-  await dbConnStore.getDbConnActiveList();
-  if (isEmpty(dbConnStore.dbConnList)) return;
+  await dbConnectionApi().getList();
+  if (isEmpty(dbConnStore.list)) return;
   await store.getDataMartQuery();
   const { dbType, connName, host, database, dbName } = store.dataMartSetForm;
 

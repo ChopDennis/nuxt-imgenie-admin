@@ -1,3 +1,38 @@
+enum ApiDataMart {
+  List = "/api/datamart/datamart/all",
+  Update = "/api/datamart/datamart/update",
+  Query = "/api/datamart/datamart/query",
+  Save = "/api/datamart/datamart/save",
+  Export = "/api/datamart/datamart/export-file",
+}
+
+interface DataMartListRes {
+  datamartId: string;
+  dataMartName: string;
+  description: string;
+  dbType: string;
+  connId: string;
+  connName: string;
+  icon: string;
+  isActivate: boolean;
+  updateTime: string;
+}
+
+interface DataMartQueryRes {
+  datamartId: string;
+  datamartName: string;
+  description: string;
+  dbName: string;
+  dbConnection: {
+    connId: string;
+    dbType: string;
+    connName: string;
+    connInfo: ConnInfo;
+  };
+  fileName: string;
+  [key: string]: any;
+}
+
 export const useDataMartStore = defineStore("dataMart", {
   state: () => {
     return {
@@ -22,7 +57,7 @@ export const useDataMartStore = defineStore("dataMart", {
   },
 
   actions: {
-    async getDataMartTable(options?: ApiOptions) {
+    async getDataMartTable(options?) {
       try {
         const { data, execute } = await useApi(ApiDataMart.List, {
           ...options,

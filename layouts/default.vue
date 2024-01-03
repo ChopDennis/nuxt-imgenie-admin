@@ -45,14 +45,9 @@ const isCollapse = computed(() => useLayoutStore().sideMenu.collapse);
 const titleInfo = computed(() => useLayoutStore().pageLayout[useRoute().path]);
 const clickBtn = async (btn: string) => {
   if (btn === "新增連線") {
-    const store = useDbConnectionStore();
-    store.dbConnSetActivate = true;
-    await store.getDbConnTypes();
-    store.dbConnDialog.categories = true;
+    await dbConnectionApi().getTypes();
   } else {
     navigateTo({ path: "/data-mart/add" });
   }
 };
 </script>
-
-<style></style>

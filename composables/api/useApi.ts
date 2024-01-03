@@ -2,14 +2,35 @@ import { v4 as uuidv4 } from "uuid";
 import { jwtDecode } from "jwt-decode";
 import type { AsyncData } from "nuxt/dist/app/composables";
 
+interface ApiResponse<T = any> {
+  code: string;
+  message: string;
+  data: T;
+}
+
+interface ApiOptions {
+  params?: any | null;
+  cached?: boolean;
+  loading?: boolean;
+  encrypt?: boolean;
+  decrypt?: boolean;
+  immediate?: boolean;
+}
+
+export type { ApiResponse, ApiOptions };
+
+export enum ApiResponseCode {
+  Success = "A0001",
+}
+
 export const useLoading = () => {
   return useState<boolean>("isLoading", () => false);
 };
 
-export const useApi = (
+export const useApi = <T>(
   url: string,
   options?: ApiOptions,
-): AsyncData<ApiResponse | Blob, Error | null> => {
+): AsyncData<ApiResponse<T>, Error | null> => {
   const nuxtApp = useNuxtApp();
   const headers = new Headers();
   const uuid = uuidv4();

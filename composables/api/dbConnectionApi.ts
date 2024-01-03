@@ -1,5 +1,5 @@
 enum Api {
-  All = "/api/datamart/dbconnection/all",
+  Table = "/api/datamart/dbconnection/all",
   List = "/api/datamart/dbconnection/list",
   Types = "/api/datamart/dbconnection/dbs",
   Save = "/api/datamart/dbconnection/save",
@@ -11,37 +11,194 @@ enum Api {
 
 export default function dbConnectionApi() {
   const store = useDbConnectionStore();
-  const test = async () => {
-    store.dbConnTestStatus = null;
-    const dbType = store.dbConnSetType;
+
+  /** @description Get all of database connection. */
+  const getTable = async () => {
+    const { data } = await useApi<ConnectionList[]>(Api.Table);
+    const res = data.value;
+    store.table = _useMap(res.data, (list) => {
+      const { connInfo, dbType, connName, connId, isActivate } = list;
+      const { host, port, database } = connInfo;
+      return {
+        id: connId,
+        dbType,
+        connName,
+        host: `${host}: ${port}`,
+        database,
+        isActivate,
+      };
+    });
+  };
+
+  /** @description Get types of database. */
+  const getTypes = async () => {
+    const { data } = await useApi<ConnectionTypes[]>(Api.Types);
+    const res = data.value;
+    store.types = res.data;
+    store.dialog.categories = store.setting.connId === "";
+  };
+
+  /** @description Get the list of activate database connection. */
+  const getList = async () => {
+    const { data } = await useApi<ConnectionList[]>(Api.List);
+    const res = data.value;
+    store.list = _useMap(res.data, (list) => {
+      const { connInfo, dbType, connName, connId } = list;
+      const { host, port, database } = connInfo;
+      return {
+        connId,
+        dbType,
+        connName,
+        host: `${host}: ${port}`,
+        database,
+      };
+    });
+  };
+
+  /** @description Get schemas of the database. */
+  const getSchemas = async (connId: string) => {
+    const { data } = await useApi<string[]>(Api.Schemas, {
+      params: { connId },
+    });
+    const res = data.value;
+    store.schemas = res.data;
+  };
+
+  /** @description Get detail of the database connection. */
+  const getQuery = async (connId: string) => {
+    const { data } = await useApi<ConnectionList>(Api.Query, {
+      params: {
+        connId,
+      },
+      decrypt: true,
+    });
+    const res = data.value;
+    const { connName, connInfo, dbType, isActivate } = res.data;
+    const { ssl, host, port, username, password, database } = connInfo;
+    store.select = {
+      connId,
+      dbType,
+      connName,
+      host,
+      database,
+    };
+    store.setting = {
+      connId,
+      form: {
+        connName,
+        host,
+        port,
+        username,
+        password,
+        database,
+        ...ssl,
+      },
+      dbType,
+      dialogTitle: "",
+      isActivate,
+    };
+    await getTypes();
+    store.setting.dialogTitle =
+      _useFind(store.types, ["itemId", dbType])?.title ?? "";
+  };
+
+  /** @description Send Request after saving database connection. */
+  const sendSave = async () => {
+    const { connId, dbType, isActivate } = store.setting;
+    const { connName, ...connInfo } = store.setting.form;
+    const params = {
+      connId,
+      connName,
+      dbType,
+      connInfo: JSON.stringify(connInfo),
+      isActivate,
+    };
+    const { status } = await useApi(Api.Save, {
+      params,
+      encrypt: true,
+      decrypt: true,
+    });
+    if (status.value === "success") {
+      await getTable();
+    }
+    resetForm();
+  };
+
+  /** @description Send Request while switch connection status. */
+  const sendUpdate = async (
+    connId: string,
+    isActivate: boolean,
+  ): Promise<boolean> => {
+    const { data } = await useApi(Api.Update, {
+      params: {
+        connId,
+        isActivate,
+      },
+    });
+    const res = data.value as ApiResponse;
+    return res.code === ApiResponseCode.Success;
+  };
+
+  /** @description Send Request while click test-connection button. */
+  const sendTest = async () => {
+    store.test.status = null;
+    const dbType = store.setting.dbType;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { connName, ...info } = store.dbConnSetForm;
+    const { connName, ...info } = store.setting.form;
     const connInfo = JSON.stringify(info);
-    const params: DbConnTestReq = {
+    const params = {
       dbType,
       connInfo,
     };
 
-    const { data, status } = await useApi(Api.Test, {
+    const { data, status } = await useApi<any>(Api.Test, {
       params,
       encrypt: true,
       loading: true,
     });
 
     if (status.value === "success") {
-      const test = data.value as ApiResponse;
-      console.log(test.code); // eslint-disable-line no-console
-      if (test.code === ApiResponseCode.Success) {
-        store.dbConnTestStatus = true;
-        store.dbConnTestMessage = "連線成功";
+      const res = data.value;
+      console.log(res.code); // eslint-disable-line no-console
+      if (res.code === ApiResponseCode.Success) {
+        store.test.status = true;
+        store.test.message = "連線成功";
       } else {
-        store.dbConnTestStatus = false;
-        store.dbConnTestMessage = test.message as string;
+        store.test.status = false;
+        store.test.message = res.message as string;
       }
     }
   };
 
+  const resetForm = () => {
+    store.dialog.connSetting = false;
+    store.setting.dbType = "";
+    store.test.status = null;
+    store.setting = {
+      connId: "",
+      dbType: "",
+      dialogTitle: "",
+      isActivate: false,
+      form: {
+        connName: "",
+        host: "",
+        port: "",
+        username: "",
+        password: "",
+        database: "",
+      },
+    };
+  };
+
   return {
-    test,
+    sendTest,
+    sendUpdate,
+    sendSave,
+    getTable,
+    getTypes,
+    getList,
+    getQuery,
+    getSchemas,
+    resetForm,
   };
 }
