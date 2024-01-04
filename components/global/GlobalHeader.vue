@@ -1,10 +1,23 @@
 <template>
   <div class="w-full h-16 flex justify-end px-6 gap-2 items-center">
     <div>
-      <img src="~/assets/icons/header/ic_avatar.svg" width="40" />
+      <!-- <img src="~/assets/icons/header/ic_avatar.svg" width="40" /> -->
+      <div
+        style="
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: #adb4cc;
+        "
+        class="flex justify-center items-center"
+      >
+        <p class="font-bold text-white">
+          {{ jwtName.charAt(0).toUpperCase() }}
+        </p>
+      </div>
     </div>
     <div class="flex gap-2">
-      <h1 class="font-bold">{{ jwtName }}</h1>
+      <h1 class="font-bold pt-1">{{ jwtName }}</h1>
       <el-tooltip
         :show-arrow="false"
         content="登出"
