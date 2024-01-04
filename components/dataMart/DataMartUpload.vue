@@ -25,7 +25,7 @@
           </div>
         </div>
       </ElUpload>
-      <div class="text-red-400 px-1">{{ errorMessage }}</div>
+      <div class="text-red-400 p-1 text-xs">{{ errorMessage }}</div>
     </div>
     <div v-else class="flex w-full">
       <div class="flex justify-between w-full border pl-4 mr-4 rounded-lg">

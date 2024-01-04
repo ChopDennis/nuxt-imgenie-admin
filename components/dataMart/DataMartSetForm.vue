@@ -10,16 +10,17 @@
           ref="dataMartSetFormRef"
           class="data-mart-form"
           :model="dataMartStore.dataMartSetForm"
+          :rules="formRules"
           label-width="120px"
         >
-          <ElFormItem label="資料模型名稱">
+          <ElFormItem label="資料模型名稱" prop="datamartName">
             <div class="ml-2 w-full">
               <ElInput
                 v-model="dataMartStore.dataMartSetForm.datamartName"
               ></ElInput>
             </div>
           </ElFormItem>
-          <ElFormItem label="資料模型說明">
+          <ElFormItem label="資料模型說明" prop="description">
             <div class="ml-2 w-full">
               <ElInput
                 v-model="dataMartStore.dataMartSetForm.description"
@@ -37,7 +38,12 @@
               </div>
             </div>
           </ElFormItem>
-          <ElFormItem label="資料庫連線設定">
+          <ElFormItem label="資料庫連線設定" prop="connId">
+            <ElInput
+              hidden
+              :model="dataMartStore.dataMartSetForm.connId"
+              class="hiddenInput"
+            ></ElInput>
             <div class="w-full pt-2 pl-2 -mt-10">
               <div class="flex justify-end">
                 <div
@@ -140,8 +146,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { UploadRawFile } from "element-plus";
+import type { UploadRawFile, FormInstance, FormRules } from "element-plus";
 import DataMartUpload from "~/components/dataMart/DataMartUpload.vue";
+const dataMartSetFormRef = ref<FormInstance>();
+
 interface ConnSetTable {
   dbType: string;
   connName: string;
@@ -170,10 +178,12 @@ const fileFormFileRemove = () => {
 };
 
 const clickUpload = async () => {
-  const formData = new FormData();
   dataMartStore.dataMartSetForm = useForm().trim(
     dataMartStore.dataMartSetForm,
-  ) as DataMartSetForm;
+  ) as ConnectionSetForm;
+  const valid = await useForm().validate(dataMartSetFormRef.value);
+  const formData = new FormData();
+  dataMartStore.dataMartSetForm = useForm().trim(dataMartStore.dataMartSetForm);
   const data = new File(
     [JSON.stringify(dataMartStore.dataMartSetForm)],
     "data.json",
@@ -181,9 +191,9 @@ const clickUpload = async () => {
       type: "application/json",
     },
   );
-  if (!isNull(dbmlFile.value)) {
-    formData.append("data", data);
-    formData.append("file", dbmlFile.value as File);
+  formData.append("data", data);
+  formData.append("file", dbmlFile.value as File);
+  if (valid && !isNull(dbmlFile.value)) {
     await dataMartStore.getDataMartSave(formData);
     await dataMartStore.getDataMartTable();
     navigateTo({ path: "/data-mart" });

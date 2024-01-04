@@ -266,3 +266,7 @@ body .el-divider--horizontal {
 body .el-collapse-item__header {
   height: auto;
 }
+
+body .hiddenInput > .el-input__wrapper {
+  box-shadow: none !important;
+}
