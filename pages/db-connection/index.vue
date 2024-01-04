@@ -56,10 +56,6 @@
         </ElTableColumn>
       </template>
       <!-- 空值 -->
-      <template #empty
-        ><div class="flex w-full h-full justify-center">
-          <img src="~/assets/images/imgenie_empty_table.svg" /></div
-      ></template>
     </GlobalSortableTable>
 
     <!-- 選擇連線類型 -->

@@ -9,7 +9,10 @@
           @sort-change="sortChange"
         >
           <slot name="column"></slot>
-          <slot name="empty"></slot>
+          <template #empty
+            ><div class="flex w-full h-full justify-center">
+              <img src="~/assets/images/imgenie_empty_table.svg" /></div
+          ></template>
         </ElTable>
       </ClientOnly>
       <div class="flex justify-end mt-4 items-center gap-4">
