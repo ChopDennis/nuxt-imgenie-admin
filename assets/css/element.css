@@ -41,14 +41,14 @@ body .el-button {
   box-shadow: var(--el-box-shadow-button);
 }
 
-body .el-button:hover {
+body .el-button:not(.is-disabled):hover {
   --el-button-hover-text-color: var(--el-color-primary-dark);
   --el-button-hover-bg-color: var(--el-color-white);
   --el-button-hover-border-color: var(--el-color-primary-dark);
   box-shadow: var(--el-box-shadow-button-hover);
 }
 
-body .el-button.el-button--primary:hover {
+body .el-button.el-button--primary:not(.is-disabled):hover {
   --el-button-hover-text-color: var(--el-color-white);
   --el-button-hover-bg-color: var(--el-color-primary-dark);
   box-shadow: var(--el-box-shadow-button-hover);
@@ -273,8 +273,16 @@ body .hiddenInput > .el-input__wrapper {
   box-shadow: none !important;
 }
 
-body .el-button.is-disabled {
+body .el-button.is-disabled, body .el-button.is-disabled:hover {
   color: #adb4cc;
   border-color: #adb4cc;
   background-color: #f6f7f9;
+}
+
+i.el-icon.el-collapse-item__arrow.is-active {
+  transform: rotate(-90deg);
+}
+
+i.el-icon.el-collapse-item__arrow {
+  transform: rotate(90deg);
 }

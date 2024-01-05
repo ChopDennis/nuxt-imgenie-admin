@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-scroll h-full pt-6 px-6 pb-16">
+  <div class="overflow-scroll h-full pt-4 px-6 pb-16">
     <div class="flex flex-col gap-6">
       <!-- 群組 -->
       <div class="bg-white rounded-lg p-4 shadow-custom-lg">
@@ -49,7 +49,33 @@
                           :key="index"
                           :label="value.dataMartName"
                           :value="value"
-                        ></ElOption>
+                        >
+                          <template #default>
+                            <div class="flex p-3 rounded-lg items-center gap-2">
+                              <div>
+                                <img
+                                  :src="icons[`ic_mysql`]"
+                                  class="w-6"
+                                  width="24"
+                                />
+                              </div>
+                              <div
+                                class=""
+                                style="color: var(--el-text-color-secondary)"
+                              >
+                                {{ value.dataMartName }}
+                              </div>
+                            </div>
+                          </template>
+                        </ElOption>
+                        <template #prefix>
+                          <img
+                            v-if="dataMartNew"
+                            :src="icons[`ic_mysql`]"
+                            class="w-6"
+                            width="24"
+                          />
+                        </template>
                       </ElSelect>
                       <ElButton
                         :icon="ElIconPlus"
@@ -113,6 +139,38 @@
           </ElCollapseItem>
         </ElCollapse>
       </div>
+      <!-- <div class="flex w-full items-center justify-center">
+        <div
+          class="w-1/3 xl:w-2/5 border-t"
+          style="border-color: #373c55"
+        ></div>
+        <div class="w-1/3 xl:w-1/5 flex justify-center">
+          <div class="text-red-500 self-center pr-1">
+            <img src="~/assets/icons/data-mart/ic_important.svg" />
+          </div>
+          <div>
+            <p class="text-base font-bold" style="color: #373c55">
+              成員/使用者群組 至少擇一選填
+            </p>
+          </div>
+        </div>
+        <div
+          class="w-1/3 xl:w-2/5 border-t"
+          style="border-color: #373c55"
+        ></div>
+      </div> -->
+      <ElDivider
+        ><div class="flex justify-center">
+          <div class="text-red-500 self-center pr-1">
+            <img src="~/assets/icons/data-mart/ic_important.svg" />
+          </div>
+          <div>
+            <p class="text-base font-bold" style="color: #373c55">
+              成員/使用者群組 至少擇一選填
+            </p>
+          </div>
+        </div></ElDivider
+      >
 
       <!-- 成員 -->
       <div class="bg-white rounded-lg p-4 shadow-custom-lg">

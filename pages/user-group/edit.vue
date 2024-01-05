@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="flex flex-col gap-6 p-6">
+  <div class="overflow-scroll h-full pt-4 px-6 pb-16">
+    <div class="flex flex-col gap-6">
       <div class="bg-white rounded-lg p-4 shadow-custom-lg">
         <ElCollapse v-model="group">
           <ElCollapseItem title="" name="1">

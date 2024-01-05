@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6">
+  <div class="pt-4 px-6 pb-6">
     <div class="bg-white rounded-lg p-4 shadow-custom-lg">
       <ClientOnly>
         <ElTable

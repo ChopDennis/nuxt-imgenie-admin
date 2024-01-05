@@ -14,7 +14,7 @@
             <p>{{ titleInfo.pageName }}</p>
           </div>
         </ElCol>
-        <ElCol class="pt-4">
+        <ElCol class="pt-4 pb-2">
           <div class="flex justify-between h-10">
             <div class="self-end">
               <h1 class="text-xl font-bold tracking-wide">
