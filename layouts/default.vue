@@ -33,7 +33,7 @@
           </div>
         </ElCol>
       </ElRow>
-      <div style="height: calc(100vh - 180px)" class="p-6">
+      <div style="height: calc(100vh - 180px)">
         <slot />
       </div>
     </div>

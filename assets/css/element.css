@@ -251,7 +251,9 @@ body .dbml-dialog .el-dialog__headerbtn .el-dialog__close {
   color: white;
 }
 
-body .el-collapse-item__wrap, body .el-collapse, body .el-collapse-item__header {
+body .el-collapse-item__wrap,
+body .el-collapse,
+body .el-collapse-item__header {
   border: none;
 }
 
@@ -269,4 +271,10 @@ body .el-collapse-item__header {
 
 body .hiddenInput > .el-input__wrapper {
   box-shadow: none !important;
+}
+
+body .el-button.is-disabled {
+  color: #adb4cc;
+  border-color: #adb4cc;
+  background-color: #f6f7f9;
 }

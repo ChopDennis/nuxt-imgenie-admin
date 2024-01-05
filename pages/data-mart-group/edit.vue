@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-scroll h-full p-6">
+  <div class="overflow-scroll h-full pt-6 px-6 pb-16">
     <div class="flex flex-col gap-6">
       <!-- 群組 -->
       <div class="bg-white rounded-lg p-4 shadow-custom-lg">
@@ -69,9 +69,12 @@
                       size="large"
                       empty-text="尚未設定"
                     >
-                      <ElTableColumn label="資料庫類型" width="150"
+                      <ElTableColumn
+                        label="資料庫類型"
+                        width="100"
+                        header-align="center"
                         ><template #default="scope">
-                          <div class="flex gap-2">
+                          <div class="flex gap-2 justify-center">
                             <img
                               :src="icons[`ic_${scope.row.dbType}`]"
                               class="w-6"
@@ -94,11 +97,10 @@
                         <template #default="scope">
                           <div
                             class="flex justify-center w-full"
-                            src="~/assets/icons/dbConnection/ic_db_edit.svg"
                             @click="deleteDataMartRow(scope.$index)"
                           >
                             <div>
-                              <ElIconDelete width="24"></ElIconDelete>
+                              <ElIconDelete width="16"></ElIconDelete>
                             </div>
                           </div>
                         </template>
@@ -178,7 +180,7 @@
                             @click="deleteRow(scope.$index)"
                           >
                             <div>
-                              <ElIconDelete width="24"></ElIconDelete>
+                              <ElIconDelete width="16"></ElIconDelete>
                             </div>
                           </div>
                         </template>
@@ -252,7 +254,7 @@
                             @click="deleteGroupRow(scope.$index)"
                           >
                             <div>
-                              <ElIconDelete width="24"></ElIconDelete>
+                              <ElIconDelete width="16"></ElIconDelete>
                             </div>
                           </div>
                         </template>

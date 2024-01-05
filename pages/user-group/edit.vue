@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-6 p-6">
       <div class="bg-white rounded-lg p-4 shadow-custom-lg">
         <ElCollapse v-model="group">
           <ElCollapseItem title="" name="1">
@@ -90,7 +90,7 @@
                             @click="deleteRow(scope.$index)"
                           >
                             <div>
-                              <ElIconDelete width="24"></ElIconDelete>
+                              <ElIconDelete width="16"></ElIconDelete>
                             </div>
                           </div>
                         </template>
