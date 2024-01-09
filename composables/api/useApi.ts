@@ -20,7 +20,7 @@ interface ApiOptions {
 export type { ApiResponse, ApiOptions };
 
 export enum ApiResponseCode {
-  Success = "A0001",
+  Success = "GL_A0001",
 }
 
 export const useLoading = () => {
