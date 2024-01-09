@@ -2,32 +2,6 @@
   <div class="">
     <ElForm label-width="70px" label-position="right" class="conn-set-form">
       <ElFormItem label="連線類型">
-        <!-- <div class="flex justify-between gap-2 ml-2 -mt-1">
-          <div
-            v-for="(type, index) in dbConnStore.dbConnTypesRes"
-            :key="index"
-            style="width: 140px"
-            @click="changeDbType()"
-          >
-            <div
-              class="flex p-3 gap-2 justify-center cursor-pointer border rounded-lg text-sm db-type-select"
-              :class="{
-                'db-type-select-active': selectDbType === type.itemId,
-              }"
-            >
-              <div>
-                <img
-                  :src="icons[type.icon.split('.')[0]]"
-                  class="w-6"
-                  width="24"
-                />
-              </div>
-              <div>
-                {{ type.title }}
-              </div>
-            </div>
-          </div>
-        </div> -->
         <ElSelect
           v-model="selectDbType"
           placeholder="請選擇連線類型"
@@ -36,14 +10,14 @@
           @change="changeDbType()"
         >
           <ElOption
-            v-for="(type, index) in dbConnStore.dbConnTypesRes"
+            v-for="(type, index) in dbConnStore.types"
             :key="index"
             :label="type.title"
             :value="type.itemId"
           >
             <template #default>
               <div class="flex p-3 rounded-lg items-center gap-2">
-                <div class="">
+                <div>
                   <img
                     :src="icons[type.icon.split('.')[0]]"
                     class="w-6"
@@ -56,6 +30,9 @@
               </div>
             </template>
           </ElOption>
+          <template #prefix>
+            <img :src="icons[`ic_${selectDbType}`]" class="w-6" width="24" />
+          </template>
         </ElSelect>
       </ElFormItem>
       <ElFormItem label="資料來源">
@@ -118,7 +95,7 @@
           @change="changeSelectSchemas()"
         >
           <ElOption
-            v-for="schema in dbConnStore.dbConnSchemaRes"
+            v-for="schema in dbConnStore.schemas"
             :key="schema"
             :label="schema"
             :value="schema"
@@ -137,35 +114,32 @@ const selectSchemas = ref("");
 const selectDbType = ref("");
 const searchText = ref("");
 
-await dbConnStore.getDbConnActiveList();
-await dbConnStore.getDbConnTypes();
+await dbConnectionApi().getList();
+await dbConnectionApi().getTypes();
 
 const route = useRoute();
 
 onMounted(async () => {
-  if (route.query.datamartId && !isEmpty(dbConnStore.dbConnList)) {
-    const { data, execute } = useApi(ApiDbConnection.Schemas, {
+  if (route.query.datamartId && !isEmpty(dbConnStore.list)) {
+    const { data, execute } = useApi("/api/datamart/dbconnection/schemas", {
       params: { connId: selectConnId.value },
       immediate: false,
     });
     await execute();
     const schemas = data.value as ApiResponse;
-    dbConnStore.dbConnSchemaRes = schemas.data;
+    dbConnStore.schemas = schemas.data;
   }
 });
 
-if (route.query.datamartId && !isEmpty(dbConnStore.dbConnList)) {
+if (route.query.datamartId && !isEmpty(dbConnStore.list)) {
   selectConnId.value = dataMartStore.dataMartSetForm.connId;
   selectSchemas.value = dataMartStore.dataMartSetForm.dbName;
   selectDbType.value = dataMartStore.dataMartSetForm.dbType;
 }
 
 const optionList = computed(() => {
-  return dbConnStore.dbConnList
-    ? _useFilter(dbConnStore.dbConnList as DbConnList[], [
-        "connType",
-        _useUpperFirst(selectDbType.value),
-      ])
+  return dbConnStore.list
+    ? _useFilter(dbConnStore.list, ["dbType", selectDbType.value])
     : [];
 });
 
@@ -183,7 +157,7 @@ const filteredList = computed(() => {
 
 const changeSelectConn = async () => {
   dataMartStore.dataMartSetForm.connId = selectConnId.value;
-  await dbConnStore.getDbConnSchemas(dataMartStore.dataMartSetForm.connId);
+  await dbConnectionApi().getSchemas(dataMartStore.dataMartSetForm.connId);
 };
 const changeSelectSchemas = () => {
   dataMartStore.dataMartSetForm.dbName = selectSchemas.value;
@@ -194,6 +168,6 @@ const changeDbType = () => {
   selectConnId.value = "";
   selectSchemas.value = "";
   searchText.value = "";
-  dbConnStore.dbConnSchemaRes = [];
+  dbConnStore.schemas = [];
 };
 </script>

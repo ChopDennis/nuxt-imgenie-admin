@@ -46,8 +46,18 @@ const titleInfo = computed(() => useLayoutStore().pageLayout[useRoute().path]);
 const clickBtn = async (btn: string) => {
   if (btn === "新增連線") {
     await dbConnectionApi().getTypes();
-  } else {
-    navigateTo({ path: "/data-mart/add" });
+  }
+  if (btn === "新增資料模型") {
+    dataMartApi().resetForm();
+    navigateTo({
+      path: "/data-mart/edit",
+    });
+  }
+  if (btn === "建立群組" && useRoute().path === "/user-group") {
+    navigateTo({ path: "/user-group/edit" });
+  }
+  if (btn === "建立群組" && useRoute().path === "/data-mart-group") {
+    navigateTo({ path: "/data-mart-group/edit" });
   }
 };
 </script>

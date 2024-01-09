@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pt-4 px-6 pb-6">
     <div
       class="bg-white rounded-lg p-5 shadow-custom-lg grid-cols-1 grid gap-0 overflow-scroll"
     >
@@ -9,21 +9,19 @@
         <ElForm
           ref="dataMartSetFormRef"
           class="data-mart-form"
-          :model="dataMartStore.dataMartSetForm"
+          :model="dataMartStore.setting"
           :rules="formRules"
           label-width="120px"
         >
           <ElFormItem label="資料模型名稱" prop="datamartName">
             <div class="ml-2 w-full">
-              <ElInput
-                v-model="dataMartStore.dataMartSetForm.datamartName"
-              ></ElInput>
+              <ElInput v-model="dataMartStore.setting.datamartName"></ElInput>
             </div>
           </ElFormItem>
           <ElFormItem label="資料模型說明" prop="description">
             <div class="ml-2 w-full">
               <ElInput
-                v-model="dataMartStore.dataMartSetForm.description"
+                v-model="dataMartStore.setting.description"
                 :autosize="{ minRows: 2, maxRows: 6 }"
                 type="textarea"
                 resize="none"
@@ -34,14 +32,14 @@
             <div class="flex justify-between w-full pl-2">
               <div>限制 100 字元</div>
               <div class="text-gray-400">
-                {{ dataMartStore.dataMartSetForm.description.length }}/100
+                {{ dataMartStore.setting.description.length }}/100
               </div>
             </div>
           </ElFormItem>
           <ElFormItem label="資料庫連線設定" prop="connId">
             <ElInput
               hidden
-              :model="dataMartStore.dataMartSetForm.connId"
+              :model="dataMartStore.setting.connId"
               class="hiddenInput"
             ></ElInput>
             <div class="w-full pt-2 pl-2 -mt-10">
@@ -109,11 +107,7 @@
           <div class="mt-9">
             <ElFormItem label="資料說明文件" class="data-mart-upload">
               <div class="pl-2 pb-12 w-full">
-                <DataMartUpload
-                  ref="dataMartUploadRef"
-                  @upload="fileFormUpload"
-                  @remove="fileFormFileRemove"
-                />
+                <slot name="upload"></slot>
               </div>
             </ElFormItem>
           </div>
@@ -146,8 +140,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { UploadRawFile, FormInstance, FormRules } from "element-plus";
-import DataMartUpload from "~/components/dataMart/DataMartUpload.vue";
+import type { FormInstance, FormRules } from "element-plus";
 const dataMartSetFormRef = ref<FormInstance>();
 
 interface ConnSetTable {
@@ -160,59 +153,51 @@ interface ConnSetTable {
 const props = defineProps<{
   table: ConnSetTable[];
 }>();
-const dataMartUploadRef = ref<InstanceType<typeof DataMartUpload> | null>(null);
 
 const dataMartStore = useDataMartStore();
 const dbConnStore = useDbConnectionStore();
 const icons = useDbConnIcons();
-const dbmlFile = ref<UploadRawFile | File | null>(null);
 const connSetTable = ref<ConnSetTable[]>(props.table);
 const dialog = ref(false);
 
-const fileFormUpload = (fileFormUpload: UploadRawFile | File) => {
-  dbmlFile.value = fileFormUpload;
-};
-
-const fileFormFileRemove = () => {
-  dbmlFile.value = null;
-};
-
 const clickUpload = async () => {
-  dataMartStore.dataMartSetForm = useForm().trim(
-    dataMartStore.dataMartSetForm,
-  ) as ConnectionSetForm;
+  dataMartStore.setting = useForm().trim(
+    dataMartStore.setting,
+  ) as DataMartSetting;
   const valid = await useForm().validate(dataMartSetFormRef.value);
   const formData = new FormData();
-  dataMartStore.dataMartSetForm = useForm().trim(dataMartStore.dataMartSetForm);
-  const data = new File(
-    [JSON.stringify(dataMartStore.dataMartSetForm)],
-    "data.json",
-    {
-      type: "application/json",
-    },
-  );
+  const data = new File([JSON.stringify(dataMartStore.setting)], "data.json", {
+    type: "application/json",
+  });
   formData.append("data", data);
-  formData.append("file", dbmlFile.value as File);
-  if (valid && !isNull(dbmlFile.value)) {
-    await dataMartStore.getDataMartSave(formData);
-    await dataMartStore.getDataMartTable();
+  formData.append("file", dataMartStore.dbml as File);
+  if (valid && !isNull(dataMartStore.dbml)) {
+    await dataMartApi().sendSave(formData);
+    await dataMartApi().getTable();
     navigateTo({ path: "/data-mart" });
   } else {
-    dataMartUploadRef.value?.setErrorUpload("請上傳DBML(必填)");
+    // dataMartUploadRef.value?.setErrorUpload("請上傳DBML(必填)");
+    alert("請上傳DBML(必填)");
   }
 };
 
 const clickConfirm = async () => {
   dialog.value = false;
-  await dbConnStore.getDbConnQuery(dataMartStore.dataMartSetForm.connId);
+  await dbConnectionApi().getQuery(dataMartStore.setting.connId);
   if (connSetTable.value) connSetTable.value.pop();
   connSetTable.value.push({
-    ...dbConnStore.dbConnSetTable,
-    dbName: dataMartStore.dataMartSetForm.dbName,
+    ...dbConnStore.select,
+    dbName: dataMartStore.setting.dbName,
   });
-  dataMartStore.dataMartSetForm.dbType = dbConnStore.dbConnSetTable.dbType;
-  dataMartStore.dataMartSetForm.connName = dbConnStore.dbConnSetTable.connName;
-  dataMartStore.dataMartSetForm.database = dbConnStore.dbConnSetTable.database;
-  dataMartStore.dataMartSetForm.host = dbConnStore.dbConnSetTable.host;
+  dataMartStore.setting.dbType = dbConnStore.select.dbType;
+  dataMartStore.setting.connName = dbConnStore.select.connName;
+  dataMartStore.setting.database = dbConnStore.select.database;
+  dataMartStore.setting.host = dbConnStore.select.host;
 };
+
+const formRules = reactive<FormRules<ConnectionSetForm>>({
+  datamartName: [{ required: true, message: "請輸入資料模型名稱" }],
+  description: [{ required: true, message: "請輸入資料模型說明" }],
+  connId: [{ required: true, message: "請選擇資料庫連線" }],
+});
 </script>

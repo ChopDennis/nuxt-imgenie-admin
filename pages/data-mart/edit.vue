@@ -1,20 +1,46 @@
 <template>
   <div>
-    <DataMartSetForm :table="connSetTable" />
+    <DataMartSetForm :table="connSetTable">
+      <template #upload>
+        <DataMartUpload
+          ref="dataMartUploadRef"
+          :error-message="errorMessage"
+          :is-upload="isUpload"
+          @upload="fileFormUpload"
+          @remove="fileFormFileRemove"
+          @open-dialog="openDbmlDialog"
+        />
+      </template>
+    </DataMartSetForm>
+    <ElDialog
+      v-model="dbmlPreviewDialog"
+      width="auto"
+      :title="store.setting.fileName"
+      modal-class="backdrop-blur-sm"
+      :destroy-on-close="true"
+      align-center
+      class="dbml-dialog"
+      ><div v-highlight>
+        <pre><code>{{ dbmlPreviewContent }}</code></pre>
+      </div></ElDialog
+    >
   </div>
 </template>
 <script setup lang="ts">
+import type { UploadRawFile } from "element-plus";
+
 const store = useDataMartStore();
-const dbConnStore = useDbConnectionStore();
+const exportFile = ref<UploadRawFile | File | null>(null);
+const dbmlPreviewContent = ref("");
 const connSetTable = ref<any>([]);
+const dbmlPreviewDialog = ref(false);
+const errorMessage = ref("");
+const isUpload = ref(false);
 
-setTimeout(async () => {
-  await dbConnectionApi().getList();
-  if (isEmpty(dbConnStore.list)) return;
-  await store.getDataMartQuery();
-  const { dbType, connName, host, database, dbName } = store.dataMartSetForm;
-
+onNuxtReady(async () => {
   if (useRoute().query.datamartId) {
+    await dataMartApi().getQuery();
+    const { dbType, connName, host, database, dbName } = store.setting;
     connSetTable.value.push({
       dbType,
       connName,
@@ -22,6 +48,46 @@ setTimeout(async () => {
       database,
       dbName,
     });
+    const dbml = await dataMartApi().getExport();
+    if (dbml) {
+      if (dbml.size < 1000 * 1000) {
+        store.dbml = new File([dbml], `${store.query.fileName}`, {
+          type: "application/octet-stream",
+        });
+        dbmlPreviewContent.value = await store.dbml.text();
+        isUpload.value = true;
+        errorMessage.value = "";
+      } else {
+        errorMessage.value = "檔案大小超過1MB限制";
+      }
+    }
   }
-}, 100);
+});
+
+const fileFormUpload = async (fileFormUpload: UploadRawFile) => {
+  if (fileFormUpload) {
+    if (fileFormUpload.name.split(".")[1] === "dbml") {
+      if (fileFormUpload.size < 1000 * 1000) {
+        store.setting.fileName = fileFormUpload.name;
+        store.dbml = fileFormUpload;
+        dbmlPreviewContent.value = await fileFormUpload.text();
+        isUpload.value = true;
+        errorMessage.value = "";
+      } else {
+        errorMessage.value = "檔案大小超過1MB限制";
+      }
+    } else {
+      errorMessage.value = "限制只能上傳DBML檔";
+    }
+  }
+};
+
+const fileFormFileRemove = () => {
+  isUpload.value = false;
+  exportFile.value = null;
+};
+
+const openDbmlDialog = (val: boolean) => {
+  dbmlPreviewDialog.value = val;
+};
 </script>

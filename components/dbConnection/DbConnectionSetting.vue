@@ -106,8 +106,4 @@ const connSetBtn = async (action: string) => {
     console.error("欄位錯誤"); // eslint-disable-line no-console
   }
 };
-
-onBeforeUnmount(() => {
-  dbConnectionApi().resetForm();
-});
 </script>
