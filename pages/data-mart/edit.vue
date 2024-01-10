@@ -1,6 +1,9 @@
 <template>
   <div>
-    <DataMartSetForm :table="connSetTable">
+    <DataMartSetForm
+      :table="connSetTable"
+      @show-error="(error) => (errorMessage = error)"
+    >
       <template #upload>
         <DataMartUpload
           ref="dataMartUploadRef"
@@ -30,7 +33,6 @@
 import type { UploadRawFile } from "element-plus";
 
 const store = useDataMartStore();
-const exportFile = ref<UploadRawFile | File | null>(null);
 const dbmlPreviewContent = ref("");
 const connSetTable = ref<any>([]);
 const dbmlPreviewDialog = ref(false);
@@ -51,7 +53,7 @@ onNuxtReady(async () => {
     const dbml = await dataMartApi().getExport();
     if (dbml) {
       if (dbml.size < 1000 * 1000) {
-        store.dbml = new File([dbml], `${store.query.fileName}`, {
+        store.dbml = new File([dbml], `${store.setting.fileName}`, {
           type: "application/octet-stream",
         });
         dbmlPreviewContent.value = await store.dbml.text();
@@ -84,7 +86,7 @@ const fileFormUpload = async (fileFormUpload: UploadRawFile) => {
 
 const fileFormFileRemove = () => {
   isUpload.value = false;
-  exportFile.value = null;
+  store.dbml = null;
 };
 
 const openDbmlDialog = (val: boolean) => {

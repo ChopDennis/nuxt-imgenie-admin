@@ -48,6 +48,7 @@ export default function dataMartApi() {
       ...conn,
       host,
       database,
+      fileName: "",
       isActivate: true,
     };
   };
@@ -104,6 +105,7 @@ export default function dataMartApi() {
       host: "",
       isActivate: true,
     };
+    store.dbml = null;
   };
 
   return {

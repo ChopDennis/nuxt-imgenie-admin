@@ -39,7 +39,6 @@ export interface DataMartQuery {
     connName: string;
     connInfo: ConnectionInfo;
   };
-  fileName: string;
   [key: string]: any;
 }
 
@@ -84,7 +83,6 @@ export const useDataMartStore = defineStore("dataMart", {
             password: "",
           },
         },
-        fileName: "",
       },
       setting: {
         connId: "",

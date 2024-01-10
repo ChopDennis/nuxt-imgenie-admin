@@ -154,6 +154,10 @@ const props = defineProps<{
   table: ConnSetTable[];
 }>();
 
+const emits = defineEmits<{
+  showError: [string];
+}>();
+
 const dataMartStore = useDataMartStore();
 const dbConnStore = useDbConnectionStore();
 const icons = useDbConnIcons();
@@ -176,8 +180,7 @@ const clickUpload = async () => {
     await dataMartApi().getTable();
     navigateTo({ path: "/data-mart" });
   } else {
-    // dataMartUploadRef.value?.setErrorUpload("請上傳DBML(必填)");
-    alert("請上傳DBML(必填)");
+    emits("showError", "請上傳DBML(必填)");
   }
 };
 

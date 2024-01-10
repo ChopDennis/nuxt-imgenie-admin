@@ -3,7 +3,7 @@
     <ElForm label-width="70px" label-position="right" class="conn-set-form">
       <ElFormItem label="連線類型">
         <ElSelect
-          v-model="selectDbType"
+          v-model="select.dbType"
           placeholder="請選擇連線類型"
           class="ml-2"
           style="width: 436px"
@@ -30,19 +30,19 @@
               </div>
             </template>
           </ElOption>
-          <template #prefix>
-            <img :src="icons[`ic_${selectDbType}`]" class="w-6" width="24" />
+          <template v-if="select.dbType" #prefix>
+            <img :src="icons[`ic_${select.dbType}`]" class="w-6" width="24" />
           </template>
         </ElSelect>
       </ElFormItem>
       <ElFormItem label="資料來源">
         <ElSelect
           ref="ElSelectRef"
-          v-model="selectConnId"
+          v-model="select.connId"
           placeholder="請選擇資料來源"
           class="ml-2"
           style="width: 436px"
-          :disabled="selectDbType === ''"
+          :disabled="select.dbType === ''"
           no-data-text="查無資料"
           @change="changeSelectConn()"
         >
@@ -86,11 +86,11 @@
       </ElFormItem>
       <ElFormItem label="Schema">
         <ElSelect
-          v-model="selectSchemas"
+          v-model="select.schemas"
           placeholder="請選擇 Schema"
           class="ml-2"
           style="width: 436px"
-          :disabled="selectDbType === ''"
+          :disabled="select.dbType === ''"
           no-data-text="請選擇資料來源"
           @change="changeSelectSchemas()"
         >
@@ -109,37 +109,27 @@
 const dbConnStore = useDbConnectionStore();
 const dataMartStore = useDataMartStore();
 const icons = useDbConnIcons();
-const selectConnId = ref("");
-const selectSchemas = ref("");
-const selectDbType = ref("");
+const select = reactive({
+  connId: "",
+  dbType: "",
+  schemas: "",
+});
 const searchText = ref("");
 
-await dbConnectionApi().getList();
-await dbConnectionApi().getTypes();
-
-const route = useRoute();
-
-onMounted(async () => {
-  if (route.query.datamartId && !isEmpty(dbConnStore.list)) {
-    const { data, execute } = useApi("/api/datamart/dbconnection/schemas", {
-      params: { connId: selectConnId.value },
-      immediate: false,
-    });
-    await execute();
-    const schemas = data.value as ApiResponse;
-    dbConnStore.schemas = schemas.data;
+onNuxtReady(async () => {
+  await dbConnectionApi().getList();
+  await dbConnectionApi().getTypes();
+  if (useRoute().query.datamartId) {
+    await dbConnectionApi().getSchemas(dataMartStore.setting.connId);
+    select.connId = dataMartStore.setting.connId;
+    select.schemas = dataMartStore.setting.dbName;
+    select.dbType = dataMartStore.setting.dbType;
   }
 });
 
-if (route.query.datamartId && !isEmpty(dbConnStore.list)) {
-  selectConnId.value = dataMartStore.dataMartSetForm.connId;
-  selectSchemas.value = dataMartStore.dataMartSetForm.dbName;
-  selectDbType.value = dataMartStore.dataMartSetForm.dbType;
-}
-
 const optionList = computed(() => {
   return dbConnStore.list
-    ? _useFilter(dbConnStore.list, ["dbType", selectDbType.value])
+    ? _useFilter(dbConnStore.list, ["dbType", select.dbType])
     : [];
 });
 
@@ -156,17 +146,16 @@ const filteredList = computed(() => {
 });
 
 const changeSelectConn = async () => {
-  dataMartStore.dataMartSetForm.connId = selectConnId.value;
-  await dbConnectionApi().getSchemas(dataMartStore.dataMartSetForm.connId);
+  dataMartStore.setting.connId = select.connId;
+  await dbConnectionApi().getSchemas(dataMartStore.setting.connId);
 };
 const changeSelectSchemas = () => {
-  dataMartStore.dataMartSetForm.dbName = selectSchemas.value;
+  dataMartStore.setting.dbName = select.schemas;
 };
 
 const changeDbType = () => {
-  // selectDbType.value = selectDbType.value !== type ? type : "";
-  selectConnId.value = "";
-  selectSchemas.value = "";
+  select.connId = "";
+  select.schemas = "";
   searchText.value = "";
   dbConnStore.schemas = [];
 };
