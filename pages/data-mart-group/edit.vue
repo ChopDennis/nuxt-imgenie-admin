@@ -87,7 +87,7 @@
                     </div>
                   </div>
                 </ElFormItem>
-                <ElFormItem label="資料模型清單">
+                <ElFormItem class="form-table" label="資料模型清單">
                   <div class="ml-2 w-full">
                     <ElTable
                       :data="dataMartSetTable"
@@ -139,26 +139,6 @@
           </ElCollapseItem>
         </ElCollapse>
       </div>
-      <!-- <div class="flex w-full items-center justify-center">
-        <div
-          class="w-1/3 xl:w-2/5 border-t"
-          style="border-color: #373c55"
-        ></div>
-        <div class="w-1/3 xl:w-1/5 flex justify-center">
-          <div class="text-red-500 self-center pr-1">
-            <img src="~/assets/icons/data-mart/ic_important.svg" />
-          </div>
-          <div>
-            <p class="text-base font-bold" style="color: #373c55">
-              成員/使用者群組 至少擇一選填
-            </p>
-          </div>
-        </div>
-        <div
-          class="w-1/3 xl:w-2/5 border-t"
-          style="border-color: #373c55"
-        ></div>
-      </div> -->
       <ElDivider
         ><div class="flex justify-center">
           <div class="text-red-500 self-center pr-1">
@@ -207,7 +187,7 @@
                     </div>
                   </div>
                 </ElFormItem>
-                <ElFormItem label="成員名單">
+                <ElFormItem class="form-table" label="成員名單">
                   <div class="ml-2 w-full">
                     <ElTable
                       :data="memberSetTable"
@@ -286,7 +266,7 @@
                     </div>
                   </div>
                 </ElFormItem>
-                <ElFormItem label="使用者群組">
+                <ElFormItem class="form-table" label="使用者群組">
                   <div class="ml-2 w-full">
                     <ElTable
                       :data="userGroupSetTable"

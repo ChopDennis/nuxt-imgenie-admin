@@ -36,7 +36,11 @@
               </div>
             </div>
           </ElFormItem>
-          <ElFormItem label="資料庫連線設定" prop="connId">
+          <ElFormItem
+            class="form-table conn-set"
+            label="資料庫連線設定"
+            prop="connId"
+          >
             <ElInput
               hidden
               :model="dataMartStore.setting.connId"

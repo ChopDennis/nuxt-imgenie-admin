@@ -59,7 +59,7 @@
                     </div>
                   </div>
                 </ElFormItem>
-                <ElFormItem label="成員名單">
+                <ElFormItem class="form-table" label="成員名單">
                   <div class="ml-2 w-full">
                     <ElTable
                       :data="memberSetTable"
@@ -104,8 +104,6 @@
         </ElCollapse>
       </div>
     </div>
-
-    <!-- <div class="bg-white rounded-lg p-4 shadow-custom-lg"></div> -->
     <div
       class="flex w-full justify-end gap-2 bg-slate-400 fixed bottom-0 left-0 py-2 px-6 data-mart-bottom"
     >

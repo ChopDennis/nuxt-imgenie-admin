@@ -61,7 +61,7 @@ export default function dataMartApi() {
       },
     });
     const dbml = data.value as unknown;
-    store.setting.fileName = localStorage // TODO:
+    store.setting.fileName = localStorage
       .getItem("fileName")
       ?.split("''")[1] as string;
     return dbml as Blob;

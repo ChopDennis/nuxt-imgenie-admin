@@ -26,6 +26,19 @@ const clickEdit = async (id: string) => {
           datamartId: id,
         },
       });
+      break;
+    }
+    case "/data-mart-group": {
+      navigateTo({
+        path: "/data-mart-group/edit",
+      });
+      break;
+    }
+    case "/user-group": {
+      navigateTo({
+        path: "/user-group/edit",
+      });
+      break;
     }
   }
 };

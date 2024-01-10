@@ -273,7 +273,8 @@ body .hiddenInput > .el-input__wrapper {
   box-shadow: none !important;
 }
 
-body .el-button.is-disabled, body .el-button.is-disabled:hover {
+body .el-button.is-disabled,
+body .el-button.is-disabled:hover {
   color: #adb4cc;
   border-color: #adb4cc;
   background-color: #f6f7f9;
@@ -285,4 +286,12 @@ i.el-icon.el-collapse-item__arrow.is-active {
 
 i.el-icon.el-collapse-item__arrow {
   transform: rotate(90deg);
+}
+
+body .el-form-item.form-table > .el-form-item__label {
+  margin-top: 7px;
+}
+
+body .el-form-item.form-table.conn-set > .el-form-item__label {
+  margin-top: 12px;
 }

@@ -1,6 +1,14 @@
 <template>
   <div>
-    <AdminSortableTable :list="list" :column="column" />
+    <GlobalSortableTable :list="list">
+      <template #column>
+        <ElTableColumn prop="groupName" label="群組名稱" sortable />
+        <ElTableColumn prop="description" label="簡述" sortable />
+        <ElTableColumn prop="createTime" label="建立時間" sortable />
+        <!-- 操作 -->
+        <TableColumnEdit />
+      </template>
+    </GlobalSortableTable>
   </div>
 </template>
 <script setup>
@@ -8,12 +16,7 @@ const list = ref([
   {
     groupName: "群組測試",
     description: "群組測試、群組測試、群組測試、群組測試",
-    creteTime: "2024-01-02",
+    createTime: "2024-01-02",
   },
 ]);
-const column = ref({
-  groupName: "群組名稱",
-  description: "簡述",
-  creteTime: "建立時間",
-});
 </script>
