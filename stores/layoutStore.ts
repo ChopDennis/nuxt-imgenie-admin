@@ -97,11 +97,11 @@ export const useLayoutStore = defineStore("layout", {
             subMenu: [
               {
                 title: "帳號設定",
-                path: "/",
+                path: "/db-connection",
               },
               {
                 title: "角色管理",
-                path: "/",
+                path: "/db-connection",
               },
               {
                 title: "使用者群組管理",

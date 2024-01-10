@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="isLoading" class="flex flex-col w-full">
+  <div v-loading="isLoading" class="flex flex-col w-full h-screen">
     <GlobalSideMenu />
     <GlobalHeader />
 

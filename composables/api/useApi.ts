@@ -93,10 +93,27 @@ export const useApi = <T>(
         }
       }
       if (response._data.code === ApiResponseCode.Success) {
+        if (
+          url === "/api/datamart/datamart/save" ||
+          url === "/api/datamart/dbconnection/save"
+        ) {
+          ElNotification({
+            title: "系統訊息",
+            message: "儲存成功",
+            type: "success",
+            duration: 3000,
+          });
+        }
         console.log(`useFetch ${url} success`); // eslint-disable-line no-console
       }
     },
     onResponseError({ response }) {
+      ElNotification({
+        title: `系統錯誤－${response._data.code}`,
+        message: _useToString(response._data.message),
+        type: "error",
+        duration: 3000,
+      });
       console.log(response._data); // eslint-disable-line no-console
     },
     getCachedData: (key) =>

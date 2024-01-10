@@ -133,11 +133,22 @@
       width="572"
       class="conn-set-dialog"
     >
-      <DataMartSetDialog />
+      <DataMartSetDialog
+        @upload-button="
+          (val) => {
+            isUploadButton = val;
+          }
+        "
+      />
       <template #footer>
         <div class="flex justify-center">
           <ElButton @click="dialog = false">取消</ElButton>
-          <ElButton type="primary" @click="clickConfirm()">儲存</ElButton>
+          <ElButton
+            type="primary"
+            :disabled="!isUploadButton"
+            @click="clickConfirm()"
+            >儲存</ElButton
+          >
         </div>
       </template>
     </ElDialog>
@@ -162,6 +173,7 @@ const emits = defineEmits<{
   showError: [string];
 }>();
 
+const isUploadButton = ref(false);
 const dataMartStore = useDataMartStore();
 const dbConnStore = useDbConnectionStore();
 const icons = useDbConnIcons();

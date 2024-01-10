@@ -106,6 +106,9 @@
   </div>
 </template>
 <script setup lang="ts">
+const emits = defineEmits<{
+  uploadButton: [boolean];
+}>();
 const dbConnStore = useDbConnectionStore();
 const dataMartStore = useDataMartStore();
 const icons = useDbConnIcons();
@@ -124,6 +127,10 @@ onNuxtReady(async () => {
     select.connId = dataMartStore.setting.connId;
     select.schemas = dataMartStore.setting.dbName;
     select.dbType = dataMartStore.setting.dbType;
+  } else {
+    select.connId = dbConnStore.select.connId;
+    select.schemas = dataMartStore.setting.dbName;
+    select.dbType = dbConnStore.select.dbType;
   }
 });
 
@@ -147,10 +154,12 @@ const filteredList = computed(() => {
 
 const changeSelectConn = async () => {
   dataMartStore.setting.connId = select.connId;
+  dbConnStore.schemas = [];
   await dbConnectionApi().getSchemas(dataMartStore.setting.connId);
 };
 const changeSelectSchemas = () => {
   dataMartStore.setting.dbName = select.schemas;
+  emits("uploadButton", true);
 };
 
 const changeDbType = () => {
@@ -158,5 +167,6 @@ const changeDbType = () => {
   select.schemas = "";
   searchText.value = "";
   dbConnStore.schemas = [];
+  emits("uploadButton", false);
 };
 </script>
