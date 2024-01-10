@@ -4,56 +4,15 @@
     <GlobalSortableTable :list="store.table">
       <template #column>
         <!-- 資料庫類型 -->
-        <ElTableColumn
-          v-if="
-            useRoute().path === '/db-connection' ||
-            useRoute().path === '/data-mart'
-          "
-          prop="dbType"
-          label="資料庫類型"
-          width="150"
-          align="center"
-          sortable
-        >
-          <template #default="scope">
-            <div>
-              <img
-                :src="icons[`ic_${scope.row.dbType}`]"
-                class="m-auto"
-                width="24"
-              />
-            </div>
-          </template>
-        </ElTableColumn>
+        <TableColumnDbType />
         <!-- 其他欄位 -->
         <ElTableColumn prop="connName" label="連線名稱" sortable />
         <ElTableColumn prop="database" label="資料庫名稱" sortable />
         <ElTableColumn prop="host" label="主機名稱或IP" sortable />
         <!-- 狀態 -->
-        <ElTableColumn
-          prop="isActivate"
-          label="狀態"
-          width="90"
-          align="center"
-          sortable
-        >
-          <template #default="scope">
-            <ElSwitch
-              v-model="scope.row.isActivate"
-              @change="changSwitch(scope.row.id, scope.row.isActivate)"
-            />
-          </template>
-        </ElTableColumn>
+        <TableColumnIsActivate />
         <!-- 操作 -->
-        <ElTableColumn label="操作" width="90" align="center">
-          <template #default="scope">
-            <img
-              class="m-auto"
-              src="~/assets/icons/dbConnection/ic_db_edit.svg"
-              @click="clickEdit(scope.row.id)"
-            />
-          </template>
-        </ElTableColumn>
+        <TableColumnEdit />
       </template>
       <!-- 空值 -->
     </GlobalSortableTable>
@@ -64,6 +23,7 @@
     <!-- 資料庫連線設定 -->
     <DbConnectionSetting>
       <template #alert>
+        <!-- 資料庫連線成功 -->
         <ElAlert
           v-if="store.test.status"
           title="連線成功"
@@ -71,6 +31,7 @@
           show-icon
           class="font-black"
         />
+        <!-- 資料庫連線失敗 -->
         <ElAlert
           v-if="!store.test.status && !isNull(store.test.status)"
           :title="`無法連結到: ${store.setting.form.host}:${store.setting.form.port}`"
@@ -84,18 +45,7 @@
 </template>
 <script setup lang="ts">
 const store = useDbConnectionStore();
-const icons = useDbConnIcons();
-
 onNuxtReady(async () => {
   await dbConnectionApi().getTable();
 });
-
-const changSwitch = async (id: string, value: boolean) => {
-  return await dbConnectionApi().sendUpdate(id, value);
-};
-
-const clickEdit = async (id: string) => {
-  await dbConnectionApi().getQuery(id);
-  store.dialog.connSetting = true;
-};
 </script>

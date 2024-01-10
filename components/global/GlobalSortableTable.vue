@@ -32,7 +32,7 @@
     </div>
   </div>
 </template>
-<script setup lang="ts" generic="T extends { id: string; isActivate: boolean }">
+<script setup lang="ts" generic="T">
 interface SortChangeParams {
   prop: string;
   order: "descending" | "ascending" | null;

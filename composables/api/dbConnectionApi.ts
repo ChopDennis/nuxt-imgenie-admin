@@ -32,7 +32,9 @@ export default function dbConnectionApi() {
 
   /** @description Get types of database. */
   const getTypes = async () => {
-    const { data } = await useApi<ConnectionTypes[]>(Api.Types);
+    const { data } = await useApi<ConnectionTypes[]>(Api.Types, {
+      cached: true,
+    });
     const res = data.value;
     store.types = res.data;
     store.dialog.categories = store.setting.connId === "";
@@ -178,7 +180,7 @@ export default function dbConnectionApi() {
       connId: "",
       dbType: "",
       dialogTitle: "",
-      isActivate: false,
+      isActivate: true,
       form: {
         connName: "",
         host: "",

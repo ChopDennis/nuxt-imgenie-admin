@@ -1,0 +1,32 @@
+<template>
+  <ElTableColumn label="操作" width="90" align="center">
+    <template #default="scope">
+      <img
+        class="m-auto"
+        src="~/assets/icons/dbConnection/ic_db_edit.svg"
+        @click="clickEdit(scope.row.id)"
+      />
+    </template>
+  </ElTableColumn>
+</template>
+<script setup lang="ts">
+const store = useDbConnectionStore();
+
+const clickEdit = async (id: string) => {
+  switch (useRoute().path) {
+    case "/db-connection": {
+      await dbConnectionApi().getQuery(id);
+      store.dialog.connSetting = true;
+      break;
+    }
+    case "/data-mart": {
+      navigateTo({
+        path: "/data-mart/edit",
+        query: {
+          datamartId: id,
+        },
+      });
+    }
+  }
+};
+</script>
