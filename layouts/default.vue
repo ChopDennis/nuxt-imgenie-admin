@@ -43,9 +43,11 @@
 const isLoading = useLoading();
 const isCollapse = computed(() => useLayoutStore().sideMenu.collapse);
 const titleInfo = computed(() => useLayoutStore().pageLayout[useRoute().path]);
+const store = useDbConnectionStore();
 const clickBtn = async (btn: string) => {
   if (btn === "新增連線") {
     await dbConnectionApi().getTypes();
+    store.dialog.categories = true;
   }
   if (btn === "新增資料模型") {
     dataMartApi().resetForm();

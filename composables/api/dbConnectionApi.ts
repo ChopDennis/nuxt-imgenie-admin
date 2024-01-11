@@ -37,7 +37,6 @@ export default function dbConnectionApi() {
     });
     const res = data.value;
     store.types = res.data;
-    store.dialog.categories = store.setting.connId === "";
   };
 
   /** @description Get the list of activate database connection. */

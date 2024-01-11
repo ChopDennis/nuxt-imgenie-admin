@@ -155,6 +155,7 @@ const filteredList = computed(() => {
 const changeSelectConn = async () => {
   dataMartStore.setting.connId = select.connId;
   dbConnStore.schemas = [];
+  select.schemas = "";
   await dbConnectionApi().getSchemas(dataMartStore.setting.connId);
 };
 const changeSelectSchemas = () => {
