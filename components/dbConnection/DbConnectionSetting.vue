@@ -1,6 +1,6 @@
 <template>
   <ElDialog
-    v-model="store.dialog.connSetting"
+    v-model="isConnSetting"
     :destroy-on-close="true"
     :close-on-click-modal="false"
     :before-close="
@@ -67,6 +67,7 @@ import type { FormInstance, FormRules } from "element-plus";
 const dbConnSetFormRef = ref<FormInstance>();
 const store = useDbConnectionStore();
 const icons = useDbConnIcons();
+const isConnSetting = openConnectionSetting();
 
 const formLabel: ConnectionSetForm = {
   connName: "連線名稱",

@@ -10,13 +10,13 @@
   </ElTableColumn>
 </template>
 <script setup lang="ts">
-const store = useDbConnectionStore();
+const isConnSetting = openConnectionSetting();
 
 const clickEdit = async (id: string) => {
   switch (useRoute().path) {
     case "/db-connection": {
       await dbConnectionApi().getQuery(id);
-      store.dialog.connSetting = true;
+      isConnSetting.value = true;
       break;
     }
     case "/data-mart": {

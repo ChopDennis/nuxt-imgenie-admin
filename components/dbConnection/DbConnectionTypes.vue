@@ -1,6 +1,6 @@
 <template>
   <ElDialog
-    v-model="store.dialog.categories"
+    v-model="isConnTypes"
     title="選擇連線類型"
     modal-class="backdrop-blur-sm"
     width="572"
@@ -35,13 +35,15 @@
 <script setup lang="ts">
 const store = useDbConnectionStore();
 const icons = useDbConnIcons();
+const isConnSetting = openConnectionSetting();
+const isConnTypes = openConnectionTypes();
 
 const clickEditNewConn = (dbType: string, title: string) => {
   store.setting.dialogTitle = title;
   store.setting.dbType = dbType;
   setTimeout(() => {
-    store.dialog.categories = false;
-    store.dialog.connSetting = true;
+    isConnTypes.value = false;
+    isConnSetting.value = true;
   }, 500);
 };
 </script>

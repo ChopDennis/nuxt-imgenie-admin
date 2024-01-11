@@ -56,10 +56,6 @@ interface ConnectionSetting {
 
 interface DbConnectionStoreState {
   schemas: string[];
-  dialog: {
-    categories: boolean;
-    connSetting: boolean;
-  };
   test: {
     message: string;
     status: boolean | null;
@@ -81,10 +77,6 @@ export type {
 export const useDbConnectionStore = defineStore("dbConnection", {
   state: (): DbConnectionStoreState => {
     return {
-      dialog: {
-        categories: false,
-        connSetting: false,
-      },
       list: [],
       table: [],
       test: {
