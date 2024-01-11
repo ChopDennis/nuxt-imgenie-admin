@@ -9,14 +9,22 @@ enum Api {
   Schemas = "/api/datamart/dbconnection/schemas",
 }
 
-export default function dbConnectionApi() {
-  const store = useDbConnectionStore();
+export const openConnectionSetting = () => {
+  return useState<boolean>("isConnSetting", () => false);
+};
+
+export const openConnectionTypes = () => {
+  return useState<boolean>("isConnTypes", () => false);
+};
+
+export default function useDbConnectionApi() {
+  const dbConnStore = useDbConnectionStore();
 
   /** @description Get all of database connection. */
   const getTable = async () => {
     const { data } = await useApi<ConnectionList[]>(Api.Table);
     const res = data.value;
-    store.table = _useMap(res.data, (list) => {
+    dbConnStore.table = _useMap(res.data, (list) => {
       const { connInfo, dbType, connName, connId, isActivate } = list;
       const { host, port, database } = connInfo;
       return {
@@ -36,14 +44,14 @@ export default function dbConnectionApi() {
       cached: true,
     });
     const res = data.value;
-    store.types = res.data;
+    dbConnStore.types = res.data;
   };
 
   /** @description Get the list of activate database connection. */
   const getList = async () => {
     const { data } = await useApi<ConnectionList[]>(Api.List);
     const res = data.value;
-    store.list = _useMap(res.data, (list) => {
+    dbConnStore.list = _useMap(res.data, (list) => {
       const { connInfo, dbType, connName, connId } = list;
       const { host, port, database } = connInfo;
       return {
@@ -62,7 +70,7 @@ export default function dbConnectionApi() {
       params: { connId },
     });
     const res = data.value;
-    store.schemas = res.data;
+    dbConnStore.schemas = res.data;
   };
 
   /** @description Get detail of the database connection. */
@@ -76,14 +84,14 @@ export default function dbConnectionApi() {
     const res = data.value;
     const { connName, connInfo, dbType, isActivate } = res.data;
     const { ssl, host, port, username, password, database } = connInfo;
-    store.select = {
+    dbConnStore.select = {
       connId,
       dbType,
       connName,
       host,
       database,
     };
-    store.setting = {
+    dbConnStore.setting = {
       connId,
       form: {
         connName,
@@ -99,14 +107,14 @@ export default function dbConnectionApi() {
       isActivate,
     };
     await getTypes();
-    store.setting.dialogTitle =
-      _useFind(store.types, ["itemId", dbType])?.title ?? "";
+    dbConnStore.setting.dialogTitle =
+      _useFind(dbConnStore.types, ["itemId", dbType])?.title ?? "";
   };
 
   /** @description Send Request after saving database connection. */
   const sendSave = async () => {
-    const { connId, dbType, isActivate } = store.setting;
-    const { connName, ...connInfo } = store.setting.form;
+    const { connId, dbType, isActivate } = dbConnStore.setting;
+    const { connName, ...connInfo } = dbConnStore.setting.form;
     const params = {
       connId,
       connName,
@@ -142,10 +150,10 @@ export default function dbConnectionApi() {
 
   /** @description Send Request while click test-connection button. */
   const sendTest = async () => {
-    store.test.status = null;
-    const dbType = store.setting.dbType;
+    dbConnStore.test.status = null;
+    const dbType = dbConnStore.setting.dbType;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { connName, ...info } = store.setting.form;
+    const { connName, ...info } = dbConnStore.setting.form;
     const connInfo = JSON.stringify(info);
     const params = {
       dbType,
@@ -162,20 +170,21 @@ export default function dbConnectionApi() {
       const res = data.value;
       console.log(res.code); // eslint-disable-line no-console
       if (res.code === ApiResponseCode.Success) {
-        store.test.status = true;
-        store.test.message = "連線成功";
+        dbConnStore.test.status = true;
+        dbConnStore.test.message = "連線成功";
       } else {
-        store.test.status = false;
-        store.test.message = res.message as string;
+        dbConnStore.test.status = false;
+        dbConnStore.test.message = res.message as string;
       }
     }
   };
 
   const resetForm = () => {
-    store.dialog.connSetting = false;
-    store.setting.dbType = "";
-    store.test.status = null;
-    store.setting = {
+    const isConnSetting = openConnectionSetting();
+    isConnSetting.value = false;
+    dbConnStore.setting.dbType = "";
+    dbConnStore.test.status = null;
+    dbConnStore.setting = {
       connId: "",
       dbType: "",
       dialogTitle: "",

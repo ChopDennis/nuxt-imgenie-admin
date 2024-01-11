@@ -46,6 +46,6 @@
 <script setup lang="ts">
 const store = useDbConnectionStore();
 onNuxtReady(async () => {
-  await dbConnectionApi().getTable();
+  await useDbConnectionApi().getTable();
 });
 </script>

@@ -19,11 +19,11 @@ const changActivate = async (id: string, value: boolean) => {
   let state: boolean;
   switch (useRoute().path) {
     case "/db-connection": {
-      state = await dbConnectionApi().sendUpdate(id, !value);
+      state = await useDbConnectionApi().sendUpdate(id, !value);
       break;
     }
     case "/data-mart": {
-      state = await dataMartApi().sendUpdate(id, !value);
+      state = await useDataMartApi().sendUpdate(id, !value);
       break;
     }
     default: {

@@ -6,13 +6,13 @@ enum Api {
   Export = "/api/datamart/datamart/export-file",
 }
 
-export default function dataMartApi() {
-  const store = useDataMartStore();
+export default function useDataMartApi() {
+  const dataMartStore = useDataMartStore();
 
   const getTable = async () => {
     const { data } = await useApi<DataMartList[]>(Api.List);
     const res = data.value;
-    store.table = _useMap(res.data, (list) => {
+    dataMartStore.table = _useMap(res.data, (list) => {
       const {
         datamartId: id,
         dataMartName,
@@ -38,12 +38,12 @@ export default function dataMartApi() {
       },
     });
     const res = data.value;
-    store.query = res.data;
+    dataMartStore.query = res.data;
 
-    const { dbConnection, ...rest } = store.query;
+    const { dbConnection, ...rest } = dataMartStore.query;
     const { connInfo, ...conn } = dbConnection;
     const { host, database } = connInfo;
-    store.setting = {
+    dataMartStore.setting = {
       ...rest,
       ...conn,
       host,
@@ -61,7 +61,7 @@ export default function dataMartApi() {
       },
     });
     const dbml = data.value as unknown;
-    store.setting.fileName = localStorage
+    dataMartStore.setting.fileName = localStorage
       .getItem("fileName")
       ?.split("''")[1] as string;
     return dbml as Blob;
@@ -92,7 +92,7 @@ export default function dataMartApi() {
   };
 
   const resetForm = () => {
-    store.setting = {
+    dataMartStore.setting = {
       connId: "",
       connName: "",
       datamartId: "",
@@ -105,7 +105,7 @@ export default function dataMartApi() {
       host: "",
       isActivate: true,
     };
-    store.dbml = null;
+    dataMartStore.dbml = null;
   };
 
   return {

@@ -41,7 +41,7 @@ const isUpload = ref(false);
 
 onNuxtReady(async () => {
   if (useRoute().query.datamartId) {
-    await dataMartApi().getQuery();
+    await useDataMartApi().getQuery();
     const { dbType, connName, host, database, dbName } = store.setting;
     connSetTable.value.push({
       dbType,
@@ -50,7 +50,7 @@ onNuxtReady(async () => {
       database,
       dbName,
     });
-    const dbml = await dataMartApi().getExport();
+    const dbml = await useDataMartApi().getExport();
     if (dbml) {
       if (dbml.size < 1000 * 1000) {
         store.dbml = new File([dbml], `${store.setting.fileName}`, {

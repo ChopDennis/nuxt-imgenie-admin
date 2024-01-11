@@ -15,7 +15,7 @@ const isConnSetting = openConnectionSetting();
 const clickEdit = async (id: string) => {
   switch (useRoute().path) {
     case "/db-connection": {
-      await dbConnectionApi().getQuery(id);
+      await useDbConnectionApi().getQuery(id);
       isConnSetting.value = true;
       break;
     }

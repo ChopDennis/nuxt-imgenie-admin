@@ -47,11 +47,11 @@ const isConnTypes = openConnectionTypes();
 
 const clickBtn = async (btn: string) => {
   if (btn === "新增連線") {
-    await dbConnectionApi().getTypes();
+    await useDbConnectionApi().getTypes();
     isConnTypes.value = true;
   }
   if (btn === "新增資料模型") {
-    dataMartApi().resetForm();
+    useDataMartApi().resetForm();
     navigateTo({
       path: "/data-mart/edit",
     });

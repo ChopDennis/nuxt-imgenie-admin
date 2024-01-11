@@ -18,6 +18,6 @@
 <script setup lang="ts">
 const store = useDataMartStore();
 onNuxtReady(async () => {
-  await dataMartApi().getTable();
+  await useDataMartApi().getTable();
 });
 </script>

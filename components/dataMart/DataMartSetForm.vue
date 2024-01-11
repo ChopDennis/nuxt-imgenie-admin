@@ -192,8 +192,8 @@ const clickUpload = async () => {
   formData.append("data", data);
   formData.append("file", dataMartStore.dbml as File);
   if (valid && !isNull(dataMartStore.dbml)) {
-    await dataMartApi().sendSave(formData);
-    await dataMartApi().getTable();
+    await useDataMartApi().sendSave(formData);
+    await useDataMartApi().getTable();
     navigateTo({ path: "/data-mart" });
   } else {
     emits("showError", "請上傳DBML(必填)");
@@ -202,7 +202,7 @@ const clickUpload = async () => {
 
 const clickConfirm = async () => {
   dialog.value = false;
-  await dbConnectionApi().getQuery(dataMartStore.setting.connId);
+  await useDbConnectionApi().getQuery(dataMartStore.setting.connId);
   if (connSetTable.value) connSetTable.value.pop();
   connSetTable.value.push({
     ...dbConnStore.select,

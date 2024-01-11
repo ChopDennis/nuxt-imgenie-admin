@@ -120,10 +120,10 @@ const select = reactive({
 const searchText = ref("");
 
 onNuxtReady(async () => {
-  await dbConnectionApi().getList();
-  await dbConnectionApi().getTypes();
+  await useDbConnectionApi().getList();
+  await useDbConnectionApi().getTypes();
   if (useRoute().query.datamartId) {
-    await dbConnectionApi().getSchemas(dataMartStore.setting.connId);
+    await useDbConnectionApi().getSchemas(dataMartStore.setting.connId);
     select.connId = dataMartStore.setting.connId;
     select.schemas = dataMartStore.setting.dbName;
     select.dbType = dataMartStore.setting.dbType;
@@ -156,7 +156,7 @@ const changeSelectConn = async () => {
   dataMartStore.setting.connId = select.connId;
   dbConnStore.schemas = [];
   select.schemas = "";
-  await dbConnectionApi().getSchemas(dataMartStore.setting.connId);
+  await useDbConnectionApi().getSchemas(dataMartStore.setting.connId);
 };
 const changeSelectSchemas = () => {
   dataMartStore.setting.dbName = select.schemas;

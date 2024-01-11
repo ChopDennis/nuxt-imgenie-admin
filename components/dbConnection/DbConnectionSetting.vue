@@ -5,7 +5,7 @@
     :close-on-click-modal="false"
     :before-close="
       (done) => {
-        dbConnectionApi().resetForm();
+        useDbConnectionApi().resetForm();
         done();
       }
     "
@@ -54,7 +54,7 @@
       <div class="flex justify-between">
         <ElButton @click="connSetBtn('test')">連線測試</ElButton>
         <span>
-          <ElButton @click="dbConnectionApi().resetForm()">取消</ElButton>
+          <ElButton @click="useDbConnectionApi().resetForm()">取消</ElButton>
           <ElButton type="primary" @click="connSetBtn('save')">儲存</ElButton>
         </span>
       </div>
@@ -98,10 +98,10 @@ const connSetBtn = async (action: string) => {
   const valid = await useForm().validate(dbConnSetFormRef.value);
   if (valid) {
     if (action === "test") {
-      await dbConnectionApi().sendTest();
+      await useDbConnectionApi().sendTest();
     }
     if (action === "save") {
-      await dbConnectionApi().sendSave();
+      await useDbConnectionApi().sendSave();
     }
   } else {
     console.error("欄位錯誤"); // eslint-disable-line no-console
