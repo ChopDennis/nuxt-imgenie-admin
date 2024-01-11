@@ -73,9 +73,3 @@ const clickRemoveIcon = () => {
   emit("remove", null);
 };
 </script>
-<style scoped>
-.upload-error {
-  border: 1px solid rgb(248 113 113 /400);
-  border-radius: 8px;
-}
-</style>

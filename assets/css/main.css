@@ -1,5 +1,5 @@
-@import url("highlight.js/styles/atom-one-dark-reasonable.css");
-@import url("assets/css/element.css");
+@import url('highlight.js/styles/atom-one-dark-reasonable.css');
+@import url('assets/css/element.css');
 
 html {
   font-size: 16px;
@@ -17,7 +17,7 @@ body {
   margin: 0;
   line-height: 1.6;
   font-family:
-    "Noto Sans TC",
+    'Noto Sans TC',
     -apple-system,
     sans-serif;
   text-rendering: optimizeLegibility;
@@ -94,4 +94,23 @@ th:not(:last-child) .cell {
 
 pre code.hljs {
   padding: 0;
+}
+
+.upload-error {
+  border: 1px solid rgb(248 113 113 /400);
+  border-radius: 8px;
+}
+
+.icon-menu-collapse {
+  transform: scaleX(-1);
+}
+
+.icon-menu-expend {
+  position: absolute;
+  left: 280px;
+}
+
+.login-bg {
+  background-image: url('@/assets/images/imgenie_login_bg.jpg');
+  background-size: cover;
 }

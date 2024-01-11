@@ -59,12 +59,3 @@ const collapseSideMenu = () => {
   useLayoutStore().sideMenu.collapse = !useLayoutStore().sideMenu.collapse;
 };
 </script>
-<style>
-.icon-menu-collapse {
-  transform: scaleX(-1);
-}
-.icon-menu-expend {
-  position: absolute;
-  left: 280px;
-}
-</style>
