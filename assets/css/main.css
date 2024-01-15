@@ -1,5 +1,5 @@
-@import url('highlight.js/styles/atom-one-dark-reasonable.css');
-@import url('assets/css/element.css');
+@import url("highlight.js/styles/atom-one-dark-reasonable.css");
+@import url("assets/css/element.css");
 
 html {
   font-size: 16px;
@@ -17,7 +17,7 @@ body {
   margin: 0;
   line-height: 1.6;
   font-family:
-    'Noto Sans TC',
+    "Noto Sans TC",
     -apple-system,
     sans-serif;
   text-rendering: optimizeLegibility;
@@ -111,6 +111,6 @@ pre code.hljs {
 }
 
 .login-bg {
-  background-image: url('@/assets/images/imgenie_login_bg.jpg');
+  background-image: url("@/assets/images/imgenie_login_bg.jpg");
   background-size: cover;
 }

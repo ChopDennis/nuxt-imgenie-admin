@@ -41,7 +41,7 @@
         class="w-full"
         type="primary"
         size="large"
-        @click="login.clickLoginButton(loginFormRef, credentials)"
+        @click="keycloakApi.login(credentials)"
         ><div class="text-2xl font-bold" style="line-height: 34px">登入</div>
       </ElButton>
     </div>
@@ -49,11 +49,6 @@
 </template>
 <script setup lang="ts">
 import type { FormInstance, FormRules } from "element-plus";
-
-interface Credentials {
-  account: string;
-  password: string;
-}
 
 definePageMeta({
   layout: "login",
@@ -63,8 +58,8 @@ const credentials = reactive<Credentials>({
   account: "",
   password: "",
 });
-useRoute();
-const login = new UseLogin();
+
+const keycloakApi = useKeycloakApi();
 const loginFormRef = ref<FormInstance>();
 const loginFormRules = reactive<FormRules<Credentials>>({
   account: [{ required: true, message: "請輸入帳號", trigger: "blur" }],

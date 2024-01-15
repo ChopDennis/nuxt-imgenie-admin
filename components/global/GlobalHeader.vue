@@ -26,7 +26,9 @@
         :offset="0"
       >
         <template #content>
-          <ElButton style="border: 0px; box-shadow: none" @click="goToLogin"
+          <ElButton
+            style="border: 0px; box-shadow: none"
+            @click="useKeycloakApi().logout()"
             >登出</ElButton
           >
         </template>
@@ -39,15 +41,8 @@
 </template>
 <script setup lang="ts">
 import { jwtDecode } from "jwt-decode";
-const { signOut, token } = useAuth();
+const token = useCookie("AccessToken");
 const jwtName = computed(() => {
   return token.value ? jwtDecode(token.value).preferred_username : "";
 });
-const goToLogin = async () => {
-  try {
-    await signOut({ callbackUrl: "/" });
-  } catch (error) {
-    console.error(error); // eslint-disable-line no-console
-  }
-};
 </script>

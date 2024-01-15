@@ -42,7 +42,9 @@
 <script setup lang="ts">
 const isLoading = useLoading();
 const isCollapse = computed(() => useLayoutStore().sideMenu.collapse);
-const titleInfo = computed(() => useLayoutStore().pageLayout[useRoute().path]);
+const titleInfo = computed(
+  () => useLayoutStore().pageLayout[useRoute().path] || "",
+);
 const isConnTypes = openConnectionTypes();
 
 const clickBtn = async (btn: string) => {

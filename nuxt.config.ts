@@ -9,30 +9,6 @@ export default defineNuxtConfig({
           }
         : false,
   },
-  auth: {
-    provider: {
-      type: "refresh",
-      pages: {
-        login: "/",
-      },
-      token: {
-        signInResponseTokenPointer: "/accessToken",
-        maxAgeInSeconds: 60 * 14,
-      },
-      refreshToken: {
-        signInResponseRefreshTokenPointer: "/refreshToken",
-        maxAgeInSeconds: 60 * 60 * 23,
-      },
-    },
-    baseURL:
-      process.env.NODE_ENV === "production"
-        ? "https://imgenie-app-admin-pcpt4o333q-de.a.run.app"
-        : "http://localhost:3000",
-    session: {
-      enableRefreshPeriodically: false,
-      enableRefreshOnWindowFocus: false,
-    },
-  },
   css: ["@/assets/css/main.css"],
   devtools: {
     enabled: false,
@@ -46,7 +22,6 @@ export default defineNuxtConfig({
   modules: [
     "@pinia/nuxt",
     "@nuxtjs/tailwindcss",
-    "@sidebase/nuxt-auth",
     "nuxt-security",
     "nuxt-lodash",
     "@element-plus/nuxt",
@@ -89,7 +64,10 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiBase: "https://imgenie-app-gl-pcpt4o333q-de.a.run.app/v1",
+      apiBase:
+        process.env.NODE_ENV === "production"
+          ? "https://imgenie-app-lab-gl-qxzqub6ffa-de.a.run.app/v1"
+          : "https://imgenie-app-gl-pcpt4o333q-de.a.run.app/v1",
     },
   },
 });

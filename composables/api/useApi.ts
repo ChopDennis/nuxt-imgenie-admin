@@ -1,5 +1,4 @@
 import { v4 as uuidv4 } from "uuid";
-import { jwtDecode } from "jwt-decode";
 import type { AsyncData } from "nuxt/dist/app/composables";
 
 interface ApiResponse<T = any> {
@@ -35,9 +34,7 @@ export const useApi = <T>(
   const headers = new Headers();
   const uuid = uuidv4();
   const isLoading = useLoading();
-  const { token, refresh, status } = useAuth();
 
-  let isTokenValid = false;
   let body: any = {};
   let isEncrypt: boolean = false;
 
@@ -52,26 +49,11 @@ export const useApi = <T>(
     isEncrypt = true;
   }
 
-  if (status.value === "authenticated" && token.value) {
-    const jwtExp = jwtDecode(token.value).exp;
-    if (jwtExp) {
-      const expDate = new Date(jwtExp * 1000);
-      const currentDate = new Date();
-      expDate.setMinutes(expDate.getMinutes() - 1);
-      isTokenValid = currentDate < expDate;
-    }
-  } else {
-    // refresh();
-    throw new Error("登入驗證失敗");
-  }
-
   return useFetch(url, {
     method: "post",
     headers,
     body,
-    async onRequest() {
-      if (!isTokenValid) await refresh();
-      if (token.value) headers.append("Authorization", token.value);
+    onRequest() {
       headers.append("TXNSEQ", uuid);
       headers.append("IS_ENCRYPT", _useToString(isEncrypt));
       headers.append(
@@ -100,6 +82,14 @@ export const useApi = <T>(
           ElNotification({
             title: "系統訊息",
             message: "儲存成功",
+            type: "success",
+            duration: 3000,
+          });
+        }
+        if (url === "/api/keycloak/manager-login") {
+          ElNotification({
+            title: "系統訊息",
+            message: "登入成功",
             type: "success",
             duration: 3000,
           });

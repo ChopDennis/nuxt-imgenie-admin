@@ -14,8 +14,7 @@ export default defineEventHandler(async (event) => {
 
   headers.append("TXNSEQ", getHeader(event, "TXNSEQ") as string);
   headers.append("IS_ENCRYPT", getHeader(event, "IS_ENCRYPT") as string);
-  headers.append("REFRESH_TOKEN", getHeader(event, "REFRESH_TOKEN") as string);
-  headers.append("Authorization", getHeader(event, "Authorization") as string);
+  headers.append("Authorization", getCookie(event, "AccessToken") as string);
 
   const response = await $fetch(`${baseUrl}/datamart/${url}`, {
     method: "post",
