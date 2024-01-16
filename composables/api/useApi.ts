@@ -26,14 +26,20 @@ export const useLoading = () => {
   return useState<boolean>("isLoading", () => false);
 };
 
-export const useApi = <T>(
+export const useApi = async <T>(
   url: string,
   options?: ApiOptions,
-): AsyncData<ApiResponse<T>, Error | null> => {
+): Promise<AsyncData<ApiResponse<T>, Error | null>> => {
   const nuxtApp = useNuxtApp();
   const headers = new Headers();
   const uuid = uuidv4();
   const isLoading = useLoading();
+
+  const isLogin = await useKeycloakApi().checkAuth();
+  if (!_useIncludes(url, "admin") && !isLogin) {
+    const isRefresh = await useKeycloakApi().refresh();
+    url = isRefresh ? url : "/api/redirect";
+  }
 
   let body: any = {};
   let isEncrypt: boolean = false;
@@ -105,6 +111,9 @@ export const useApi = <T>(
         duration: 3000,
       });
       console.log(response._data); // eslint-disable-line no-console
+      if (response._data.code === "KY_V0001") {
+        navigateTo("/");
+      }
     },
     getCachedData: (key) =>
       options?.cached ? nuxtApp.payload.data[key] : null,

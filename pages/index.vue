@@ -41,7 +41,7 @@
         class="w-full"
         type="primary"
         size="large"
-        @click="keycloakApi.login(credentials)"
+        @click="keycloakApi.login({ ...credentials })"
         ><div class="text-2xl font-bold" style="line-height: 34px">登入</div>
       </ElButton>
     </div>

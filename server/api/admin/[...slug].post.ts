@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const headers = new Headers();
 
   headers.append("TXNSEQ", getHeader(event, "TXNSEQ") as string);
-  const response: any = await $fetch(`${baseUrl}/keycloak/${url}`, {
+  const response: any = await $fetch(`${baseUrl}/admin/${url}`, {
     method: "post",
     headers,
     body,
