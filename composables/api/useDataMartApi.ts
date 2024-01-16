@@ -74,10 +74,8 @@ export default function useDataMartApi() {
     });
     const save = data.value as ApiResponse;
     if (save.code === ApiResponseCode.Success) {
-      await getTable();
-      // resetForm();
+      navigateTo({ path: "/data-mart" });
     }
-    return save.code === ApiResponseCode.Success;
   };
 
   const sendUpdate = async (datamartId: string, isActivate: boolean) => {

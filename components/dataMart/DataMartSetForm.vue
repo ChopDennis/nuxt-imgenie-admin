@@ -15,7 +15,16 @@
         >
           <ElFormItem label="資料模型名稱" prop="datamartName">
             <div class="ml-2 w-full">
-              <ElInput v-model="dataMartStore.setting.datamartName"></ElInput>
+              <ElInput
+                v-model="dataMartStore.setting.datamartName"
+                maxlength="60"
+              ></ElInput>
+            </div>
+            <div class="flex justify-between w-full pl-2">
+              <div>限制 60 字元</div>
+              <div class="text-gray-400">
+                {{ dataMartStore.setting.datamartName.length }}/60
+              </div>
             </div>
           </ElFormItem>
           <ElFormItem label="資料模型說明" prop="description">
@@ -26,7 +35,6 @@
                 type="textarea"
                 resize="none"
                 maxlength="100"
-                style=""
               ></ElInput>
             </div>
             <div class="flex justify-between w-full pl-2">
@@ -193,8 +201,6 @@ const clickUpload = async () => {
   formData.append("file", dataMartStore.dbml as File);
   if (valid && !isNull(dataMartStore.dbml)) {
     await useDataMartApi().sendSave(formData);
-    await useDataMartApi().getTable();
-    navigateTo({ path: "/data-mart" });
   } else {
     emits("showError", "請上傳DBML(必填)");
   }

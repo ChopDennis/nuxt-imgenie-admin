@@ -17,7 +17,7 @@
     </DataMartSetForm>
     <ElDialog
       v-model="dbmlPreviewDialog"
-      width="auto"
+      width="800"
       :title="store.setting.fileName"
       modal-class="backdrop-blur-sm"
       :destroy-on-close="true"

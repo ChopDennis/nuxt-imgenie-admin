@@ -28,7 +28,9 @@
       <div class="text-red-400 p-1 text-xs">{{ props.errorMessage }}</div>
     </div>
     <div v-else class="flex w-full">
-      <div class="flex justify-between w-full border pl-4 mr-4 rounded-lg">
+      <div
+        class="flex justify-between w-full border pl-4 mr-4 rounded-lg overflow-hidden"
+      >
         <div>{{ store.setting.fileName }}</div>
         <div class="flex justify-center w-8 h-8" @click="clickRemoveIcon">
           <ElIconCircleCloseFilled width="14" class="self-center" />
