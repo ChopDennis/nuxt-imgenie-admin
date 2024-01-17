@@ -21,11 +21,11 @@ export default function useKeycloakApi() {
         const expirationTime = decodedToken.exp * 1000;
         const currentTime = Date.now();
         const isTokenExpire = expirationTime - currentTime <= 60 * 1000;
-        // console.log(
-        //   `AccessToken will expire in: ${Math.ceil(
-        //     (expirationTime - currentTime) / 60 / 1000,
-        //   )} mins`,
-        // );
+        const timeRemains = Math.ceil(
+          (expirationTime - currentTime) / 60 / 1000,
+        );
+        // eslint-disable-next-line no-console
+        console.warn(`AccessToken will expire in: ${timeRemains} mins`);
         if (isTokenExpire) {
           accessToken.value = null;
         }
@@ -56,11 +56,11 @@ export default function useKeycloakApi() {
       const expirationTime = decodedToken.exp ? decodedToken.exp * 1000 : 0;
       const currentTime = Date.now();
       const isTokenExpire = expirationTime - currentTime <= 60 * 1000;
-      // console.log(
-      //   `RefreshToken will expire in: ${Math.ceil(
-      //     (expirationTime - currentTime) / 3600 / 1000,
-      //   )} hours`,
-      // );
+      const timeRemains = Math.ceil(
+        (expirationTime - currentTime) / 3600 / 1000,
+      );
+      // eslint-disable-next-line no-console
+      console.warn(`RefreshToken will expire in: ${timeRemains} hours`);
       if (isTokenExpire) {
         refreshToken.value = null;
         navigateTo("/");

@@ -37,8 +37,7 @@ export const useApi = async <T>(
 
   const isLogin = await useKeycloakApi().checkAuth();
   if (!_useIncludes(url, "admin") && !isLogin) {
-    const isRefresh = await useKeycloakApi().refresh();
-    url = isRefresh ? url : "/api/redirect";
+    await useKeycloakApi().refresh();
   }
 
   let body: any = {};
@@ -92,7 +91,7 @@ export const useApi = async <T>(
             duration: 3000,
           });
         }
-        if (url === "/api/keycloak/manager-login") {
+        if (url === "/api/admin/manager-login") {
           ElNotification({
             title: "系統訊息",
             message: "登入成功",
