@@ -26,6 +26,10 @@ const changActivate = async (id: string, value: boolean) => {
       state = await useDataMartApi().sendUpdate(id, !value);
       break;
     }
+    case "/user-group": {
+      state = await useUserGroup().updateUserGroups(id, !value);
+      break;
+    }
     default: {
       state = false;
       break;

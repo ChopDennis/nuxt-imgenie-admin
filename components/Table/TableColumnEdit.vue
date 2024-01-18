@@ -37,6 +37,9 @@ const clickEdit = async (id: string) => {
     case "/user-group": {
       navigateTo({
         path: "/user-group/edit",
+        query: {
+          userGroupId: id,
+        },
       });
       break;
     }

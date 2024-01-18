@@ -113,6 +113,9 @@
   </div>
 </template>
 <script setup lang="ts">
+onNuxtReady(async () => {
+  await useUserGroup().getUserGroupMembers();
+});
 const group = ref(["1"]);
 const member = ref(["1"]);
 const memberList = ref([

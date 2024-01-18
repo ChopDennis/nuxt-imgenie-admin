@@ -118,6 +118,14 @@ export const useApi = async <T>(
       options?.cached ? nuxtApp.payload.data[key] : null,
     transform: (response: ApiResponse) => {
       if (options?.decrypt) response.data = decryptData(response.data, uuid);
+
+      if (url === "/api/admin/group/user-groups") {
+        response.data = _useMap(response.data, (group) => {
+          return _useMapKeys(group, (_, key) => {
+            return key === "userGroupid" ? "id" : key;
+          });
+        });
+      }
       return response;
     },
     immediate: options?.immediate,
