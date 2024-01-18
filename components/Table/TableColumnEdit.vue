@@ -20,6 +20,7 @@ const clickEdit = async (id: string) => {
       break;
     }
     case "/data-mart": {
+      useDataMartApi().resetForm();
       navigateTo({
         path: "/data-mart/edit",
         query: {

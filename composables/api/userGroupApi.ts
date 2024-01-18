@@ -1,7 +1,7 @@
 enum UserGroupApi {
   users = "/api/admin/group/users",
   userGroups = "/api/admin/group/user-groups",
-  saveUserGroups = "/api/admin/group/save-user-groups",
+  saveUserGroup = "/api/admin/group/save-user-group",
   userGroupMembers = "/api/admin/group/user-group-members",
 }
 
@@ -16,8 +16,8 @@ const getUserGroupMembersApi = (userGroupId: string) =>
     },
   });
 
-const saveUserGroupsApi = (userGroupId: string, isActivate: boolean) =>
-  useApi<UserGroups>(UserGroupApi.saveUserGroups, {
+const saveUserGroupApi = (userGroupId: string, isActivate: boolean) =>
+  useApi<UserGroups>(UserGroupApi.saveUserGroup, {
     params: {
       userGroupId,
       isActivate,
@@ -28,5 +28,5 @@ export {
   getUsersApi,
   getUserGroupsApi,
   getUserGroupMembersApi,
-  saveUserGroupsApi,
+  saveUserGroupApi,
 };

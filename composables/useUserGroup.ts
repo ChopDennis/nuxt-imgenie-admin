@@ -17,11 +17,11 @@ export default function useUserGroup() {
     userGroupStore.members = response.value.data;
   };
 
-  const updateUserGroups = async (
+  const updateUserGroup = async (
     userGroupId: string,
     isActivate: boolean,
   ): Promise<boolean> => {
-    const { data: response } = await saveUserGroupsApi(userGroupId, isActivate);
+    const { data: response } = await saveUserGroupApi(userGroupId, isActivate);
     return response.value.code === ApiResponseCode.Success;
   };
 
@@ -29,6 +29,6 @@ export default function useUserGroup() {
     getUsers,
     getUserGroups,
     getUserGroupMembers,
-    updateUserGroups,
+    updateUserGroup,
   };
 }

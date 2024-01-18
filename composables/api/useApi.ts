@@ -122,7 +122,7 @@ export const useApi = async <T>(
       if (url === "/api/admin/group/user-groups") {
         response.data = _useMap(response.data, (group) => {
           return _useMapKeys(group, (_, key) => {
-            return key === "userGroupid" ? "id" : key;
+            return key === "userGroupId" ? "id" : key;
           });
         });
       }

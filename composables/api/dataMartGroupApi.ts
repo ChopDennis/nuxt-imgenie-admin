@@ -1,6 +1,6 @@
 enum DataMartGroupApi {
   datamartGroups = "/api/admin/group/datamart-groups",
-  saveDatamartGroups = "/api/admin/group/save-datamart-groups",
+  saveDatamartGroup = "/api/admin/group/save-datamart-group",
   datamartGroupMembers = "/api/admin/group/datamart-group-members",
 }
 
@@ -15,7 +15,7 @@ const getDataMartGroupMembersApi = (datamartGroupId: string) =>
   });
 
 const saveDataMartGroupApi = (datamartGroupId: string, isActivate: boolean) =>
-  useApi(DataMartGroupApi.saveDatamartGroups, {
+  useApi(DataMartGroupApi.saveDatamartGroup, {
     params: {
       datamartGroupId,
       isActivate,

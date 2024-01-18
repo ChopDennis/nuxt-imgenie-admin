@@ -27,7 +27,7 @@ const changActivate = async (id: string, value: boolean) => {
       break;
     }
     case "/user-group": {
-      state = await useUserGroup().updateUserGroups(id, !value);
+      state = await useUserGroup().updateUserGroup(id, !value);
       break;
     }
     case "/data-mart-group": {
