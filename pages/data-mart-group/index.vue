@@ -1,10 +1,11 @@
 <template>
   <div>
-    <GlobalSortableTable :list="list">
+    <GlobalSortableTable :list="dataMartGroupStore.groups">
       <template #column>
-        <ElTableColumn prop="groupName" label="群組名稱" sortable />
+        <ElTableColumn prop="datamartGroupName" label="群組名稱" sortable />
         <ElTableColumn prop="description" label="簡述" sortable />
         <ElTableColumn prop="createTime" label="建立時間" sortable />
+        <TableColumnIsActivate />
         <!-- 操作 -->
         <TableColumnEdit />
       </template>
@@ -12,11 +13,8 @@
   </div>
 </template>
 <script setup>
-const list = ref([
-  {
-    groupName: "群組測試",
-    description: "群組測試、群組測試、群組測試、群組測試",
-    createTime: "2024-01-02",
-  },
-]);
+const dataMartGroupStore = useDataMartGroupStore();
+onNuxtReady(async () => {
+  await useDataMartGroup().getDataMartGroup();
+});
 </script>

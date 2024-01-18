@@ -319,6 +319,9 @@
   </div>
 </template>
 <script setup lang="ts">
+onNuxtReady(async () => {
+  await useDataMartGroup().getDataMartGroupMembers();
+});
 const icons = useDbConnIcons();
 
 const userGroup = ref(["1"]);

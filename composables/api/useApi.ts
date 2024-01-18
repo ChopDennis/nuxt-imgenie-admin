@@ -126,6 +126,13 @@ export const useApi = async <T>(
           });
         });
       }
+      if (url === "/api/admin/group/datamart-groups") {
+        response.data = _useMap(response.data, (group) => {
+          return _useMapKeys(group, (_, key) => {
+            return key === "datamartGroupId" ? "id" : key;
+          });
+        });
+      }
       return response;
     },
     immediate: options?.immediate,

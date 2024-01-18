@@ -31,6 +31,9 @@ const clickEdit = async (id: string) => {
     case "/data-mart-group": {
       navigateTo({
         path: "/data-mart-group/edit",
+        query: {
+          datamartGroupId: id,
+        },
       });
       break;
     }
