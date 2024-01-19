@@ -61,10 +61,6 @@ export const useApi = async <T>(
     onRequest() {
       headers.append("TXNSEQ", uuid);
       headers.append("IS_ENCRYPT", _useToString(isEncrypt));
-      headers.append(
-        "ID_TOKEN",
-        uuid.replace(/-/g, "").split("").reverse().join("").toString(),
-      );
       isLoading.value = options?.loading ?? false;
     },
     onResponse({ response }) {

@@ -7,7 +7,6 @@ export default defineEventHandler(async (event) => {
 
   if (url === "datamart/save") {
     body = await readFormData(event);
-    headers.append("id_token", getHeader(event, "id_token") as string);
   } else {
     body = await readBody(event);
   }

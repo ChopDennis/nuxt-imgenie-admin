@@ -5,7 +5,9 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const headers = new Headers();
   headers.append("TXNSEQ", getHeader(event, "TXNSEQ") as string);
-  headers.append("Authorization", getCookie(event, "AccessToken") as string);
+  if (url !== "manager-login" && url !== "refreshToken") {
+    headers.append("Authorization", getCookie(event, "AccessToken") as string);
+  }
   const response: any = await $fetch(`${baseUrl}/admin/${url}`, {
     method: "post",
     headers,
