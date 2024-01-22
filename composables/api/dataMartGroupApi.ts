@@ -8,22 +8,27 @@ const getDataMartGroupsApi = () =>
   useApi<DataMartGroup[]>(DataMartGroupApi.datamartGroups);
 
 const getDataMartGroupMembersApi = (datamartGroupId: string) =>
-  useApi<DatamartGroupMembers[]>(DataMartGroupApi.datamartGroupMembers, {
+  useApi<DatamartGroupMembers>(DataMartGroupApi.datamartGroupMembers, {
     params: {
       datamartGroupId,
     },
   });
 
-const saveDataMartGroupApi = (datamartGroupId: string, isActivate: boolean) =>
+const updateDataMartGroupApi = (datamartGroupId: string, isActivate: boolean) =>
   useApi(DataMartGroupApi.saveDatamartGroup, {
     params: {
       datamartGroupId,
       isActivate,
     },
   });
+const saveDataMartGroupApi = (params: any) =>
+  useApi(DataMartGroupApi.saveDatamartGroup, {
+    params,
+  });
 
 export {
   getDataMartGroupsApi,
   getDataMartGroupMembersApi,
   saveDataMartGroupApi,
+  updateDataMartGroupApi,
 };

@@ -17,10 +17,15 @@ export default function useDataMartGroup() {
     datamartGroupId: string,
     isActivate: boolean,
   ) => {
-    const { data: response } = await saveDataMartGroupApi(
+    const { data: response } = await updateDataMartGroupApi(
       datamartGroupId,
       isActivate,
     );
+    return response.value.code === ApiResponseCode.Success;
+  };
+
+  const saveDataMartGroup = async (params: any) => {
+    const { data: response } = await saveDataMartGroupApi(params);
     return response.value.code === ApiResponseCode.Success;
   };
 
@@ -28,5 +33,6 @@ export default function useDataMartGroup() {
     getDataMartGroup,
     getDataMartGroupMembers,
     updateDataMartGroup,
+    saveDataMartGroup,
   };
 }

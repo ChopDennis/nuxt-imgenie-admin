@@ -25,7 +25,7 @@ interface DatamartGroupMembers extends DataMartGroup {
 
 interface DataMartGroupStoreState {
   groups: DataMartGroup[];
-  members: DatamartGroupMembers[];
+  members: DatamartGroupMembers;
 }
 
 export type { DataMartGroup, DatamartGroupMembers };
@@ -34,7 +34,16 @@ export const useDataMartGroupStore = defineStore("dataMartGroup", {
   state: (): DataMartGroupStoreState => {
     return {
       groups: [],
-      members: [],
+      members: {
+        datamartGroupId: "",
+        datamartGroupName: "",
+        description: "",
+        isActivate: false,
+        createTime: "",
+        datamarts: [],
+        userGroups: [],
+        users: [],
+      },
     };
   },
 });

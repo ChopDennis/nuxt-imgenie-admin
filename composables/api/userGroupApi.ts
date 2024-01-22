@@ -10,23 +10,28 @@ const getUsersApi = () => useApi<Users[]>(UserGroupApi.users);
 const getUserGroupsApi = () => useApi<UserGroups[]>(UserGroupApi.userGroups);
 
 const getUserGroupMembersApi = (userGroupId: string) =>
-  useApi<UserGroupMembers[]>(UserGroupApi.userGroupMembers, {
+  useApi<UserGroupMembers>(UserGroupApi.userGroupMembers, {
     params: {
       userGroupId,
     },
   });
 
-const saveUserGroupApi = (userGroupId: string, isActivate: boolean) =>
+const updateUserGroupApi = (userGroupId: string, isActivate: boolean) =>
   useApi<UserGroups>(UserGroupApi.saveUserGroup, {
     params: {
       userGroupId,
       isActivate,
     },
   });
+const saveUserGroupApi = (params: any) =>
+  useApi<UserGroups>(UserGroupApi.saveUserGroup, {
+    params,
+  });
 
 export {
   getUsersApi,
   getUserGroupsApi,
   getUserGroupMembersApi,
+  updateUserGroupApi,
   saveUserGroupApi,
 };

@@ -78,7 +78,8 @@ export const useApi = async <T>(
       if (response._data.code === ApiResponseCode.Success) {
         if (
           url === "/api/datamart/datamart/save" ||
-          url === "/api/datamart/dbconnection/save"
+          url === "/api/datamart/dbconnection/save" ||
+          url === "/api/admin/group/save-user-group"
         ) {
           ElNotification({
             title: "系統訊息",

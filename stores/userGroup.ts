@@ -24,7 +24,7 @@ interface UserGroupMembers {
 interface UserGroupStoreState {
   users: Users[];
   groups: UserGroups[];
-  members: UserGroupMembers[];
+  members: UserGroupMembers;
 }
 
 export type { Users, UserGroups, UserGroupMembers };
@@ -33,7 +33,12 @@ export const useUserGroupStore = defineStore("userGroup", {
   state: (): UserGroupStoreState => {
     return {
       groups: [],
-      members: [],
+      members: {
+        userGroupId: "",
+        userGroupName: "",
+        description: "",
+        users: [],
+      },
       users: [],
     };
   },

@@ -21,8 +21,44 @@ export default function useUserGroup() {
     userGroupId: string,
     isActivate: boolean,
   ): Promise<boolean> => {
-    const { data: response } = await saveUserGroupApi(userGroupId, isActivate);
+    const { data: response } = await updateUserGroupApi(
+      userGroupId,
+      isActivate,
+    );
     return response.value.code === ApiResponseCode.Success;
+  };
+
+  const saveUserGroup = async (): Promise<boolean> => {
+    const { userGroupId, userGroupName, description, users } =
+      userGroupStore.members;
+    const userIds = _useMap(users, "userId");
+    let params;
+    if (!isEmpty(userGroupId)) {
+      params = {
+        userGroupId,
+        groupName: userGroupName,
+        description,
+        userIds,
+      };
+    } else {
+      params = {
+        groupName: userGroupName,
+        description,
+        userIds,
+      };
+    }
+
+    const { data: response } = await saveUserGroupApi(params);
+    return response.value.code === ApiResponseCode.Success;
+  };
+
+  const resetUserGroup = () => {
+    userGroupStore.members = {
+      userGroupId: "",
+      userGroupName: "",
+      description: "",
+      users: [],
+    };
   };
 
   return {
@@ -30,5 +66,7 @@ export default function useUserGroup() {
     getUserGroups,
     getUserGroupMembers,
     updateUserGroup,
+    saveUserGroup,
+    resetUserGroup,
   };
 }
