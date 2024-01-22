@@ -22,7 +22,6 @@ export default defineNuxtConfig({
   modules: [
     "@pinia/nuxt",
     "@nuxtjs/tailwindcss",
-    "nuxt-security",
     "nuxt-lodash",
     "@element-plus/nuxt",
     [
@@ -55,13 +54,13 @@ export default defineNuxtConfig({
       },
     },
   },
-  routeRules: {
-    "/api/datamart/datamart/save": {
-      security: {
-        xssValidator: false,
-      },
-    },
-  },
+  // routeRules: {
+  //   "/api/datamart/datamart/save": {
+  //     security: {
+  //       xssValidator: false,
+  //     },
+  //   },
+  // },
   runtimeConfig: {
     public: {
       apiBase:

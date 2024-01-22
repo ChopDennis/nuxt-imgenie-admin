@@ -19,6 +19,14 @@ export default defineEventHandler(async (event) => {
     method: "post",
     headers,
     body,
+    onRequest({ request }) {
+      console.log(
+        "New Request ==============================================================",
+      );
+      console.log("getRequestURL - ", request);
+      console.log("getRequestHeaders - ", headers);
+      console.log("getRequestBody - ", body);
+    },
     onResponse({ response }) {
       if (response.headers.has("content-disposition")) {
         if (response.headers.get("content-disposition")) {

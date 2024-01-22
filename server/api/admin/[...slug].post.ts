@@ -17,6 +17,14 @@ export default defineEventHandler(async (event) => {
         setResponseStatus(event, 400, "");
       }
     },
+    onRequest({ request }) {
+      console.log(
+        "New Request ==============================================================",
+      );
+      console.log("getRequestURL - ", request);
+      console.log("getRequestHeaders - ", headers);
+      console.log("getRequestBody - ", body);
+    },
   }).catch((error) => {
     return error.data;
   });
