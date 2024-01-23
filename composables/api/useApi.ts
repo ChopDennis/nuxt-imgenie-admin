@@ -68,10 +68,11 @@ export const useApi = async <T>(
       if (url === "/api/datamart/datamart/export-file") {
         if (response.headers.has("content-disposition")) {
           if (response.headers.get("content-disposition")) {
-            localStorage.setItem(
-              "fileName",
-              response.headers.get("Content-Disposition") as string,
-            );
+            const doubleEncodedString = response.headers.get(
+              "Content-Disposition",
+            ) as string;
+            const decodedOnce = decodeURIComponent(doubleEncodedString);
+            localStorage.setItem("fileName", decodeURIComponent(decodedOnce));
           }
         }
       }
