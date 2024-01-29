@@ -1,16 +1,20 @@
-enum Api {
-  List = "/api/datamart/datamart/all",
+enum DataMartApi {
+  All = "/api/datamart/datamart/all",
+  List = "/api/datamart/datamart/list",
   Update = "/api/datamart/datamart/update",
   Query = "/api/datamart/datamart/query",
   Save = "/api/datamart/datamart/save",
   Export = "/api/datamart/datamart/export-file",
 }
 
+export const getDataMartListApi = () =>
+  useApi<DataMartList[]>(DataMartApi.List);
+
 export default function useDataMartApi() {
   const dataMartStore = useDataMartStore();
 
   const getTable = async () => {
-    const { data } = await useApi<DataMartList[]>(Api.List);
+    const { data } = await useApi<DataMartList[]>(DataMartApi.All);
     const res = data.value;
     dataMartStore.table = _useMap(res.data, (list) => {
       const {
@@ -18,11 +22,13 @@ export default function useDataMartApi() {
         dataMartName,
         connName,
         dbType,
+        connId,
         isActivate,
       } = list;
       return {
         id,
         dataMartName,
+        connId,
         connName,
         dbType,
         isActivate,
@@ -32,7 +38,7 @@ export default function useDataMartApi() {
 
   const getQuery = async () => {
     const datamartId = _useToString(useRoute().query.datamartId);
-    const { data } = await useApi<DataMartQuery>(Api.Query, {
+    const { data } = await useApi<DataMartQuery>(DataMartApi.Query, {
       params: {
         datamartId,
       },
@@ -55,7 +61,7 @@ export default function useDataMartApi() {
 
   const getExport = async () => {
     const datamartId = _useToString(useRoute().query.datamartId);
-    const { data } = await useApi(Api.Export, {
+    const { data } = await useApi(DataMartApi.Export, {
       params: {
         datamartId,
       },
@@ -68,7 +74,7 @@ export default function useDataMartApi() {
   };
 
   const sendSave = async (params: FormData) => {
-    const { data } = await useApi(Api.Save, {
+    const { data } = await useApi(DataMartApi.Save, {
       params,
       loading: true,
     });
@@ -79,7 +85,7 @@ export default function useDataMartApi() {
   };
 
   const sendUpdate = async (datamartId: string, isActivate: boolean) => {
-    const { data } = await useApi(Api.Update, {
+    const { data } = await useApi(DataMartApi.Update, {
       params: {
         datamartId,
         isActivate,
@@ -108,6 +114,7 @@ export default function useDataMartApi() {
 
   return {
     getTable,
+    getDataMartListApi,
     getQuery,
     getExport,
     sendSave,

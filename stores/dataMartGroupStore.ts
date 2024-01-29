@@ -23,12 +23,21 @@ interface DatamartGroupMembers extends DataMartGroup {
   }[];
 }
 
+interface DataMartGroupSave {
+  datamartGroupName: string;
+  description: string;
+  datamartIds: string[];
+  userIds: string[];
+  userGroupIds: string[];
+}
+
 interface DataMartGroupStoreState {
   groups: DataMartGroup[];
   members: DatamartGroupMembers;
+  save: DataMartGroupSave;
 }
 
-export type { DataMartGroup, DatamartGroupMembers };
+export type { DataMartGroup, DatamartGroupMembers, DataMartGroupSave };
 
 export const useDataMartGroupStore = defineStore("dataMartGroup", {
   state: (): DataMartGroupStoreState => {
@@ -43,6 +52,13 @@ export const useDataMartGroupStore = defineStore("dataMartGroup", {
         datamarts: [],
         userGroups: [],
         users: [],
+      },
+      save: {
+        datamartGroupName: "",
+        description: "",
+        datamartIds: [],
+        userGroupIds: [],
+        userIds: [],
       },
     };
   },

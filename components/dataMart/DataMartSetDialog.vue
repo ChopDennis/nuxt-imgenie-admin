@@ -82,6 +82,24 @@
               </div>
             </template>
           </ElOption>
+          <ElOption
+            v-if="dataMartStore.default.isDefaultSet"
+            :label="dataMartStore.default.defaultConnName"
+            :value="dataMartStore.default.defaultConnId"
+            :disabled="true"
+          >
+            <template #default>
+              <div class="flex flex-col pb-2 rounded-lg">
+                <div class="px-3 py-1">
+                  {{ dataMartStore.default.defaultConnName }}
+                </div>
+
+                <div class="text-xs px-3" style="color: #ff4d4f">
+                  資料庫連線已修改，請確認連線設定資訊是否正確
+                </div>
+              </div>
+            </template></ElOption
+          >
         </ElSelect>
       </ElFormItem>
       <ElFormItem label="Schema">
@@ -121,16 +139,28 @@ const searchText = ref("");
 
 onNuxtReady(async () => {
   await useDbConnectionApi().getList();
+
+  if (!isConnectionActivate(dataMartStore.setting.connId)) {
+    dataMartStore.default.isDefaultSet = true;
+    dataMartStore.default.defaultConnName = dataMartStore.setting.connName;
+    dataMartStore.default.defaultConnId = dataMartStore.setting.connId;
+  } else {
+    dataMartStore.default.isDefaultSet = false;
+  }
+
   await useDbConnectionApi().getTypes();
+  console.log(select);
   if (useRoute().query.datamartId) {
     await useDbConnectionApi().getSchemas(dataMartStore.setting.connId);
     select.connId = dataMartStore.setting.connId;
     select.schemas = dataMartStore.setting.dbName;
     select.dbType = dataMartStore.setting.dbType;
+    console.log(select);
   } else {
     select.connId = dbConnStore.select.connId;
     select.schemas = dataMartStore.setting.dbName;
     select.dbType = dbConnStore.select.dbType;
+    console.log(select);
   }
 });
 
@@ -157,6 +187,7 @@ const changeSelectConn = async () => {
   dbConnStore.schemas = [];
   select.schemas = "";
   await useDbConnectionApi().getSchemas(dataMartStore.setting.connId);
+  emits("uploadButton", false);
 };
 const changeSelectSchemas = () => {
   dataMartStore.setting.dbName = select.schemas;
@@ -170,4 +201,18 @@ const changeDbType = () => {
   dbConnStore.schemas = [];
   emits("uploadButton", false);
 };
+
+const isConnectionActivate = (connId: string) => {
+  const connIdList = _useMap(dbConnStore.list, "connId");
+  return _useIncludes(connIdList, connId);
+};
 </script>
+<style>
+.el-select-dropdown .el-select-dropdown__item.is-disabled.selected {
+  color: #20222f !important;
+}
+
+.el-select-dropdown__item.is-disabled {
+  background-color: #fff2f0 !important;
+}
+</style>

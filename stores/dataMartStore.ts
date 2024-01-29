@@ -17,12 +17,12 @@ export interface DataMartList {
   connName: string;
   icon: string;
   isActivate: boolean;
-  createTIme: string;
   updateTime: string;
 }
 
 interface DataMartTable {
   id: string;
+  connId: string;
   connName: string;
   dataMartName: string;
   dbType: string;
@@ -57,15 +57,22 @@ export interface DataMartSetting {
 }
 interface DataMartStoreState {
   table: DataMartTable[];
+  list: DataMartList[];
   query: DataMartQuery;
   setting: DataMartSetting;
   dbml: UploadRawFile | File | null;
+  default: {
+    isDefaultSet: boolean;
+    defaultConnName: string;
+    defaultConnId: string;
+  };
 }
 
 export const useDataMartStore = defineStore("dataMart", {
   state: (): DataMartStoreState => {
     return {
       table: [],
+      list: [],
       query: {
         datamartId: "",
         datamartName: "",
@@ -98,6 +105,11 @@ export const useDataMartStore = defineStore("dataMart", {
         isActivate: true,
       },
       dbml: null,
+      default: {
+        isDefaultSet: false,
+        defaultConnId: "",
+        defaultConnName: "",
+      },
     };
   },
 });

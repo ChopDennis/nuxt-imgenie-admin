@@ -1,5 +1,5 @@
 interface UserGroups {
-  id: string;
+  userGroupId: string;
   userGroupName: string;
   description: string;
   isActivate: boolean;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <GlobalSortableTable :list="userGroupStore.groups">
+    <GlobalSortableTable :list="table">
       <template #column>
         <ElTableColumn prop="userGroupName" label="群組名稱" sortable />
         <ElTableColumn prop="description" label="簡述" sortable />
@@ -14,6 +14,15 @@
 </template>
 <script setup>
 const userGroupStore = useUserGroupStore();
+useUserGroup().resetUserGroup();
+const table = computed(() =>
+  _useMap(userGroupStore.groups, ({ userGroupId, ...rest }) => {
+    return {
+      id: userGroupId,
+      ...rest,
+    };
+  }),
+);
 onNuxtReady(async () => {
   await useUserGroup().getUserGroups();
 });

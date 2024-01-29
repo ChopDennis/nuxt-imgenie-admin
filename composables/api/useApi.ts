@@ -78,9 +78,8 @@ export const useApi = async <T>(
       }
       if (response._data.code === ApiResponseCode.Success) {
         if (
-          url === "/api/datamart/datamart/save" ||
-          url === "/api/datamart/dbconnection/save" ||
-          url === "/api/admin/group/save-user-group"
+          _useIncludes(_useToLower(url), "save") ||
+          _useIncludes(_useToLower(url), "update")
         ) {
           ElNotification({
             title: "系統訊息",
@@ -117,13 +116,13 @@ export const useApi = async <T>(
     transform: (response: ApiResponse) => {
       if (options?.decrypt) response.data = decryptData(response.data, uuid);
 
-      if (url === "/api/admin/group/user-groups") {
-        response.data = _useMap(response.data, (group) => {
-          return _useMapKeys(group, (_, key) => {
-            return key === "userGroupId" ? "id" : key;
-          });
-        });
-      }
+      // if (url === "/api/admin/group/user-groups") {
+      //   response.data = _useMap(response.data, (group) => {
+      //     return _useMapKeys(group, (_, key) => {
+      //       return key === "userGroupId" ? "id" : key;
+      //     });
+      //   });
+      // }
       if (url === "/api/admin/group/datamart-groups") {
         response.data = _useMap(response.data, (group) => {
           return _useMapKeys(group, (_, key) => {

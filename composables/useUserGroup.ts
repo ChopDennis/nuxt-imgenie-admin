@@ -12,6 +12,7 @@ export default function useUserGroup() {
   };
 
   const getUserGroupMembers = async () => {
+    if (isEmpty(useRoute().query)) return;
     const userGroupId = _useToString(useRoute().query.userGroupId);
     const { data: response } = await getUserGroupMembersApi(userGroupId);
     userGroupStore.members = response.value.data;

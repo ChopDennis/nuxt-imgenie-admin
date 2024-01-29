@@ -59,7 +59,6 @@ const clickBtn = async (btn: string) => {
     });
   }
   if (btn === "建立群組" && useRoute().path === "/user-group") {
-    useUserGroup().resetUserGroup();
     navigateTo({ path: "/user-group/edit" });
   }
   if (btn === "建立群組" && useRoute().path === "/data-mart-group") {

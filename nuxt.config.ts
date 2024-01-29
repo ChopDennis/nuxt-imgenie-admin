@@ -65,7 +65,7 @@ export default defineNuxtConfig({
     public: {
       apiBase:
         process.env.NODE_ENV === "production"
-          ? "https://imgenie-app-lab-gl-qxzqub6ffa-de.a.run.app/v1"
+          ? "https://imgenie-app-gl-pcpt4o333q-de.a.run.app/v1"
           : "https://imgenie-app-gl-pcpt4o333q-de.a.run.app/v1",
     },
   },
