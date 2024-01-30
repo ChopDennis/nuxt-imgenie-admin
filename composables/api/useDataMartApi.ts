@@ -59,18 +59,22 @@ export default function useDataMartApi() {
     };
   };
 
-  const getExport = async () => {
-    const datamartId = _useToString(useRoute().query.datamartId);
+  const getExport = async (id: string) => {
+    const datamartId = id;
+    if (!datamartId) return;
     const { data } = await useApi(DataMartApi.Export, {
       params: {
         datamartId,
       },
     });
+    const contentDisposition = localStorage.getItem("Content-Disposition");
+    if (contentDisposition) {
+      dataMartStore.setting.fileName = contentDisposition.split("''")[1];
+    }
     const dbml = data.value as unknown;
-    dataMartStore.setting.fileName = localStorage
-      .getItem("fileName")
-      ?.split("''")[1] as string;
-    return dbml as Blob;
+    return new File([dbml as Blob], `${dataMartStore.setting.fileName}`, {
+      type: "application/octet-stream",
+    });
   };
 
   const sendSave = async (params: FormData) => {

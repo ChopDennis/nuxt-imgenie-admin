@@ -1,51 +1,42 @@
 <template>
-  <div>
+  <div class="pt-4 px-6 pb-6">
     <DataMartSetForm
+      :id="props?.id"
+      ref="dataMartSetFormRef"
       :table="connSetTable"
-      @show-error="(error) => (errorMessage = error)"
     >
       <template #upload>
         <DataMartUpload
-          ref="dataMartUploadRef"
-          :error-message="errorMessage"
-          :is-upload="isUpload"
-          @upload="fileFormUpload"
-          @remove="fileFormFileRemove"
-          @open-dialog="openDbmlDialog"
+          :id="props?.id"
+          v-model:is-upload="isUpload"
+          v-model:non-upload="nonUpload"
         />
       </template>
     </DataMartSetForm>
-    <ElDialog
-      v-model="dbmlPreviewDialog"
-      width="800"
-      :title="store.setting.fileName"
-      modal-class="backdrop-blur-sm"
-      :destroy-on-close="true"
-      align-center
-      class="dbml-dialog"
-      ><div v-highlight>
-        <pre><code>{{ dbmlPreviewContent }}</code></pre>
-      </div></ElDialog
+    <div
+      class="flex w-full justify-end gap-2 bg-slate-400 fixed bottom-0 left-0 py-2 px-6 data-mart-bottom"
     >
+      <ElButton @click="emit('update:edit', false)">取消</ElButton>
+      <ElButton type="primary" @click="clickUpload()">儲存</ElButton>
+    </div>
   </div>
 </template>
-<script setup lang="ts">
-import type { UploadRawFile } from "element-plus";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const props = defineProps({
-  id: String,
-});
-const store = useDataMartStore();
-const dbmlPreviewContent = ref("");
-const connSetTable = ref<any>([]);
-const dbmlPreviewDialog = ref(false);
-const errorMessage = ref("");
-const isUpload = ref(false);
 
+<script setup lang="ts">
+import DataMartSetForm from "~/components/dataMart/DataMartSetForm.vue";
+const dataMartSetFormRef = ref<InstanceType<typeof DataMartSetForm>>();
+
+const props = defineProps<{ id: string }>();
+const emit = defineEmits(["update:edit", "update:id", "showError"]);
+
+const dataMartStore = useDataMartStore();
+const connSetTable = ref<any>([]);
+const isUpload = ref<boolean>(false);
+const nonUpload = ref<boolean>(false);
 onNuxtReady(async () => {
-  if (Object.keys(store.setting).length > 0) {
+  if (Object.keys(dataMartStore.setting).length > 0) {
     await useDataMartApi().getQuery(props?.id as string);
-    const { dbType, connName, host, database, dbName } = store.setting;
+    const { dbType, connName, host, database, dbName } = dataMartStore.setting;
     connSetTable.value.push({
       dbType,
       connName,
@@ -53,46 +44,35 @@ onNuxtReady(async () => {
       database,
       dbName,
     });
-    const dbml = await useDataMartApi().getExport();
-    if (dbml) {
-      if (dbml.size < 1000 * 1000) {
-        store.dbml = new File([dbml], `${store.setting.fileName}`, {
-          type: "application/octet-stream",
-        });
-        dbmlPreviewContent.value = await store.dbml.text();
-        isUpload.value = true;
-        errorMessage.value = "";
-      } else {
-        errorMessage.value = "檔案大小超過1MB限制";
-      }
-    }
   }
 });
 
-const fileFormUpload = async (fileFormUpload: UploadRawFile) => {
-  if (fileFormUpload) {
-    if (fileFormUpload.name.split(".")[1] === "dbml") {
-      if (fileFormUpload.size < 1000 * 1000) {
-        store.setting.fileName = fileFormUpload.name;
-        store.dbml = fileFormUpload;
-        dbmlPreviewContent.value = await fileFormUpload.text();
-        isUpload.value = true;
-        errorMessage.value = "";
-      } else {
-        errorMessage.value = "檔案大小超過1MB限制";
-      }
-    } else {
-      errorMessage.value = "限制只能上傳DBML檔";
-    }
+const clickUpload = async () => {
+  dataMartStore.setting = useForm().trim(
+    dataMartStore.setting,
+  ) as DataMartSetting;
+
+  const valid = await dataMartSetFormRef.value?.valid();
+  const formData = new FormData();
+  const data = new File([JSON.stringify(dataMartStore.setting)], "data.json", {
+    type: "application/json",
+  });
+
+  formData.append("data", data);
+
+  if (isUpload.value) {
+    formData.append("file", dataMartStore.dbml as File);
+  } else {
+    const emptyFile = new File([], "", {
+      type: "application/octet-stream",
+    });
+    formData.append("file", emptyFile);
   }
-};
 
-const fileFormFileRemove = () => {
-  isUpload.value = false;
-  store.dbml = null;
-};
-
-const openDbmlDialog = (val: boolean) => {
-  dbmlPreviewDialog.value = val;
+  if (valid && !isNull(dataMartStore.dbml)) {
+    await useDataMartApi().sendSave(formData);
+  } else {
+    nonUpload.value = true;
+  }
 };
 </script>

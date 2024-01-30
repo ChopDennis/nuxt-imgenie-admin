@@ -127,6 +127,11 @@
 const emits = defineEmits<{
   uploadButton: [boolean];
 }>();
+
+const props = defineProps<{
+  id: string;
+}>();
+
 const dbConnStore = useDbConnectionStore();
 const dataMartStore = useDataMartStore();
 const icons = useDbConnIcons();
@@ -139,7 +144,11 @@ const searchText = ref("");
 
 onNuxtReady(async () => {
   await useDbConnectionApi().getList();
-
+  await useDbConnectionApi().getTypes();
+  if (props.id) {
+    await useDbConnectionApi().getSchemas(dataMartStore.setting.connId);
+    emits("uploadButton", true);
+  }
   if (!isConnectionActivate(dataMartStore.setting.connId)) {
     dataMartStore.default.isDefaultSet = true;
     dataMartStore.default.defaultConnName = dataMartStore.setting.connName;
@@ -147,21 +156,9 @@ onNuxtReady(async () => {
   } else {
     dataMartStore.default.isDefaultSet = false;
   }
-
-  await useDbConnectionApi().getTypes();
-  console.log(select);
-  if (useRoute().query.datamartId) {
-    await useDbConnectionApi().getSchemas(dataMartStore.setting.connId);
-    select.connId = dataMartStore.setting.connId;
-    select.schemas = dataMartStore.setting.dbName;
-    select.dbType = dataMartStore.setting.dbType;
-    console.log(select);
-  } else {
-    select.connId = dbConnStore.select.connId;
-    select.schemas = dataMartStore.setting.dbName;
-    select.dbType = dbConnStore.select.dbType;
-    console.log(select);
-  }
+  select.connId = dataMartStore.setting.connId;
+  select.schemas = dataMartStore.setting.dbName;
+  select.dbType = dataMartStore.setting.dbType;
 });
 
 const optionList = computed(() => {

@@ -72,7 +72,10 @@ export const useApi = async <T>(
               "Content-Disposition",
             ) as string;
             const decodedOnce = decodeURIComponent(doubleEncodedString);
-            localStorage.setItem("fileName", decodeURIComponent(decodedOnce));
+            localStorage.setItem(
+              "Content-Disposition",
+              decodeURIComponent(decodedOnce),
+            );
           }
         }
       }

@@ -1,14 +1,14 @@
 <template>
   <div class="w-1/2">
-    <div v-if="!props.isUpload" class="w-full">
+    <div v-if="!fileName" class="w-full">
       <ElUpload
-        :on-change="handleChange"
+        :on-change="handleUpload"
         :multiple="false"
         :show-file-list="false"
         :auto-upload="false"
         :drag="true"
         :class="{
-          'upload-error': props.errorMessage !== '',
+          'upload-error': fileUploadError !== '',
         }"
       >
         <div class="flex flex-col items-center gap-2">
@@ -25,14 +25,17 @@
           </div>
         </div>
       </ElUpload>
-      <div class="text-red-400 p-1 text-xs">{{ props.errorMessage }}</div>
+      <div class="text-red-400 p-1 text-xs">{{ fileUploadError }}</div>
+      <div v-if="props.nonUpload" class="text-red-400 p-1 text-xs">
+        請上傳DBML(必填)
+      </div>
     </div>
     <div v-else class="flex w-full">
       <div
         class="flex justify-between w-full border pl-4 mr-4 rounded-lg overflow-hidden"
       >
-        <div>{{ store.setting.fileName }}</div>
-        <div class="flex justify-center w-8 h-8" @click="clickRemoveIcon">
+        <div>{{ fileName }}</div>
+        <div class="flex justify-center w-8 h-8" @click="removeUpload">
           <ElIconCircleCloseFilled width="14" class="self-center" />
         </div>
       </div>
@@ -43,35 +46,73 @@
         <img
           class="m-auto"
           src="~/assets/icons/data-mart/ic_export_dbml.svg"
-          @click="emit('openDialog', true)"
+          @click="isPreviewDialog = true"
         />
       </div>
     </div>
+    <ElDialog
+      v-model="isPreviewDialog"
+      width="800"
+      :title="fileName"
+      modal-class="backdrop-blur-sm"
+      :destroy-on-close="true"
+      align-center
+      class="dbml-dialog"
+      ><div v-highlight>
+        <pre><code>{{ fileContent }}</code></pre>
+      </div></ElDialog
+    >
   </div>
 </template>
 <script setup lang="ts">
-import type { UploadProps, UploadRawFile } from "element-plus";
+import type { UploadProps } from "element-plus";
+const dataMartStore = useDataMartStore();
 
-const emit = defineEmits<{
-  upload: [dbml: UploadRawFile];
-  remove: [null];
-  openDialog: [boolean];
-}>();
+onNuxtReady(async () => {
+  const exportFile = await useDataMartApi().getExport(props?.id as string);
+  if (exportFile) {
+    fileContent.value = await exportFile.text();
+    fileName.value = exportFile.name;
+    updateStore(exportFile);
+  }
+});
 
-const props = defineProps<{
-  errorMessage: string;
-  isUpload: boolean;
-}>();
+const props = defineProps<{ id: string; nonUpload: boolean }>();
 
-const store = useDataMartStore();
+const emit = defineEmits(["update:isUpload", "update:nonUpload"]);
 
-const handleChange: UploadProps["onChange"] = (uploadFile) => {
+const fileContent = ref("");
+const fileName = ref("");
+const fileUploadError = ref("");
+const isPreviewDialog = ref(false);
+
+const handleUpload: UploadProps["onChange"] = async (uploadFile) => {
   if (uploadFile.raw) {
-    emit("upload", uploadFile.raw);
+    const result = useUpload(["dbml"]).handleFileUploadChange(uploadFile.raw);
+    if (result instanceof File) {
+      updateStore(result);
+      emit("update:isUpload", true);
+      emit("update:nonUpload", false);
+      fileName.value = result.name;
+      fileContent.value = await result.text();
+      fileUploadError.value = "";
+    } else {
+      fileName.value = "";
+      fileContent.value = "";
+      fileUploadError.value = result;
+    }
   }
 };
 
-const clickRemoveIcon = () => {
-  emit("remove", null);
+const removeUpload = () => {
+  fileContent.value = "";
+  fileName.value = "";
+  dataMartStore.dbml = null;
+  emit("update:nonUpload", false);
+};
+
+const updateStore = (file: File) => {
+  dataMartStore.setting.fileName = file.name;
+  dataMartStore.dbml = file;
 };
 </script>

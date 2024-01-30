@@ -10,7 +10,6 @@
   </ElTableColumn>
 </template>
 <script setup lang="ts">
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emit = defineEmits(["update:edit", "update:id"]);
 const isConnSetting = openConnectionSetting();
 

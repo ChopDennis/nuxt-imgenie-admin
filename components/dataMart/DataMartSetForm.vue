@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-4 px-6 pb-6">
+  <div>
     <div
       class="bg-white rounded-lg p-5 shadow-custom-lg grid-cols-1 grid gap-0 overflow-scroll"
     >
@@ -126,12 +126,7 @@
         </ElForm>
       </div>
     </div>
-    <div
-      class="flex w-full justify-end gap-2 bg-slate-400 fixed bottom-0 left-0 py-2 px-6 data-mart-bottom"
-    >
-      <ElButton @click="navigateTo({ path: '/data-mart' })">取消</ElButton>
-      <ElButton type="primary" @click="clickUpload()">儲存</ElButton>
-    </div>
+
     <ElDialog
       v-model="dialog"
       title="資料庫連線設定"
@@ -142,6 +137,7 @@
       class="conn-set-dialog"
     >
       <DataMartSetDialog
+        :id="props?.id"
         @upload-button="
           (val) => {
             isUploadButton = val;
@@ -175,10 +171,7 @@ interface ConnSetTable {
 }
 const props = defineProps<{
   table: ConnSetTable[];
-}>();
-
-const emits = defineEmits<{
-  showError: [string];
+  id: string;
 }>();
 
 const isUploadButton = ref(false);
@@ -187,24 +180,6 @@ const dbConnStore = useDbConnectionStore();
 const icons = useDbConnIcons();
 const connSetTable = ref<ConnSetTable[]>(props.table);
 const dialog = ref(false);
-
-const clickUpload = async () => {
-  dataMartStore.setting = useForm().trim(
-    dataMartStore.setting,
-  ) as DataMartSetting;
-  const valid = await useForm().validate(dataMartSetFormRef.value);
-  const formData = new FormData();
-  const data = new File([JSON.stringify(dataMartStore.setting)], "data.json", {
-    type: "application/json",
-  });
-  formData.append("data", data);
-  formData.append("file", dataMartStore.dbml as File);
-  if (valid && !isNull(dataMartStore.dbml)) {
-    await useDataMartApi().sendSave(formData);
-  } else {
-    emits("showError", "請上傳DBML(必填)");
-  }
-};
 
 const clickConfirm = async () => {
   dialog.value = false;
@@ -224,5 +199,13 @@ const formRules = reactive<FormRules<ConnectionSetForm>>({
   datamartName: [{ required: true, message: "請輸入資料模型名稱" }],
   description: [{ required: true, message: "請輸入資料模型說明" }],
   connId: [{ required: true, message: "請選擇資料庫連線" }],
+});
+
+const valid = async () => {
+  return await useForm().validate(dataMartSetFormRef.value);
+};
+
+defineExpose({
+  valid,
 });
 </script>

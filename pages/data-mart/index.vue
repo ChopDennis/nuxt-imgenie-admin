@@ -27,12 +27,11 @@
       </GlobalSortableTable>
     </div>
     <div v-if="edit">
-      <DataMartEdit :id="id" />
+      <DataMartEdit v-model:id="id" v-model:edit="edit" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const store = useDataMartStore();
 const dbConnStore = useDbConnectionStore();
 onMounted(async () => {
