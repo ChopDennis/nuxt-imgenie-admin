@@ -18,6 +18,7 @@ export interface DataMartList {
   icon: string;
   isActivate: boolean;
   updateTime: string;
+  isConnUpdated: boolean;
 }
 
 interface DataMartTable {
@@ -27,6 +28,7 @@ interface DataMartTable {
   dataMartName: string;
   dbType: string;
   isActivate: boolean;
+  isConnUpdated: boolean;
 }
 export interface DataMartQuery {
   datamartId: string;
@@ -66,6 +68,7 @@ interface DataMartStoreState {
     defaultConnName: string;
     defaultConnId: string;
   };
+  isEdit: boolean;
 }
 
 export const useDataMartStore = defineStore("dataMart", {
@@ -110,6 +113,7 @@ export const useDataMartStore = defineStore("dataMart", {
         defaultConnId: "",
         defaultConnName: "",
       },
+      isEdit: false,
     };
   },
 });

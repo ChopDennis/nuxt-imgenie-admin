@@ -24,6 +24,7 @@ export default function useDataMartApi() {
         dbType,
         connId,
         isActivate,
+        isConnUpdated,
       } = list;
       return {
         id,
@@ -32,12 +33,14 @@ export default function useDataMartApi() {
         connName,
         dbType,
         isActivate,
+        isConnUpdated,
       };
     });
   };
 
   const getQuery = async (id: string) => {
     const datamartId = id;
+    if (!datamartId) return;
     const { data } = await useApi<DataMartQuery>(DataMartApi.Query, {
       params: {
         datamartId,
@@ -84,7 +87,8 @@ export default function useDataMartApi() {
     });
     const save = data.value as ApiResponse;
     if (save.code === ApiResponseCode.Success) {
-      navigateTo({ path: "/data-mart" });
+      dataMartStore.isEdit = false;
+      await getTable();
     }
   };
 

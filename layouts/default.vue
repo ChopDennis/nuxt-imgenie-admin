@@ -23,7 +23,7 @@
             </div>
             <div>
               <ElButton
-                v-if="titleInfo.btnName"
+                v-if="titleInfo.btnName && !isEdit"
                 :icon="ElIconPlus"
                 type="primary"
                 @click="clickBtn(titleInfo.btnName)"
@@ -46,7 +46,10 @@ const titleInfo = computed(
   () => useLayoutStore().pageLayout[useRoute().path] || "",
 );
 const isConnTypes = openConnectionTypes();
-
+const dataMartStore = useDataMartStore();
+const isEdit = computed(() => {
+  return dataMartStore.isEdit;
+});
 const clickBtn = async (btn: string) => {
   if (btn === "新增連線") {
     await useDbConnectionApi().getTypes();
@@ -54,9 +57,7 @@ const clickBtn = async (btn: string) => {
   }
   if (btn === "新增資料模型") {
     useDataMartApi().resetForm();
-    navigateTo({
-      path: "/data-mart/edit",
-    });
+    dataMartStore.isEdit = true;
   }
   if (btn === "建立群組" && useRoute().path === "/user-group") {
     navigateTo({ path: "/user-group/edit" });

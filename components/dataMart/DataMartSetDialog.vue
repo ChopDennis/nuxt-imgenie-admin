@@ -200,6 +200,7 @@ const changeDbType = () => {
 };
 
 const isConnectionActivate = (connId: string) => {
+  if (!connId) return true;
   const connIdList = _useMap(dbConnStore.list, "connId");
   return _useIncludes(connIdList, connId);
 };

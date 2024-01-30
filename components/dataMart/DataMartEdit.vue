@@ -16,7 +16,13 @@
     <div
       class="flex w-full justify-end gap-2 bg-slate-400 fixed bottom-0 left-0 py-2 px-6 data-mart-bottom"
     >
-      <ElButton @click="emit('update:edit', false)">取消</ElButton>
+      <ElButton
+        @click="
+          dataMartStore.isEdit = false;
+          emit('update:id', '');
+        "
+        >取消</ElButton
+      >
       <ElButton type="primary" @click="clickUpload()">儲存</ElButton>
     </div>
   </div>
