@@ -36,8 +36,8 @@ export default function useDataMartApi() {
     });
   };
 
-  const getQuery = async () => {
-    const datamartId = _useToString(useRoute().query.datamartId);
+  const getQuery = async (id: string) => {
+    const datamartId = id;
     const { data } = await useApi<DataMartQuery>(DataMartApi.Query, {
       params: {
         datamartId,

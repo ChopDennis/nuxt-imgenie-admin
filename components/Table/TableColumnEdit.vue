@@ -10,6 +10,8 @@
   </ElTableColumn>
 </template>
 <script setup lang="ts">
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const emit = defineEmits(["update:edit", "update:id"]);
 const isConnSetting = openConnectionSetting();
 
 const clickEdit = async (id: string) => {
@@ -21,12 +23,8 @@ const clickEdit = async (id: string) => {
     }
     case "/data-mart": {
       useDataMartApi().resetForm();
-      navigateTo({
-        path: "/data-mart/edit",
-        query: {
-          datamartId: id,
-        },
-      });
+      emit("update:edit", true);
+      emit("update:id", id);
       break;
     }
     case "/data-mart-group": {

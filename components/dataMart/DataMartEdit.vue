@@ -31,7 +31,10 @@
 </template>
 <script setup lang="ts">
 import type { UploadRawFile } from "element-plus";
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const props = defineProps({
+  id: String,
+});
 const store = useDataMartStore();
 const dbmlPreviewContent = ref("");
 const connSetTable = ref<any>([]);
@@ -40,8 +43,8 @@ const errorMessage = ref("");
 const isUpload = ref(false);
 
 onNuxtReady(async () => {
-  if (useRoute().query.datamartId) {
-    await useDataMartApi().getQuery();
+  if (Object.keys(store.setting).length > 0) {
+    await useDataMartApi().getQuery(props?.id as string);
     const { dbType, connName, host, database, dbName } = store.setting;
     connSetTable.value.push({
       dbType,

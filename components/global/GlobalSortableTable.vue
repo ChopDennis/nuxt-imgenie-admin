@@ -51,10 +51,10 @@ const pageSize = computed(() => Math.floor(tableHeight.value / 60) + 5);
 const sortTable = computed(() =>
   !isNull(sortOrder.value)
     ? _useOrderBy(props.list, [sortProp.value], [sortOrder.value])
-    : props.list,
+    : props.list
 );
 const currentPageData = computed(
-  () => _useChunk(sortTable.value, pageSize.value)[currentPage.value - 1] || [],
+  () => _useChunk(sortTable.value, pageSize.value)[currentPage.value - 1] || []
 );
 
 const sortChange = ({ prop, order }: SortChangeParams) => {
@@ -62,6 +62,31 @@ const sortChange = ({ prop, order }: SortChangeParams) => {
   sortOrder.value =
     order === "descending" ? "desc" : order === "ascending" ? "asc" : null;
 };
+
+// const sortChange = (sort: { prop: any; order: any }) => {
+//   // Sort the entire dataset here
+//   const data = props.list as { [key: string]: any }[];
+//   data.sort((a, b) => {
+//     const valA = a[sort.prop];
+//     const valB = b[sort.prop];
+
+//     // Type guards to ensure correct types
+//     if (typeof valA === "string" && typeof valB === "string") {
+//       if (sort.order === "ascending") {
+//         return valA.localeCompare(valB);
+//       } else {
+//         return valB.localeCompare(valA);
+//       }
+//     } else if (typeof valA === "boolean" && typeof valB === "boolean") {
+//       // Handle boolean values (if needed)
+//       return valA === valB ? 0 : valA ? -1 : 1;
+//     }
+//     // Handle the case where either valA or valB is null
+//     // You might want to adjust this behavior based on your requirements
+//     return 0;
+//   });
+//   currentPage.value = 1;
+// };
 
 const handleCurrentChange = (val: number) => {
   currentPage.value = val;
