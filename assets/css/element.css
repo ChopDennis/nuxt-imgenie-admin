@@ -295,3 +295,11 @@ body .el-form-item.form-table > .el-form-item__label {
 body .el-form-item.form-table.conn-set > .el-form-item__label {
   margin-top: 12px;
 }
+
+body .el-message-box__status {
+  top: 13% !important;
+}
+
+body .el-message-box__btns button:nth-child(2) {
+  background-color: #ff4d4f !important;
+}

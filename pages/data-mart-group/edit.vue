@@ -2,9 +2,9 @@
   <div class="overflow-scroll h-full pt-4 px-6 pb-16">
     <div class="flex flex-col gap-6">
       <!-- 群組 -->
-      <DataMartGroupInfo />
+      <DataMartGroupInfo ref="dataMartGroupInfoRef" />
       <!-- 資料模型 -->
-      <DataMartGroupDataMartForm />
+      <DataMartGroupDataMartForm ref="dataMartGroupDataMartFormRef" />
       <ElDivider
         ><div class="flex justify-center">
           <div class="text-red-500 self-center pr-1">
@@ -19,20 +19,11 @@
       >
       <!-- 成員 -->
       <DataMartGroupUserForm />
+
       <!-- 使用者群組 -->
       <DataMartGroupUserGroupForm />
     </div>
-    <ElForm
-      ref="dataMartGroupSaveFormRef"
-      :rules="useForm().dataMartGroupRules"
-      :model="dataMartGroupStore.save"
-    >
-      <ElFormItem prop="datamartGroupName"> </ElFormItem>
-      <ElFormItem prop="description"> </ElFormItem>
-      <ElFormItem prop="datamartIds"> </ElFormItem>
-      <ElFormItem prop="userIds"> </ElFormItem>
-      <ElFormItem prop="userGroupIds"> </ElFormItem>
-    </ElForm>
+
     <div
       class="flex w-full justify-end gap-2 bg-slate-400 fixed bottom-0 left-0 py-2 px-6 data-mart-bottom"
     >
@@ -44,27 +35,30 @@
   </div>
 </template>
 <script setup lang="ts">
-import type { FormInstance } from "element-plus";
-const dataMartGroupSaveFormRef = ref<FormInstance>();
+import DataMartGroupInfo from "~/components/dataMartGroup/DataMartGroupInfo.vue";
+import DataMartGroupDataMartForm from "~/components/dataMartGroup/DataMartGroupDataMartForm.vue";
 onNuxtReady(async () => {
   await useDataMartGroup().getDataMartGroupMembers();
   await useDataMart().getDataMartList();
   await useUserGroup().getUsers();
   await useUserGroup().getUserGroups();
 });
+const dataMartGroupInfoRef = ref<InstanceType<typeof DataMartGroupInfo>>();
+const dataMartGroupDataMartFormRef =
+  ref<InstanceType<typeof DataMartGroupDataMartForm>>();
 const dataMartGroupStore = useDataMartGroupStore();
 useDataMartGroup().resetDataMartGroup();
 const saveDataMartGroup = async () => {
-  const valid = await useForm().validate(dataMartGroupSaveFormRef.value);
-  // const isNotEmpty = _useEvery(dataMartGroupStore.members, (value) => {
-  //   // 检查值是否不是空字符串且不是空数组
-  //   return !(isEmpty(value) || (isArray(value) && isEmpty(value)));
-  // });
-  if (valid) {
-    console.log(dataMartGroupSaveFormRef.value);
+  const isNotEmpty = _useEvery(dataMartGroupStore.members, (value) => {
+    return !isEmpty(value);
+  });
+  const info = await dataMartGroupInfoRef.value?.validForm();
+  const dataMart = await dataMartGroupDataMartFormRef.value?.validForm();
+  console.log("validForm", info && dataMart);
 
-    // await useDataMartGroup().saveDataMartGroup();
-    // navigateTo("/data-mart-group");
+  if (isNotEmpty) {
+    await useDataMartGroup().saveDataMartGroup();
+    navigateTo("/data-mart-group");
   } else {
     console.log("欄位不可為空");
   }

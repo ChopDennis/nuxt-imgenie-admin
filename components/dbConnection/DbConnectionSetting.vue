@@ -68,6 +68,7 @@ const dbConnSetFormRef = ref<FormInstance>();
 const store = useDbConnectionStore();
 const icons = useDbConnIcons();
 const isConnSetting = openConnectionSetting();
+const isTest = ref(false);
 
 const formLabel: ConnectionSetForm = {
   connName: "連線名稱",
@@ -96,12 +97,40 @@ const formRules = reactive<FormRules<ConnectionSetForm>>({
 const connSetBtn = async (action: string) => {
   store.setting.form = useForm().trim(store.setting.form) as ConnectionSetForm;
   const valid = await useForm().validate(dbConnSetFormRef.value);
+  let confirm = true;
+
   if (valid) {
     if (action === "test") {
       await useDbConnectionApi().sendTest();
+      isTest.value = true;
     }
     if (action === "save") {
-      await useDbConnectionApi().sendSave();
+      const result = await useDbConnectionApi().checkUsed(store.setting.connId);
+      if (!isEmpty(result)) {
+        confirm = await ElMessageBox.confirm(
+          `<div class="text-base" style="color:#20222F">請確定是否送出修改內容 ?</div><div class="pt-2" style="color:#999999">修改資料庫連線，任何連接此設定的資料模型、ChatSQL對話，均將受影響。<br>確定要儲存？<br>${
+            !isTest.value ? "建議先執行連線測試。" : ""
+          }</div>`,
+          {
+            confirmButtonText: "取消",
+            cancelButtonText: "確定",
+            dangerouslyUseHTMLString: true,
+            closeOnClickModal: false,
+            type: "error",
+            showClose: false,
+          },
+        )
+          .then(() => {
+            return false;
+          })
+          .catch(() => {
+            return true;
+          });
+      }
+
+      if (confirm) {
+        await useDbConnectionApi().sendSave();
+      }
     }
   } else {
     console.error("欄位錯誤"); // eslint-disable-line no-console

@@ -5,6 +5,7 @@ enum DataMartApi {
   Query = "/api/datamart/datamart/query",
   Save = "/api/datamart/datamart/save",
   Export = "/api/datamart/datamart/export-file",
+  Used = "/api/datamart/datamart/used",
 }
 
 export const getDataMartListApi = () =>
@@ -81,14 +82,35 @@ export default function useDataMartApi() {
   };
 
   const sendSave = async (params: FormData) => {
-    const { data } = await useApi(DataMartApi.Save, {
-      params,
-      loading: true,
-    });
-    const save = data.value as ApiResponse;
-    if (save.code === ApiResponseCode.Success) {
-      dataMartStore.isEdit = false;
-      await getTable();
+    let confirm = true;
+    const result = await checkUsed(dataMartStore.setting.datamartId);
+    if (!isEmpty(result)) {
+      const message = `<div class="text-base" style="color:#20222F">請確定是否送出修改內容 ?</div><div class="pt-2" style="color:#999999">修改資料模型，任何連接此設定的ChatSQL對話將受到影響。<br>確定要儲存？</div>`;
+      confirm = await ElMessageBox.confirm(message, {
+        confirmButtonText: "取消",
+        cancelButtonText: "確定",
+        dangerouslyUseHTMLString: true,
+        closeOnClickModal: false,
+        type: "error",
+        showClose: false,
+      })
+        .then(() => {
+          return false;
+        })
+        .catch(() => {
+          return true;
+        });
+    }
+    if (confirm) {
+      const { data } = await useApi(DataMartApi.Save, {
+        params,
+        loading: true,
+      });
+      const save = data.value as ApiResponse;
+      if (save.code === ApiResponseCode.Success) {
+        dataMartStore.isEdit = false;
+        await getTable();
+      }
     }
   };
 
@@ -101,6 +123,16 @@ export default function useDataMartApi() {
     });
     const res = data.value as ApiResponse;
     return res.code === ApiResponseCode.Success;
+  };
+
+  const checkUsed = async (datamartId: string) => {
+    const { data } = await useApi(DataMartApi.Used, {
+      params: {
+        datamartId,
+      },
+    });
+
+    return data.value.data;
   };
 
   const resetForm = () => {
@@ -127,6 +159,7 @@ export default function useDataMartApi() {
     getExport,
     sendSave,
     sendUpdate,
+    checkUsed,
     resetForm,
   };
 }

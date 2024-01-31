@@ -7,6 +7,7 @@ enum Api {
   Query = "/api/datamart/dbconnection/query",
   Update = "/api/datamart/dbconnection/update",
   Schemas = "/api/datamart/dbconnection/schemas",
+  Used = "/api/datamart/dbconnection/used",
 }
 
 export const openConnectionSetting = () => {
@@ -179,6 +180,16 @@ export default function useDbConnectionApi() {
     }
   };
 
+  const checkUsed = async (connId: string) => {
+    const { data } = await useApi(Api.Used, {
+      params: {
+        connId,
+      },
+    });
+
+    return data.value.data;
+  };
+
   const resetForm = () => {
     const isConnSetting = openConnectionSetting();
     isConnSetting.value = false;
@@ -209,6 +220,7 @@ export default function useDbConnectionApi() {
     getList,
     getQuery,
     getSchemas,
+    checkUsed,
     resetForm,
   };
 }
