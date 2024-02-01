@@ -26,8 +26,8 @@ export default function useForm() {
 
   const validateUsers = (_rule: any, _value: any, callback: any) => {
     if (
-      isEmpty(dataMartGroupStore.save.userIds) &&
-      isEmpty(dataMartGroupStore.save.userGroupIds)
+      isEmpty(dataMartGroupStore.members.users) &&
+      isEmpty(dataMartGroupStore.members.userGroups)
     ) {
       callback(new Error("成員/使用者群組至少擇一選填"));
     } else {
@@ -35,14 +35,22 @@ export default function useForm() {
     }
   };
 
-  const dataMartGroupRules = reactive<FormRules<DataMartGroupSave>>({
+  interface DataMartGroupRuleForm {
+    datamartGroupName: string;
+    description: string;
+    datamarts: [];
+    users: [];
+    userGroups: [];
+  }
+
+  const dataMartGroupRules = reactive<FormRules<DataMartGroupRuleForm>>({
     datamartGroupName: [
       { required: true, message: "請輸入群組名稱", trigger: "blur" },
     ],
     description: [
       { required: true, message: "請輸入群組簡述", trigger: "blur" },
     ],
-    datamartIds: [
+    datamarts: [
       {
         type: "array",
         required: true,
@@ -50,7 +58,7 @@ export default function useForm() {
         trigger: "change",
       },
     ],
-    userIds: [
+    users: [
       {
         type: "array",
         validator: validateUsers,
@@ -58,7 +66,7 @@ export default function useForm() {
         trigger: "change",
       },
     ],
-    userGroupIds: [
+    userGroups: [
       {
         type: "array",
         validator: validateUsers,

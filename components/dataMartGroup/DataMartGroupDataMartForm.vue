@@ -9,7 +9,7 @@
         <div class="pt-4">
           <ElForm
             class="data-mart-form"
-            :model="dataMartGroupStore.save"
+            :model="dataMartGroupStore.members"
             :rules="useForm().dataMartGroupRules"
             label-width="150px"
           >
@@ -28,7 +28,7 @@
             <ElFormItem
               class="form-table"
               label="資料模型清單"
-              prop="datamartIds"
+              prop="datamarts"
             >
               <ElCheckboxGroup v-model="dataMartGroupStore.save.datamartIds" />
               <GroupCollapseTable

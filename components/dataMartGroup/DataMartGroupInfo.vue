@@ -8,10 +8,10 @@
         <ElDivider></ElDivider>
         <div class="pt-4">
           <ElForm
-            class="data-mart-form"
-            :model="dataMartGroupStore.members"
             :rules="useForm().dataMartGroupRules"
-            label-width="150px"
+            :model="dataMartGroupStore.members"
+            class="data-mart-form"
+            label-width="150"
           >
             <ElFormItem label="群組名稱" prop="datamartGroupName">
               <div class="ml-2 w-full">

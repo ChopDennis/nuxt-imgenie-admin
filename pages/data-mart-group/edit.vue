@@ -46,21 +46,9 @@ onNuxtReady(async () => {
 const dataMartGroupInfoRef = ref<InstanceType<typeof DataMartGroupInfo>>();
 const dataMartGroupDataMartFormRef =
   ref<InstanceType<typeof DataMartGroupDataMartForm>>();
-const dataMartGroupStore = useDataMartGroupStore();
 useDataMartGroup().resetDataMartGroup();
 const saveDataMartGroup = async () => {
-  const isNotEmpty = _useEvery(dataMartGroupStore.members, (value) => {
-    return !isEmpty(value);
-  });
-  const info = await dataMartGroupInfoRef.value?.validForm();
-  const dataMart = await dataMartGroupDataMartFormRef.value?.validForm();
-  console.log("validForm", info && dataMart);
-
-  if (isNotEmpty) {
-    await useDataMartGroup().saveDataMartGroup();
-    navigateTo("/data-mart-group");
-  } else {
-    console.log("欄位不可為空");
-  }
+  await useDataMartGroup().saveDataMartGroup();
+  navigateTo("/data-mart-group");
 };
 </script>

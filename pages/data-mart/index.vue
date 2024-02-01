@@ -33,6 +33,9 @@
 </template>
 <script setup lang="ts">
 const store = useDataMartStore();
+onNuxtReady(() => {
+  store.isEdit = false;
+});
 onMounted(async () => {
   await useDataMartApi().getTable();
 });

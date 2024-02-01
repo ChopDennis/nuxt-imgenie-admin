@@ -9,7 +9,7 @@
         <div class="pt-4">
           <ElForm
             class="data-mart-form"
-            :model="dataMartGroupStore.save"
+            :model="dataMartGroupStore.members"
             :rules="useForm().dataMartGroupRules"
             label-width="150px"
           >
@@ -24,7 +24,7 @@
                 @update-selected-id="updateMembers"
               />
             </ElFormItem>
-            <ElFormItem class="form-table" label="成員名單" prop="userIds">
+            <ElFormItem class="form-table" label="成員名單" prop="users">
               <ElCheckboxGroup v-model="dataMartGroupStore.save.userIds" />
               <GroupCollapseTable
                 :table="dataMartGroupStore.members.users"
