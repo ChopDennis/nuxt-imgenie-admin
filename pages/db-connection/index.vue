@@ -45,6 +45,7 @@
 </template>
 <script setup lang="ts">
 const store = useDbConnectionStore();
+const isEdit = ref<boolean>(false);
 onNuxtReady(async () => {
   await useDbConnectionApi().getTable();
 });

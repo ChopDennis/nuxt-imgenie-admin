@@ -25,6 +25,7 @@
     <div class="flex flex-col gap-4">
       <slot name="alert"></slot>
       <ElForm
+        v-if="store.setting.dbType !== 'bigquery'"
         ref="dbConnSetFormRef"
         :model="store.setting.form"
         :rules="formRules"
@@ -49,6 +50,59 @@
           </div>
         </ElFormItem>
       </ElForm>
+      <!-- 以下bigquery專用 -->
+      <ElForm
+        v-if="store.setting.dbType === 'bigquery'"
+        ref="bigQueryFormRef"
+        :model="bigqueryForm"
+        :rules="bigQeryRules"
+        label-width="110px"
+      >
+        <ElFormItem label="連線名稱" prop="connName">
+          <ElInput v-model="bigqueryForm.connName" :validate-event="false" />
+        </ElFormItem>
+        <ElFormItem label="專案ID" prop="projectId">
+          <ElInput v-model="bigqueryForm.projectId" :validate-event="false" />
+        </ElFormItem>
+        <div class="pl-110">
+          請按照以下說明，在您的 Google Cloud Platform 帳戶中，授予專案 ID 對
+          IMGenie 服務帳戶的存取權限。
+          <span class="text-blue-500 hover:cursor-pointer" @click="openDetail"
+            >步驟說明</span
+          >
+        </div>
+        <div class="pl-110 mt-2" v-show="detailIsOpen">
+          <div class="flex items-center mt-2">
+            <div class="step mr-1">1</div>
+            打開Google Cloud 控制台的 IAM 和 管理。
+          </div>
+          <div class="flex items-center mt-2">
+            <div class="step mr-1">2</div>
+            點擊“授予存取權”
+          </div>
+          <div class="flex items-center mt-2">
+            <div class="step mr-1">3</div>
+            將下述email填入新增主題。
+          </div>
+          <el-input
+            class="mt-1 pl-4 mail-input"
+            disabled
+            :suffix-icon="CopyDocument"
+          ></el-input>
+          <div class="flex mt-2">
+            <div class="step mr-1 mt-1.5">4</div>
+            加入角色：
+            <div>
+              <div>BigQuery資料檢視者</div>
+              <div>BigQuery工作使用者</div>
+            </div>
+          </div>
+          <div class="flex items-center mt-2">
+            <div class="step mr-1">5</div>
+            點擊 “儲存”。
+          </div>
+        </div>
+      </ElForm>
     </div>
     <template #footer>
       <div class="flex justify-between">
@@ -64,11 +118,26 @@
 
 <script setup lang="ts">
 import type { FormInstance, FormRules } from "element-plus";
+import { CopyDocument } from "@element-plus/icons-vue";
+import { useDbConnectionStore } from "@/stores/dbConnectionStore";
+const dbconnationstore = useDbConnectionStore();
 const dbConnSetFormRef = ref<FormInstance>();
+const bigQueryFormRef = ref<FormInstance>();
 const store = useDbConnectionStore();
 const icons = useDbConnIcons();
 const isConnSetting = openConnectionSetting();
 const isTest = ref(false);
+const detailIsOpen = ref(false);
+interface BigqueryForm {
+  connName: string;
+  projectId: string;
+  email: string;
+}
+const bigqueryForm: BigqueryForm = reactive({
+  connName: "",
+  projectId: "",
+  email: "",
+});
 
 const formLabel: ConnectionSetForm = {
   connName: "連線名稱",
@@ -93,10 +162,21 @@ const formRules = reactive<FormRules<ConnectionSetForm>>({
   password: [{ required: true, message: "請輸入密碼" }],
   database: [{ required: true, message: "請輸入資料庫名稱" }],
 });
-
+const bigQeryRules = reactive<FormRules<any>>({
+  connName: [{ required: true, message: "請輸入連線名稱" }],
+  projectId: [{ required: true, message: "請輸入專案ID" }],
+});
 const connSetBtn = async (action: string) => {
+  let valid = false;
   store.setting.form = useForm().trim(store.setting.form) as ConnectionSetForm;
-  const valid = await useForm().validate(dbConnSetFormRef.value);
+
+  Object.keys(bigqueryForm).forEach((key) => {
+    const typedKey = key as keyof BigqueryForm;
+    bigqueryForm[typedKey] = bigqueryForm[typedKey].trim();
+  });
+  store.setting.dbType !== "bigquery"
+    ? (valid = await useForm().validate(dbConnSetFormRef.value))
+    : (valid = await useForm().validate(bigQueryFormRef.value));
   let confirm = true;
 
   if (valid) {
@@ -105,7 +185,10 @@ const connSetBtn = async (action: string) => {
       isTest.value = true;
     }
     if (action === "save") {
-      const result = await useDbConnectionApi().checkUsed(store.setting.connId);
+      let result;
+      if (dbconnationstore.isEdit) {
+        result = await useDbConnectionApi().checkUsed(store.setting.connId);
+      }
       if (!isEmpty(result)) {
         confirm = await ElMessageBox.confirm(
           `<div class="text-base" style="color:#20222F">請確定是否送出修改內容 ?</div><div class="pt-2" style="color:#999999">修改資料庫連線，任何連接此設定的資料模型、ChatSQL對話，均將受影響。<br>確定要儲存？<br>${
@@ -118,7 +201,7 @@ const connSetBtn = async (action: string) => {
             closeOnClickModal: false,
             type: "error",
             showClose: false,
-          },
+          }
         )
           .then(() => {
             return false;
@@ -127,13 +210,36 @@ const connSetBtn = async (action: string) => {
             return true;
           });
       }
-
       if (confirm) {
-        await useDbConnectionApi().sendSave();
+        store.setting.dbType !== "bigquery"
+          ? await useDbConnectionApi().sendSave()
+          : await useDbConnectionApi().sendSaveBigQuery(bigqueryForm);
       }
     }
   } else {
     console.error("欄位錯誤"); // eslint-disable-line no-console
   }
 };
+
+const openDetail = () => {
+  detailIsOpen.value = !detailIsOpen.value;
+};
 </script>
+
+<style lang="scss" scoped>
+.step {
+  width: 12px;
+  height: 12px;
+  border-radius: 30px;
+  padding: 1px 3px 1px 3px;
+  background-color: #373c55;
+  font-size: 8px;
+  text-align: center;
+  font-family: Roboto-Regular;
+  color: #fff;
+}
+.el-input.mail-input {
+  --el-input-border-radius: 2px;
+  --el-input-height: 32px;
+}
+</style>

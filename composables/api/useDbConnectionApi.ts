@@ -15,7 +15,9 @@ export const openConnectionSetting = () => {
 };
 
 export const openConnectionTypes = () => {
-  return useState<boolean>("isConnTypes", () => false);
+  // return useState<boolean>("isConnTypes", () => false);
+  const dbConnStore = useDbConnectionStore();
+  dbConnStore.addConnationTrigger = false;
 };
 
 export default function useDbConnectionApi() {
@@ -133,11 +135,31 @@ export default function useDbConnectionApi() {
     }
     resetForm();
   };
+  const sendSaveBigQuery = async (form: any) => {
+    const { connId, dbType, isActivate } = dbConnStore.setting;
+    const { connName, email, ...connInfo } = form;
+    const params = {
+      connId,
+      connName,
+      dbType,
+      connInfo: JSON.stringify(connInfo),
+      isActivate,
+    };
+    const { status } = await useApi(Api.Save, {
+      params,
+      encrypt: true,
+      decrypt: true,
+    });
+    if (status.value === "success") {
+      await getTable();
+    }
+    resetForm();
+  };
 
   /** @description Send Request while switch connection status. */
   const sendUpdate = async (
     connId: string,
-    isActivate: boolean,
+    isActivate: boolean
   ): Promise<boolean> => {
     const { data } = await useApi(Api.Update, {
       params: {
@@ -215,6 +237,7 @@ export default function useDbConnectionApi() {
     sendTest,
     sendUpdate,
     sendSave,
+    sendSaveBigQuery,
     getTable,
     getTypes,
     getList,

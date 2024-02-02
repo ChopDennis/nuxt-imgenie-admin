@@ -12,12 +12,14 @@
 <script setup lang="ts">
 const emit = defineEmits(["update:edit", "update:id"]);
 const isConnSetting = openConnectionSetting();
+const dbconnectstore = useDbConnectionStore();
 
 const clickEdit = async (id: string) => {
   switch (useRoute().path) {
     case "/db-connection": {
       await useDbConnectionApi().getQuery(id);
       isConnSetting.value = true;
+      dbconnectstore.isEdit = true;
       break;
     }
     case "/data-mart": {

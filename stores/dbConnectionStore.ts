@@ -65,6 +65,8 @@ interface DbConnectionStoreState {
   list: ConnectionActivate[];
   table: ConnectionTable[];
   types: ConnectionTypes[];
+  addConnationTrigger: boolean;
+  isEdit: boolean;
 }
 
 export type {
@@ -74,7 +76,7 @@ export type {
   ConnectionSetForm,
 };
 
-export const useDbConnectionStore = defineStore("dbConnection", {
+export const useDbConnectionStore = defineStore("dbConnectionStore", {
   state: (): DbConnectionStoreState => {
     return {
       list: [],
@@ -106,6 +108,8 @@ export const useDbConnectionStore = defineStore("dbConnection", {
           database: "",
         },
       },
+      addConnationTrigger: false,
+      isEdit: false,
     };
   },
   actions: {},

@@ -40,12 +40,14 @@
   </div>
 </template>
 <script setup lang="ts">
+import { useDbConnectionStore } from "@/stores/dbConnectionStore";
+const dbconnationstore = useDbConnectionStore();
 const isLoading = useLoading();
 const isCollapse = computed(() => useLayoutStore().sideMenu.collapse);
 const titleInfo = computed(
-  () => useLayoutStore().pageLayout[useRoute().path] || "",
+  () => useLayoutStore().pageLayout[useRoute().path] || ""
 );
-const isConnTypes = openConnectionTypes();
+// const isConnTypes = openConnectionTypes();
 const dataMartStore = useDataMartStore();
 const isEdit = computed(() => {
   return dataMartStore.isEdit;
@@ -53,7 +55,8 @@ const isEdit = computed(() => {
 const clickBtn = async (btn: string) => {
   if (btn === "新增連線") {
     await useDbConnectionApi().getTypes();
-    isConnTypes.value = true;
+    dbconnationstore.addConnationTrigger = true;
+    dbconnationstore.isEdit = false;
   }
   if (btn === "新增資料模型") {
     useDataMartApi().resetForm();

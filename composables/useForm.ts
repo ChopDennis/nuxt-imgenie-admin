@@ -8,7 +8,6 @@ export default function useForm() {
     const result = await formEl.validate((valid, fields) => {
       if (valid) {
         console.log("符合規則", fields);
-
         return valid;
       } else {
         console.log("缺少必填欄位", fields); // eslint-disable-line no-console
@@ -17,10 +16,10 @@ export default function useForm() {
     return result;
   };
   const trim = <T extends Record<string, unknown>>(
-    form: T,
+    form: T
   ): Record<keyof T, string | T[keyof T]> => {
     return _useMapValues(form, (value) =>
-      isString(value) ? _useTrim(value) : value,
+      isString(value) ? _useTrim(value) : value
     );
   };
 
