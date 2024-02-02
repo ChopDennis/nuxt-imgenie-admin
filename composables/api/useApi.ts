@@ -103,12 +103,21 @@ export const useApi = async <T>(
       }
     },
     onResponseError({ response }) {
-      ElNotification({
-        title: `系統錯誤－${response._data.code}`,
-        message: _useToString(response._data.message),
-        type: "error",
-        duration: 3000,
-      });
+      if (response._data.code === "CL_B0001") {
+        ElNotification({
+          title: `系統提示－${response._data.code}`,
+          message: _useToString(response._data.message),
+          type: "warning",
+          duration: 3000,
+        });
+      } else {
+        ElNotification({
+          title: `系統錯誤－${response._data.code}`,
+          message: _useToString(response._data.message),
+          type: "error",
+          duration: 3000,
+        });
+      }
       console.log(response._data); // eslint-disable-line no-console
       if (response._data.code === "KY_V0001") {
         navigateTo("/");

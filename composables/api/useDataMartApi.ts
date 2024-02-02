@@ -15,7 +15,9 @@ export default function useDataMartApi() {
   const dataMartStore = useDataMartStore();
 
   const getTable = async () => {
-    const { data } = await useApi<DataMartList[]>(DataMartApi.All);
+    const { data } = await useApi<DataMartList[]>(DataMartApi.All, {
+      loading: true,
+    });
     const res = data.value;
     dataMartStore.table = _useMap(res.data, (list) => {
       const {
@@ -120,6 +122,7 @@ export default function useDataMartApi() {
         datamartId,
         isActivate,
       },
+      loading: true,
     });
     const res = data.value as ApiResponse;
     return res.code === ApiResponseCode.Success;
