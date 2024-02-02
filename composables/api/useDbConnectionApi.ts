@@ -23,7 +23,9 @@ export default function useDbConnectionApi() {
 
   /** @description Get all of database connection. */
   const getTable = async () => {
-    const { data } = await useApi<ConnectionList[]>(Api.Table);
+    const { data } = await useApi<ConnectionList[]>(Api.Table, {
+      loading: true,
+    });
     const res = data.value;
     dbConnStore.table = _useMap(res.data, (list) => {
       const { connInfo, dbType, connName, connId, isActivate } = list;
@@ -127,6 +129,7 @@ export default function useDbConnectionApi() {
       params,
       encrypt: true,
       decrypt: true,
+      loading: true,
     });
     if (status.value === "success") {
       await getTable();
@@ -144,6 +147,7 @@ export default function useDbConnectionApi() {
         connId,
         isActivate,
       },
+      loading: true,
     });
     const res = data.value as ApiResponse;
     return res.code === ApiResponseCode.Success;
