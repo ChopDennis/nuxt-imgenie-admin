@@ -303,3 +303,11 @@ body .el-message-box__status {
 body .el-message-box__btns button:nth-child(2) {
   background-color: #ff4d4f !important;
 }
+
+body .el-loading-spinner .path {
+  stroke: white !important;
+}
+
+body .el-loading-mask {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}

@@ -19,7 +19,17 @@ onNuxtReady(async () => {
 });
 
 const saveUserGroup = async () => {
-  await useUserGroup().saveUserGroup();
-  navigateTo("/user-group");
+  const userGroupStore = useUserGroupStore();
+  userGroupStore.members = useForm().trim(userGroupStore.members);
+  const { userGroupName, description, users } = userGroupStore.members;
+
+  if (userGroupName === "" && description === "") {
+    console.log("請填寫名稱和簡述");
+  } else if (users.length === 0) {
+    console.log("成員請選擇");
+  } else {
+    await useUserGroup().saveUserGroup();
+    navigateTo("/user-group");
+  }
 };
 </script>

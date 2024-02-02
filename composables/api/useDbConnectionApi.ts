@@ -162,7 +162,7 @@ export default function useDbConnectionApi() {
   /** @description Send Request while switch connection status. */
   const sendUpdate = async (
     connId: string,
-    isActivate: boolean
+    isActivate: boolean,
   ): Promise<boolean> => {
     const { data } = await useApi(Api.Update, {
       params: {

@@ -51,10 +51,10 @@ const pageSize = computed(() => Math.floor(tableHeight.value / 60) + 5);
 const sortTable = computed(() =>
   !isNull(sortOrder.value)
     ? _useOrderBy(props.list, [sortProp.value], [sortOrder.value])
-    : props.list
+    : props.list,
 );
 const currentPageData = computed(
-  () => _useChunk(sortTable.value, pageSize.value)[currentPage.value - 1] || []
+  () => _useChunk(sortTable.value, pageSize.value)[currentPage.value - 1] || [],
 );
 
 const sortChange = ({ prop, order }: SortChangeParams) => {

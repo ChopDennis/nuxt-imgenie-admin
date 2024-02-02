@@ -48,7 +48,21 @@ const dataMartGroupDataMartFormRef =
   ref<InstanceType<typeof DataMartGroupDataMartForm>>();
 useDataMartGroup().resetDataMartGroup();
 const saveDataMartGroup = async () => {
-  await useDataMartGroup().saveDataMartGroup();
-  navigateTo("/data-mart-group");
+  const dataMartGroupStore = useDataMartGroupStore();
+  dataMartGroupStore.members = useForm().trim(dataMartGroupStore.members);
+
+  const { datamartGroupName, description, datamarts, userGroups, users } =
+    dataMartGroupStore.members;
+
+  if (datamartGroupName === "" && description === "") {
+    console.log("請填寫名稱和簡述");
+  } else if (datamarts.length === 0) {
+    console.log("請選擇 DataMart");
+  } else if (userGroups.length === 0 && users.length === 0) {
+    console.log("成員和成員群組請擇一選擇");
+  } else {
+    await useDataMartGroup().saveDataMartGroup();
+    navigateTo("/data-mart-group");
+  }
 };
 </script>

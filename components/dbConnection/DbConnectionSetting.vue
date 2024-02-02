@@ -71,7 +71,7 @@
             >步驟說明</span
           >
         </div>
-        <div class="pl-110 mt-2" v-show="detailIsOpen">
+        <div v-show="detailIsOpen" class="pl-110 mt-2">
           <div class="flex items-center mt-2">
             <div class="step mr-1">1</div>
             打開Google Cloud 控制台的 IAM 和 管理。
@@ -201,7 +201,7 @@ const connSetBtn = async (action: string) => {
             closeOnClickModal: false,
             type: "error",
             showClose: false,
-          }
+          },
         )
           .then(() => {
             return false;

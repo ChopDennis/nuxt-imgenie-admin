@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="true" class="flex flex-col w-full h-screen">
+  <div v-loading="isLoading" class="flex flex-col w-full h-screen">
     <GlobalSideMenu />
     <GlobalHeader />
 
@@ -45,7 +45,7 @@ const dbconnationstore = useDbConnectionStore();
 const isLoading = useLoading();
 const isCollapse = computed(() => useLayoutStore().sideMenu.collapse);
 const titleInfo = computed(
-  () => useLayoutStore().pageLayout[useRoute().path] || ""
+  () => useLayoutStore().pageLayout[useRoute().path] || "",
 );
 // const isConnTypes = openConnectionTypes();
 const dataMartStore = useDataMartStore();

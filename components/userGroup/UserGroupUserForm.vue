@@ -10,6 +10,7 @@
           <ElForm
             class="data-mart-form"
             :model="userGroupStore.members"
+            :rules="useForm().dataMartGroupRules"
             label-width="150px"
           >
             <ElFormItem label="邀請成員">
@@ -23,7 +24,8 @@
                 @update-selected-id="updateMembers"
               />
             </ElFormItem>
-            <ElFormItem class="form-table" label="成員名單">
+            <ElFormItem class="form-table" label="成員名單" prop="users">
+              <ElCheckboxGroup v-model="userGroupStore.save.userIds" />
               <GroupCollapseTable
                 :table="userGroupStore.members.users"
                 @delete-row="deleteMember"
@@ -43,6 +45,10 @@
 <script setup lang="ts">
 const userGroupStore = useUserGroupStore();
 const member = ref(["1"]);
+
+watch(userGroupStore.members.users, (value) => {
+  userGroupStore.save.userIds = _useMap(value, "userId");
+});
 
 const nonGroupUsers = computed(() =>
   _useMap(
